@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #0f245a;
+  --color-secondary: #1aaaba;
+  --color-accent: #f59e0b;
+  --color-surface: #ffffff;
+  --font-primary: 'Open Sans';
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom shadow for login cards and dashboard widgets */
+.shadow-glow {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.shadow-3xl {
+  box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
