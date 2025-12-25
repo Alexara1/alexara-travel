@@ -1,34 +1,23 @@
+# 🌍 Alexara: AI-Powered Travel Intelligence
 
-# 🌍 Alexara Travel Platform
+Alexara is a high-end international travel platform that combines curated human expertise with next-generation AI planning.
 
-A modern, AI-powered travel agency platform built with React, Vite, and Google Gemini.
+## 🚀 Live Deployment (Netlify)
 
-## 🚀 Quick Deployment Guide (GitHub + Netlify)
+1. **GitHub**: Push this code to a new repository.
+2. **Netlify**: Connect your repository.
+3. **Environment Variables**:
+   - Go to **Site Configuration** > **Build & deploy** > **Environment**.
+   - Add a variable:
+     - **Key**: `GEMINI_API_KEY`
+     - **Value**: `AIzaSyBzBFltqDBQ73kBDXJ9bP1M3dPjkwrnYDw` (or your latest key from AI Studio)
+4. **Deploy**: Trigger a new deployment.
 
-### 1. GitHub Setup
-- Create a new repository on [GitHub](https://github.com).
-- Upload all project files **EXCEPT** `.env.local` and `node_modules`.
-- Commit and push your changes.
-
-### 2. Netlify Deployment
-- Connect your GitHub account to [Netlify](https://app.netlify.com).
-- Select your repository.
-- **Build Settings:**
-  - Build Command: `npm run build`
-  - Publish Directory: `dist`
-
-### 3. Adding your API Key (CRITICAL)
-- In the Netlify deployment screen, go to **Site Configuration** > **Build & deploy** > **Environment**.
-- Click **Add a variable**.
-- **Key:** `GEMINI_API_KEY`
-- **Value:** [Your Google Gemini API Key]
-- Trigger a new deploy.
-
-## 🛠️ Local Development
-1. Clone the repo.
-2. Run `npm install`.
-3. Create a `.env.local` file with `GEMINI_API_KEY=your_key_here`.
-4. Run `npm run dev`.
+## 🧰 Tech Stack
+- **Framework**: React 19 (Vite)
+- **Intelligence**: Google Gemini 3 (Flash & Pro)
+- **UI**: Tailwind CSS + Lucide Icons
+- **Grounding**: Google Search & Maps via Gemini API
 
 ---
-*Built for the next generation of global explorers.*
+*Generated for the Alexara Travel Group.*
