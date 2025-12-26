@@ -17,7 +17,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom shadow for login cards and dashboard widgets */
 .shadow-glow {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }

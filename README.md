@@ -9,8 +9,8 @@ Alexara is a high-end international travel platform that combines curated human 
 3. **Environment Variables**:
    - Go to **Site Configuration** > **Build & deploy** > **Environment**.
    - Add a variable:
-     - **Key**: `GEMINI_API_KEY`
-     - **Value**: `AIzaSyBzBFltqDBQ73kBDXJ9bP1M3dPjkwrnYDw` (or your latest key from AI Studio)
+     - **Key**: `API_KEY`
+     - **Value**: `YOUR_GEMINI_API_KEY_HERE`
 4. **Deploy**: Trigger a new deployment.
 
 ## 🧰 Tech Stack

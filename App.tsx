@@ -22,7 +22,6 @@ import SearchResults from './pages/Search';
 import NotFound from './pages/NotFound';
 import AIPlanner from './pages/AIPlanner';
 
-// Layout wrapper to conditionally render Navbar/Footer based on route
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen relative">
@@ -43,7 +42,6 @@ const AppContent: React.FC = () => {
         <Router>
             <ScrollToTop />
             <Routes>
-                {/* Public Routes */}
                 <Route path="/" element={<Layout><Home /></Layout>} />
                 <Route path="/destinations" element={<Layout><Destinations /></Layout>} />
                 <Route path="/deals" element={<Layout><Deals /></Layout>} />
@@ -57,19 +55,12 @@ const AppContent: React.FC = () => {
                 <Route path="/privacy" element={<Layout><Privacy /></Layout>} />
                 <Route path="/terms" element={<Layout><Terms /></Layout>} />
                 <Route path="/disclaimer" element={<Layout><Disclaimer /></Layout>} />
-                
-                {/* Admin Routes */}
-                <Route 
-                    path="/admin" 
-                    element={isAdminMode ? <AdminDashboard /> : <Login />} 
-                />
-
-                {/* 404 Route */}
+                <Route path="/admin" element={isAdminMode ? <AdminDashboard /> : <Login />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </Router>
-    )
-}
+    );
+};
 
 const App: React.FC = () => {
   return (
