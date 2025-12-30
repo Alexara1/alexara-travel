@@ -5,7 +5,7 @@ import { ShoppingBag, ArrowUpRight, Search, X } from 'lucide-react';
 import AdContainer from '../components/AdContainer';
 
 const Gear: React.FC = () => {
-  const { gear, settings } = useSite();
+  const { gear, settings, t } = useSite();
   const [activeCategory, setActiveCategory] = useState<string>('All');
 
   const categories = useMemo(() => {
@@ -19,12 +19,12 @@ const Gear: React.FC = () => {
   }, [gear, activeCategory]);
 
   return (
-    <div className="bg-white min-h-screen py-12">
+    <div className="bg-white min-h-screen py-12 pt-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4">Essential Travel Gear</h1>
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4">{t('gear_title')}</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Travel smarter and lighter with our curated selection of top-rated luggage, tech, and accessories.
+            {t('gear_subtitle')}
           </p>
         </div>
 
@@ -75,7 +75,7 @@ const Gear: React.FC = () => {
                       rel="noopener noreferrer"
                       className="flex items-center text-sm font-bold text-secondary hover:text-teal-700 transition-colors"
                     >
-                      Check Price <ArrowUpRight className="w-4 h-4 ml-1" />
+                      {t('gear_check_price')} <ArrowUpRight className="w-4 h-4 ml-1" />
                     </a>
                   </div>
                 </div>
@@ -85,7 +85,7 @@ const Gear: React.FC = () => {
         ) : (
           <div className="py-20 text-center text-gray-400">
              <ShoppingBag className="w-12 h-12 mx-auto mb-4 opacity-20" />
-             <p>No gear found in this category.</p>
+             <p>{t('gear_no_results')}</p>
           </div>
         )}
 

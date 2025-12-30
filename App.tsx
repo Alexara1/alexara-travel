@@ -1,5 +1,5 @@
-import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { SiteProvider, useSite } from './context/SiteContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -22,6 +22,24 @@ import SearchResults from './pages/Search';
 import NotFound from './pages/NotFound';
 import AIPlanner from './pages/AIPlanner';
 
+const GlobalShortcuts: React.FC = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl + Alt + A to jump to Admin
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        navigate('/admin');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
+  return null;
+};
+
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen relative">
@@ -41,6 +59,7 @@ const AppContent: React.FC = () => {
     return (
         <Router>
             <ScrollToTop />
+            <GlobalShortcuts />
             <Routes>
                 <Route path="/" element={<Layout><Home /></Layout>} />
                 <Route path="/destinations" element={<Layout><Destinations /></Layout>} />

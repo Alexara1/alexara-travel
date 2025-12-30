@@ -1,4 +1,6 @@
 
+export type SupportedLanguage = 'EN' | 'ES' | 'FR' | 'DE' | 'JP' | 'RU' | 'ZH';
+
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
@@ -83,6 +85,7 @@ export interface SiteSettings {
   secondaryColor: string;
   accentColor: string;
   fontFamily: 'Open Sans' | 'Roboto' | 'Helvetica';
+  language: SupportedLanguage;
   heroTitle: string;
   heroSubtitle: string;
   // SEO & Social
@@ -114,6 +117,7 @@ export interface SiteSettings {
 export interface SiteContextType {
   settings: SiteSettings;
   updateSettings: (newSettings: Partial<SiteSettings>) => void;
+  t: (key: string) => string;
   
   // Blog
   posts: BlogPost[];

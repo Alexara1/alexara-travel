@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SiteSettings, BlogPost, Deal, Destination, GearProduct, SiteContextType, ContactMessage } from '../types';
-import { INITIAL_SETTINGS, MOCK_POSTS, MOCK_DEALS, MOCK_DESTINATIONS, MOCK_GEAR } from '../constants';
+import { INITIAL_SETTINGS, MOCK_POSTS, MOCK_DEALS, MOCK_DESTINATIONS, MOCK_GEAR, TRANSLATIONS } from '../constants';
 
 const SiteContext = createContext<SiteContextType | undefined>(undefined);
 
@@ -110,6 +110,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSettings(prev => ({ ...prev, ...newSettings }));
   };
 
+  const t = (key: string): string => {
+    const lang = settings.language || 'EN';
+    return TRANSLATIONS[lang]?.[key] || TRANSLATIONS['EN'][key] || key;
+  };
+
   const login = (email: string, pass: string): boolean => {
     if (email === settings.adminEmail && pass === settings.adminPassword) {
       setIsAdminMode(true);
@@ -160,6 +165,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <SiteContext.Provider value={{
       settings,
       updateSettings,
+      t,
       posts,
       addPost: postCrud.add,
       updatePost: postCrud.update,
