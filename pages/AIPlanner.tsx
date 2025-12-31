@@ -1,6 +1,6 @@
 
-import React, { useState, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
+import React, { useState, useRef } from 'react';
 import { Sparkles, Send, Loader2, ExternalLink, RefreshCw, Save, Trash, Clock, Copy, Check, AlertCircle, Cpu, Zap, Globe2, Link as LinkIcon, History } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { Itinerary } from '../types';
@@ -13,7 +13,6 @@ const AIPlanner: React.FC = () => {
   const [generatedItinerary, setGeneratedItinerary] = useState<string | null>(null);
   const [sources, setSources] = useState<{ uri: string; title: string }[]>([]);
   const [copied, setCopied] = useState(false);
-  // Fix: Initialized errorMsg state with null instead of 0 to match string | null type
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [savedItineraries, setSavedItineraries] = useState<Itinerary[]>(() => {
     const saved = localStorage.getItem('alexara_itineraries');
@@ -23,62 +22,13 @@ const AIPlanner: React.FC = () => {
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const loadingSteps: Record<string, string[]> = {
-    EN: [
-        "Establishing Neural Uplink...",
-        "Grounding Search Parameters...",
-        "Analyzing Global Flight Tables...",
-        "Synthesizing Luxury Accommodations...",
-        "Orchestrating Niche Experiences...",
-        "Finalizing Architectural Blueprint..."
-    ],
-    ES: [
-        "Estableciendo enlace neuronal...",
-        "Buscando parámetros...",
-        "Analizando vuelos globales...",
-        "Sintetizando alojamientos de lujo...",
-        "Orquestando experiencias nicho...",
-        "Finalizando plano arquitectónico..."
-    ],
-    FR: [
-        "Établissement de la liaison neurale...",
-        "Ancrage des paramètres de recherche...",
-        "Analyse des tables de vols mondiaux...",
-        "Synthèse d'hébergements de luxe...",
-        "Orchestration d'expériences de niche...",
-        "Finalisation du plan architectural..."
-    ],
-    DE: [
-        "Aufbau der neuronalen Verbindung...",
-        "Suchparameter verankern...",
-        "Globale Flugtabellen анализировать...",
-        "Synthese von Luxusunterkünften...",
-        "Orchestrierung von Nischenerlebnissen...",
-        "Finalisierung des Architekturplans..."
-    ],
-    JP: [
-        "ニューラルリンクを確立中...",
-        "検索パラメータを接地中...",
-        "グローバルフライト表を分析中...",
-        "豪華な宿泊施設を合成中...",
-        "ニッチな体験を調整中...",
-        "建築設計図を完成させています..."
-    ],
-    RU: [
-        "Установка нейронного соединения...",
-        "Поиск параметров в глобальной сети...",
-        "Анализ таблиц мировых авиаперелетов...",
-        "Подбор роскошных вариантов размещения...",
-        "Создание уникальных впечатлений...",
-        "Завершение архитектурного плана..."
-    ],
-    ZH: [
-        "建立神经链接...",
-        "正在搜索全球参数...",
-        "分析全球航班表...",
-        "综合高奢住宿方案...",
-        "策划独特的小众体验...",
-        "最终确定行程蓝图..."
-    ]
+    EN: ["Establishing Neural Uplink...", "Grounding Search Parameters...", "Analyzing Global Flight Tables...", "Synthesizing Luxury Accommodations...", "Orchestrating Niche Experiences...", "Finalizing Architectural Blueprint..."],
+    ES: ["Estableciendo enlace neuronal...", "Buscando parámetros...", "Analizando vuelos globales...", "Sintetizando alojamientos de lujo...", "Orquestando experiencias nicho...", "Finalizando plano arquitectónico..."],
+    FR: ["Établissement de la liaison neurale...", "Ancrage des paramètres de recherche...", "Analyse des tables de vols mondiaux...", "Synthèse d'hébergements de luxe...", "Orchestration d'expériences de niche...", "Finalisation du plan architectural..."],
+    DE: ["Aufbau der neuronalen Verbindung...", "Suchparameter verankern...", "Globale Flugtabellen analysieren...", "Synthese von Luxusunterkünften...", "Orchestrierung von Nischenerlebnissen...", "Finalisierung des Architekturplans..."],
+    JP: ["ニューラルリンクを確立中...", "検索パラメータを接地中...", "グローバルフライト表を分析中...", "豪華な宿泊施設を合成中...", "ニッチな体験を調整中...", "建築設計図を完成させています..."],
+    RU: ["Установка нейронного соединения...", "Поиск параметров в глобальной сети...", "Анализ таблиц мировых авиаперелетов...", "Подбор роскошных вариантов размещения...", "Создание уникальных впечатлений...", "Завершение архитектурного плана..."],
+    ZH: ["建立神经链接...", "正在搜索全球参数...", "分析全球航班表...", "综合高奢住宿方案...", "策划独特的小众体验...", "最终确定行程蓝图..."]
   };
 
   const currentSteps = loadingSteps[settings.language] || loadingSteps['EN'];
@@ -98,8 +48,12 @@ const AIPlanner: React.FC = () => {
     }, 3000);
 
     try {
-      // Fix: Use process.env.API_KEY directly in GoogleGenAI constructor
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) {
+        throw new Error("API_KEY missing in production bundle.");
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
@@ -108,13 +62,10 @@ const AIPlanner: React.FC = () => {
           systemInstruction: `Act as a world-class luxury travel architect for ${settings.siteName}. 
           CRITICAL: You MUST write the entire itinerary in the following language: ${settings.language}.
           Generate a sophisticated multi-day itinerary.
-          
           Formatting Rules:
-          - Use "### Day X: [Title]" for daily headers (translated correctly into the chosen language).
-          - Use Markdown for bolding and bullet points.
-          - Include a "### Expert Secrets" section with niche local tips.
-          - Suggest specific flight routes and real hotel names found via search.
-          - Be extremely detailed and focus on "off-the-beaten-path" luxury experiences.`,
+          - Use "### Day X: [Title]" for daily headers.
+          - Include specific hotel and location names.
+          - Focus on high-end, exclusive experiences.`,
           tools: [{ googleSearch: {} }],
         }
       });
@@ -134,8 +85,8 @@ const AIPlanner: React.FC = () => {
       }, 500);
 
     } catch (error: any) {
-      console.error("Alexara AI Planner Error:", error);
-      setErrorMsg("Our intelligence network is experiencing high latency. Please retry synthesis.");
+      console.error("AI Planner Failure:", error);
+      setErrorMsg("Our neural network is encountering high latency. Please verify your API Key and network connection.");
     } finally {
       setIsLoading(false);
       clearInterval(stepInterval);
@@ -173,7 +124,6 @@ const AIPlanner: React.FC = () => {
 
   const renderItineraryContent = (text: string) => {
     return text.split('\n').map((line, i) => {
-      // Improved regex to handle different languages for "Day"
       const dayMatch = line.match(/^### (Day|Día|Jour|Tag|日|День|天) (\d+): (.+)/i);
       if (dayMatch) {
         return (

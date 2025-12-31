@@ -1,6 +1,6 @@
 
-import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
+import React, { useState, useRef, useEffect } from 'react';
 import { X, Send, Sparkles, User, Bot, Search, Compass } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { ChatMessage } from '../types';
@@ -10,7 +10,6 @@ const AIConcierge: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   
-  // Dynamic welcome message based on language
   const welcomeMessages: Record<string, string> = {
     EN: `Welcome to ${settings.siteName}. I'm your Neural Travel Specialist. Where shall we fly you to today?`,
     ES: `Bienvenido a ${settings.siteName}. Soy su especialista en viajes neuronales. ¿A dónde volamos hoy?`,
@@ -23,14 +22,12 @@ const AIConcierge: React.FC = () => {
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
-  // Update welcome message when language changes
   useEffect(() => {
     setMessages([
         { role: 'model', text: welcomeMessages[settings.language] || welcomeMessages['EN'] }
     ]);
-  }, [settings.language]);
+  }, [settings.language, settings.siteName]);
 
-  const isTypingRef = useRef(false);
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -50,8 +47,13 @@ const AIConcierge: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Fix: Use process.env.API_KEY directly in GoogleGenAI constructor
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Create a fresh instance for each request to ensure the latest API key is used
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) {
+        throw new Error("API_KEY is not defined in the environment.");
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       const chat = ai.chats.create({
         model: 'gemini-3-flash-preview',
         config: {
@@ -59,11 +61,7 @@ const AIConcierge: React.FC = () => {
           systemInstruction: `You are the ${settings.siteName} AI Concierge. Your tone is professional, sophisticated, and inspiring. 
           CRITICAL: You MUST respond in the following language: ${settings.language}.
           Use Google Search to provide up-to-date travel advice, current weather, and local trending events. Recommend visiting the "Deals" page for specific bookings.`,
-        },
-        history: messages.slice(1).map(m => ({
-          role: m.role,
-          parts: [{ text: m.text }]
-        }))
+        }
       });
 
       const response = await chat.sendMessage({ message: userMessage });
@@ -75,8 +73,8 @@ const AIConcierge: React.FC = () => {
 
       setMessages(prev => [...prev, { role: 'model', text, sources }]);
     } catch (error: any) {
-      console.error("AI Concierge Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble synthesizing a response. Please try again later." }]);
+      console.error("AI Concierge Failure:", error);
+      setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble synthesizing a response. Please check your network connection or API configuration." }]);
     } finally {
       setIsTyping(false);
     }
@@ -100,7 +98,7 @@ const AIConcierge: React.FC = () => {
         </span>
       </button>
 
-      <div className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-[-20px_0_60px_rgba(0,0,0,0.15)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col border-l border-gray-100 ${
+      <div className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-[-20px_0_60_rgba(0,0,0,0.15)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col border-l border-gray-100 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-950 text-white relative overflow-hidden">
