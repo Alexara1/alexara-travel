@@ -95,6 +95,8 @@ export interface SiteSettings {
   ogImage?: string;
   canonicalUrl?: string;
   searchVisibility?: boolean; // robots index/noindex
+  robotsTxt?: string;
+  customScripts?: string; // JSON-LD, Analytics, etc
   // Monetization
   ads: {
     enabled: boolean;

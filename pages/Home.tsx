@@ -35,7 +35,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section - Added pt-20 to account for fixed navbar height */}
+      {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-slate-950 mt-20">
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, index) => (
@@ -49,7 +49,6 @@ const Home: React.FC = () => {
             </div>
           ))}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-transparent to-slate-950/90"></div>
-          {/* Scanline and Mesh adjusted to avoid top-edge flickering */}
           <div className="scanline-overlay opacity-30"></div>
           <div className="absolute inset-0 neural-mesh opacity-10 top-0"></div>
         </div>
@@ -93,6 +92,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Innovation Section - Updated Neural Navigator Visual */}
       <section className="py-32 bg-slate-950 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -114,18 +114,76 @@ const Home: React.FC = () => {
                   </div>
               </div>
               
-              <div className="relative h-[600px] w-full">
-                  <div className="absolute top-0 left-0 w-full h-full bg-slate-950/80 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] shadow-3xl overflow-hidden p-12 flex flex-col">
-                      <div className="flex items-center justify-between mb-12">
-                          <div className="flex items-center space-x-4">
-                              <div className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center shadow-lg shadow-secondary/20">
-                                  <Navigation className="w-7 h-7 text-white" />
-                              </div>
-                              <h4 className="text-white font-bold text-lg tracking-tight">Neural Navigator</h4>
-                          </div>
+              <div className="relative h-[600px] w-full perspective-1000">
+                  <div className="absolute top-0 left-0 w-full h-full bg-slate-900 border border-white/10 rounded-[3.5rem] shadow-3xl overflow-hidden p-0 flex flex-col group transition-transform duration-700 hover:rotate-y-2">
+                      {/* High-Visibility Tech Background */}
+                      <div className="absolute inset-0 z-0">
+                          <img 
+                            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80" 
+                            alt="Neural Network Visualization" 
+                            className="w-full h-full object-cover transition-transform duration-[20s] linear scale-110"
+                          />
+                          {/* Gradient Overlays for Readability */}
+                          <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/40 to-primary/20"></div>
+                          <div className="absolute inset-0 bg-slate-950/30 backdrop-blur-[2px]"></div>
+                          <div className="absolute inset-0 neural-mesh opacity-30"></div>
                       </div>
-                      <div className="flex-1 relative flex items-center justify-center">
-                          <BrainCircuit className="w-24 h-24 text-secondary/30 animate-pulse" />
+
+                      {/* Content HUD - Sharp Glassmorphism */}
+                      <div className="relative z-10 p-12 flex flex-col h-full">
+                          <div className="flex items-center justify-between mb-12 bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-2xl">
+                              <div className="flex items-center space-x-4">
+                                  <div className="w-14 h-14 bg-secondary rounded-2xl flex items-center justify-center shadow-lg shadow-secondary/30 border border-white/20">
+                                      <Navigation className="w-8 h-8 text-white" />
+                                  </div>
+                                  <div>
+                                      <h4 className="text-white font-bold text-xl tracking-tight">Neural Navigator</h4>
+                                      <p className="text-[10px] text-secondary font-black uppercase tracking-[0.2em] flex items-center">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-green-400 mr-2 animate-pulse"></span>
+                                        Synthesis Core Active
+                                      </p>
+                                  </div>
+                              </div>
+                              <div className="flex space-x-2 bg-black/40 px-4 py-2 rounded-full border border-white/5">
+                                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                  <div className="w-2 h-2 rounded-full bg-secondary/50"></div>
+                                  <div className="w-2 h-2 rounded-full bg-secondary/30"></div>
+                              </div>
+                          </div>
+                          
+                          <div className="flex-1 relative flex items-center justify-center">
+                              {/* Central Animated Node */}
+                              <div className="relative">
+                                  <div className="absolute -inset-12 bg-secondary/30 rounded-full blur-[50px] animate-pulse"></div>
+                                  <div className="absolute -inset-20 bg-primary/20 rounded-full blur-[80px] animate-pulse delay-700"></div>
+                                  <BrainCircuit className="w-40 h-40 text-white relative z-10 drop-shadow-[0_0_20px_rgba(26,170,186,0.5)]" />
+                                  
+                                  {/* Orbital Rings */}
+                                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 border border-white/10 rounded-full animate-[spin_10s_linear_infinite]"></div>
+                                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-dashed border border-secondary/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+                              </div>
+                          </div>
+
+                          <div className="mt-auto bg-black/40 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 grid grid-cols-2 gap-8 shadow-2xl">
+                              <div>
+                                  <div className="flex justify-between items-center mb-2">
+                                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Processing Data</p>
+                                      <span className="text-[10px] text-secondary font-black">94%</span>
+                                  </div>
+                                  <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                      <div className="bg-secondary h-full w-[94%] shadow-[0_0_10px_rgba(26,170,186,0.8)] animate-pulse"></div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div className="flex justify-between items-center mb-2">
+                                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Network Latency</p>
+                                      <span className="text-[10px] text-primary font-black">12ms</span>
+                                  </div>
+                                  <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                      <div className="bg-primary h-full w-[12%]"></div>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
                   </div>
               </div>

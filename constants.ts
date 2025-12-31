@@ -15,6 +15,8 @@ export const INITIAL_SETTINGS: SiteSettings = {
   metaDescription: "Discover hidden destinations, exclusive flight deals, and essential travel gear curated for the modern explorer. Experience the best of global travel with Alexara.",
   metaKeywords: "travel, luxury travel, budget travel, destinations, flight deals",
   searchVisibility: true,
+  robotsTxt: "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /login\n\nSitemap: https://alexara-travel.example.com/sitemap.xml",
+  customScripts: "<!-- Add JSON-LD or Analytics scripts here -->",
   ads: {
     enabled: true,
     headerBanner: "",
@@ -41,10 +43,15 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "Next-Generation Travel Intelligence", home_innovation_title_1: "Architecture for", home_innovation_title_2: "Modern Explorers.", home_innovation_desc: "Beyond simple booking. We utilize advanced grounding models to synthesize millions of data points.",
     home_trending_title: "Trending Destinations", home_exclusive_title: "Exclusive Collections", footer_desc: "Inspiring wanderlust and connecting you with the world's most breathtaking destinations.",
     footer_quick_links: "Quick Links", footer_contact: "Contact Us", footer_newsletter: "Newsletter", footer_subscribe: "Subscribe",
+    footer_legal: "Legal & Trust", footer_privacy: "Privacy Policy", footer_terms: "Terms of Service", footer_disclaimer: "Affiliate Disclaimer",
     dest_title: "Explore Destinations", dest_subtitle: "From bustling cities to serene beaches, find your perfect backdrop.", dest_featured_title: "France", dest_featured_desc: "The world's most visited country, offering art, history, and the Riviera.", dest_find_deals: "Find Deals in",
     gear_title: "Essential Gear", gear_subtitle: "Travel smarter and lighter with our curated tech and accessories.", gear_check_price: "Check Price", gear_no_results: "No gear found.",
     blog_title: "The Alexara Journal", blog_subtitle: "Stories, guides, and inspiration for the modern traveler.", blog_read_full: "Read Full Story", blog_read_more: "Read More",
-    contact_title: "Get in Touch", contact_info_title: "Contact Information", form_first_name: "First Name", form_last_name: "Last Name", form_email: "Email Address", form_subject: "Subject", form_message: "Message", form_submit: "Send Message"
+    contact_title: "Get in Touch", contact_info_title: "Contact Information", form_first_name: "First Name", form_last_name: "Last Name", form_email: "Email Address", form_subject: "Subject", form_message: "Message", form_submit: "Send Message",
+    about_mission_title: "Our Mission", about_who_we_are: "Who We Are", about_team: "Meet the Visionaries",
+    about_feature_1: "Premium Curation", about_feature_2: "Neural Planning", about_feature_3: "Global Support",
+    cat_hotel: "Hotel", cat_hostel: "Hostel", cat_restaurant: "Restaurant", cat_nightclub: "Nightclub", cat_beach: "Beach", cat_resort: "Resort", cat_activity: "Activity", cat_ticket: "Ticket", cat_package: "Package",
+    Europe: "Europe", Asia: "Asia", Oceania: "Oceania", Africa: "Africa", Americas: "Americas"
   },
   ES: {
     nav_home: "Inicio", nav_planner: "Planificador AI", nav_destinations: "Destinos", nav_deals: "Ofertas", nav_blog: "Blog", nav_gear: "Equipo", nav_about: "Nosotros", nav_contact: "Contacto", btn_book: "Reservar",
@@ -52,10 +59,15 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "Inteligencia de Viajes de Próxima Generación", home_innovation_title_1: "Arquitectura para", home_innovation_title_2: "Exploradores Modernos.", home_innovation_desc: "Más allá de una simple reserva. Utilizamos modelos avanzados para sintetizar millones de datos.",
     home_trending_title: "Destinos de Tendencia", home_exclusive_title: "Colecciones Exclusivas", footer_desc: "Inspirando el deseo de viajar y conectándote con los destinos más impresionantes del mundo.",
     footer_quick_links: "Enlaces Rápidos", footer_contact: "Contáctenos", footer_newsletter: "Boletín", footer_subscribe: "Suscribirse",
+    footer_legal: "Legal y Confianza", footer_privacy: "Política de Privacidad", footer_terms: "Términos de Servicio", footer_disclaimer: "Divulgación de Afiliados",
     dest_title: "Explorar Destinos", dest_subtitle: "Desde ciudades bulliciosas hasta playas serenas, encuentre su escenario perfecto.", dest_featured_title: "Francia", dest_featured_desc: "El país más visitado del mundo, que ofrece arte, historia y la Riviera.", dest_find_deals: "Ver ofertas en",
     gear_title: "Equipo Esencial", gear_subtitle: "Viaje de forma más inteligente y ligera con nuestra selección de tecnología.", gear_check_price: "Consultar Precio", gear_no_results: "No se encontró equipo.",
     blog_title: "El Diario Alexara", blog_subtitle: "Historias, guías e inspiración para el viajero moderno.", blog_read_full: "Leer historia completa", blog_read_more: "Leer más",
-    contact_title: "Ponerse en Contacto", contact_info_title: "Información de Contacto", form_first_name: "Nombre", form_last_name: "Apellido", form_email: "Correo Electrónico", form_subject: "Asunto", form_message: "Mensaje", form_submit: "Enviar Mensaje"
+    contact_title: "Ponerse en Contacto", contact_info_title: "Información de Contacto", form_first_name: "Nombre", form_last_name: "Apellido", form_email: "Correo Electrónico", form_subject: "Asunto", form_message: "Mensaje", form_submit: "Enviar Mensaje",
+    about_mission_title: "Nuestra Misión", about_who_we_are: "Quiénes Somos", about_team: "Conozca a los Visionarios",
+    about_feature_1: "Curaduría Premium", about_feature_2: "Planificación Neuronal", about_feature_3: "Soporte Global",
+    cat_hotel: "Hotel", cat_hostel: "Hostal", cat_restaurant: "Restaurante", cat_nightclub: "Club Nocturno", cat_beach: "Playa", cat_resort: "Resort", cat_activity: "Actividad", cat_ticket: "Boleto", cat_package: "Paquete",
+    Europe: "Europa", Asia: "Asia", Oceania: "Oceanía", Africa: "África", Americas: "Américas"
   },
   FR: {
     nav_home: "Accueil", nav_planner: "Planificateur IA", nav_destinations: "Destinations", nav_deals: "Offres", nav_blog: "Blog", nav_gear: "Équipement", nav_about: "À propos", nav_contact: "Contact", btn_book: "Réserver",
@@ -63,10 +75,15 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "Intelligence de Voyage de Nouvelle Génération", home_innovation_title_1: "Architecture pour", home_innovation_title_2: "Explorateurs Modernos.", home_innovation_desc: "Bien plus qu'une simple réservation. Nous utilisons des modèles avancés pour synthétiser des millions de données.",
     home_trending_title: "Destinations Tendances", home_exclusive_title: "Collections Exclusives", footer_desc: "Inspirer l'envie de voyager et vous connecter aux destinations les plus époustouflantes du monde.",
     footer_quick_links: "Liens Rapides", footer_contact: "Contactez-nous", footer_newsletter: "Newsletter", footer_subscribe: "S'abonner",
+    footer_legal: "Juridique et Confiance", footer_privacy: "Politique de Confidentialité", footer_terms: "Conditions d'Utilisation", footer_disclaimer: "Divulgation d'Affiliation",
     dest_title: "Explorer les Destinations", dest_subtitle: "Des villes animées aux plages sereines, trouvez votre décor idéal.", dest_featured_title: "France", dest_featured_desc: "Le pays le plus visité au monde, offrant art, histoire et la Riviera.", dest_find_deals: "Trouver des offres en",
     gear_title: "Équipement Essentiel", gear_subtitle: "Voyagez plus intelligemment et plus léger avec notre technologie.", gear_check_price: "Vérifier le Prix", gear_no_results: "Aucun équipement trouvé.",
     blog_title: "Le Journal Alexara", blog_subtitle: "Histoires, guides et inspiration pour le voyageur moderne.", blog_read_full: "Lire l'histoire complète", blog_read_more: "Lire la suite",
-    contact_title: "Contactez-nous", contact_info_title: "Informations de Contact", form_first_name: "Prénom", form_last_name: "Nom", form_email: "Adresse E-mail", form_subject: "Sujet", form_message: "Message", form_submit: "Envoyer le Message"
+    contact_title: "Contactez-nous", contact_info_title: "Informations de Contact", form_first_name: "Prénom", form_last_name: "Nom", form_email: "Adresse E-mail", form_subject: "Sujet", form_message: "Message", form_submit: "Envoyer le Message",
+    about_mission_title: "Notre Mission", about_who_we_are: "Qui sommes-nous", about_team: "Rencontrez les Visionnaires",
+    about_feature_1: "Curation Premium", about_feature_2: "Planificación Neurale", about_feature_3: "Support Mondial",
+    cat_hotel: "Hôtel", cat_hostel: "Auberge", cat_restaurant: "Restaurant", cat_nightclub: "Boîte de Nuit", cat_beach: "Plage", cat_resort: "Complexe", cat_activity: "Activité", cat_ticket: "Billet", cat_package: "Forfait",
+    Europe: "Europe", Asia: "Asie", Oceania: "Océanie", Africa: "Afrique", Americas: "Amériques"
   },
   DE: {
     nav_home: "Startseite", nav_planner: "KI-Planer", nav_destinations: "Ziele", nav_deals: "Angebote", nav_blog: "Blog", nav_gear: "Ausrüstung", nav_about: "Über uns", nav_contact: "Kontakt", btn_book: "Buchen",
@@ -74,10 +91,15 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "Reiseintelligenz der nächsten Generation", home_innovation_title_1: "Architektur für", home_innovation_title_2: "Moderne Entdecker.", home_innovation_desc: "Über einfaches Buchen hinaus. Wir nutzen fortschrittliche Modelle, um Millionen von Datenpunkten zu synthetisieren.",
     home_trending_title: "Trendziele", home_exclusive_title: "Exklusive Kollektionen", footer_desc: "Fernweh wecken und Sie mit den atemberaubendsten Zielen der Welt verbinden.",
     footer_quick_links: "Schnellzugriff", footer_contact: "Kontaktieren Sie uns", footer_newsletter: "Newsletter", footer_subscribe: "Abonnieren",
+    footer_legal: "Rechtliches & Vertrauen", footer_privacy: "Datenschutzrichtlinie", footer_terms: "Nutzungsbedingungen", footer_disclaimer: "Affiliate-Offenlegung",
     dest_title: "Ziele Erkunden", dest_subtitle: "Von belebten Städten bis hin zu ruhigen Stränden – finden Sie Ihre perfekte Kulisse.", dest_featured_title: "Frankreich", dest_featured_desc: "Das meistbesuchte Land der Welt mit Kunst, Geschichte und der Riviera.", dest_find_deals: "Angebote finden in",
     gear_title: "Grundausrüstung", gear_subtitle: "Reisen Sie smarter und leichter mit unserer kuratierten Technik.", gear_check_price: "Preis Prüfen", gear_no_results: "Keine Ausrüstung gefunden.",
     blog_title: "Das Alexara Journal", blog_subtitle: "Geschichten, Leitfäden und Inspiration für den modernen Reisenden.", blog_read_full: "Ganze Geschichte lesen", blog_read_more: "Mehr lesen",
-    contact_title: "Kontakt Aufnehmen", contact_info_title: "Kontaktinformationen", form_first_name: "Vorname", form_last_name: "Nachname", form_email: "E-Mail-Adresse", form_subject: "Betreff", form_message: "Nachricht", form_submit: "Nachricht senden"
+    contact_title: "Kontakt Aufnehmen", contact_info_title: "Kontaktinformationen", form_first_name: "Vorname", form_last_name: "Nachname", form_email: "E-Mail-Adresse", form_subject: "Betreff", form_message: "Nachricht", form_submit: "Nachricht senden",
+    about_mission_title: "Unsere Mission", about_who_we_are: "Wer wir sind", about_team: "Treffen Sie die Visionäre",
+    about_feature_1: "Premium Kuratierung", about_feature_2: "Neuronale Planung", about_feature_3: "Globaler Support",
+    cat_hotel: "Hotel", cat_hostel: "Hostel", cat_restaurant: "Restaurant", cat_nightclub: "Nachtclub", cat_beach: "Strand", cat_resort: "Resort", cat_activity: "Aktivität", cat_ticket: "Ticket", cat_package: "Paket",
+    Europe: "Europa", Asia: "Asien", Oceania: "Ozeanien", Africa: "Afrika", Americas: "Amerika"
   },
   JP: {
     nav_home: "ホーム", nav_planner: "AIプランナー", nav_destinations: "目的地", nav_deals: "お得な情報", nav_blog: "ブログ", nav_gear: "ギア", nav_about: "会社概要", nav_contact: "お問い合わせ", btn_book: "今すぐ予約",
@@ -85,10 +107,15 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "次世代の旅行インテリジェンス", home_innovation_title_1: "現代の探検家のための", home_innovation_title_2: "設計図。", home_innovation_desc: "単なる予約を超えて。高度なモデルを使用して、数百万のデータポイントを統合します。",
     home_trending_title: "注目の目的地", home_exclusive_title: "独占コレクション", footer_desc: "旅心を刺激し、世界で最も息をのむような目的地とあなたを繋ぎます。",
     footer_quick_links: "クイックリンク", footer_contact: "お問い合わせ", footer_newsletter: "ニュースレター", footer_subscribe: "購読する",
+    footer_legal: "法的情報と信頼", footer_privacy: "プライバシーポリシー", footer_terms: "利用規約", footer_disclaimer: "アフィリエイトに関する開示",
     dest_title: "目的地を探す", dest_subtitle: "賑やかな街から静かなビーチまで、あなたにぴったりの場所を見つけてください。", dest_featured_title: "フランス", dest_featured_desc: "世界で最も訪問者の多い国。芸術、歴史、そしてリビエラが楽しめます。", dest_find_deals: "のお得な情報を探す",
     gear_title: "必須ギア", gear_subtitle: "厳選されたテックとアクセサリーで、よりスマートに、より軽く旅をしましょう。", gear_check_price: "価格を確認", gear_no_results: "ギアが見つかりませんでした。",
     blog_title: "アレクサラ・ジャーナル", blog_subtitle: "現代の旅行者のためのストーリー、ガイド、そしてインスピレーション。", blog_read_full: "記事全文を読む", blog_read_more: "続きを読む",
-    contact_title: "お問い合わせ", contact_info_title: "連絡先情報", form_first_name: "名", form_last_name: "姓", form_email: "メールアドレス", form_subject: "件名", form_message: "メッセージ", form_submit: "メッセージを送信"
+    contact_title: "お問い合わせ", contact_info_title: "連絡先情報", form_first_name: "名", form_last_name: "姓", form_email: "メールアドレス", form_subject: "件名", form_message: "メッセージ", form_submit: "メッセージを送信",
+    about_mission_title: "私たちの使命", about_who_we_are: "私たちについて", about_team: "ビジョナリーに会う",
+    about_feature_1: "プレミアム・キュレーション", about_feature_2: "ニューラル・プランニング", about_feature_3: "グローバル・サポート",
+    cat_hotel: "ホテル", cat_hostel: "ホステル", cat_restaurant: "レストラン", cat_nightclub: "ナイトクラブ", cat_beach: "ビーチ", cat_resort: "リゾート", cat_activity: "アクティビティ", cat_ticket: "チケット", cat_package: "パッケージ",
+    Europe: "ヨーロッパ", Asia: "アジア", Oceania: "オセアニア", Africa: "アフリカ", Americas: "アメリカ"
   },
   RU: {
     nav_home: "Главная", nav_planner: "ИИ-Планировщик", nav_destinations: "Направления", nav_deals: "Предложения", nav_blog: "Блог", nav_gear: "Снаряжение", nav_about: "О нас", nav_contact: "Контакты", btn_book: "Забронировать",
@@ -96,10 +123,15 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "Интеллект для путешествий нового поколения", home_innovation_title_1: "Архитектура для", home_innovation_title_2: "Современных исследователей.", home_innovation_desc: "Больше, чем просто бронирование. Мы используем передовые модели для анализа миллионов данных.",
     home_trending_title: "Популярные направления", home_exclusive_title: "Эксклюзивные коллекции", footer_desc: "Вдохновляем на путешествия и открываем для вас самые захватывающие уголки мира.",
     footer_quick_links: "Быстрые ссылки", footer_contact: "Связаться с нами", footer_newsletter: "Рассылка", footer_subscribe: "Подписаться",
+    footer_legal: "Правовая информация", footer_privacy: "Политика конфиденциальности", footer_terms: "Условия использования", footer_disclaimer: "Отказ от ответственности",
     dest_title: "Поиск направлений", dest_subtitle: "От шумных городов до безмятежных пляжей — найдите свой идеальный уголок.", dest_featured_title: "Франция", dest_featured_desc: "Самая посещаемая страна в мире, предлагающая искусство, историю и Ривьеру.", dest_find_deals: "Найти туры в",
-    gear_title: "Снаряжение", gear_subtitle: "Путешествуйте умнее и легче с нашими гаджетами и аксессуарами.", gear_check_price: "Узнать цену", gear_no_results: "Ничего не найдено.",
+    gear_title: "Снаряжение", gear_subtitle: "Путешествуйте умнее и легче с нашими гаджетами и аксессурами.", gear_check_price: "Узнать цену", gear_no_results: "Ничего не найдено.",
     blog_title: "Журнал Alexara", blog_subtitle: "Истории, путеводители и вдохновение для современного путешественника.", blog_read_full: "Читать полностью", blog_read_more: "Подробнее",
-    contact_title: "Связаться с нами", contact_info_title: "Контактная информация", form_first_name: "Имя", form_last_name: "Фамилия", form_email: "Email адрес", form_subject: "Тема", form_message: "Сообщение", form_submit: "Отправить"
+    contact_title: "Связаться с нами", contact_info_title: "Контактная информация", form_first_name: "Имя", form_last_name: "Фамилия", form_email: "Email адрес", form_subject: "Тема", form_message: "Сообщение", form_submit: "Отправить",
+    about_mission_title: "Наша миссия", about_who_we_are: "Кто мы", about_team: "Познакомьтесь с визионерами",
+    about_feature_1: "Премиальное кураторство", about_feature_2: "Нейронное планирование", about_feature_3: "Глобальная поддержка",
+    cat_hotel: "Отель", cat_hostel: "Хостел", cat_restaurant: "Ресторан", cat_nightclub: "Ночной клуб", cat_beach: "Пляж", cat_resort: "Курорт", cat_activity: "Активность", cat_ticket: "Билет", cat_package: "Пакет",
+    Europe: "Европа", Asia: "Азия", Oceania: "Океания", Africa: "Африка", Americas: "Америка"
   },
   ZH: {
     nav_home: "首页", nav_planner: "AI 规划师", nav_destinations: "目的地", nav_deals: "优惠方案", nav_blog: "旅游博客", nav_gear: "旅行装备", nav_about: "关于我们", nav_contact: "联系我们", btn_book: "立即预订",
@@ -107,10 +139,15 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "下一代旅行智能", home_innovation_title_1: "为", home_innovation_title_2: "现代探险者设计的架构。", home_innovation_desc: "超越简单的预订。我们利用先进的模型综合数百万个数据点。",
     home_trending_title: "热门目的地", home_exclusive_title: "独家精选", footer_desc: "激发流浪愿望，带您领略全球最令人叹為观止的目的地。",
     footer_quick_links: "快速链接", footer_contact: "联系我们", footer_newsletter: "资讯订阅", footer_subscribe: "立即订阅",
+    footer_legal: "法律与信任", footer_privacy: "隐私政策", footer_terms: "服务条款", footer_disclaimer: "附属披露声明",
     dest_title: "探索目的地", dest_subtitle: "从繁华都市到宁静海滩，寻找您的完美背景。", dest_featured_title: "法国", dest_featured_desc: "世界上访问量最大的国家，融合了艺术、历史和里维埃拉风情。", dest_find_deals: "查找优惠：",
     gear_title: "必备装备", gear_subtitle: "使用我们精选的科技配件，让旅行更智能、更轻便。", gear_check_price: "查看价格", gear_no_results: "未找到相关装备。",
     blog_title: "亚历克萨拉杂志", blog_subtitle: "为现代旅行者提供的故事、指南和灵感。", blog_read_full: "阅读全文", blog_read_more: "阅读更多",
-    contact_title: "取得联系", contact_info_title: "联系信息", form_first_name: "名", form_last_name: "姓", form_email: "电子邮件", form_subject: "主题", form_message: "内容", form_submit: "提交信息"
+    contact_title: "取得联系", contact_info_title: "联系信息", form_first_name: "名", form_last_name: "姓", form_email: "电子邮件", form_subject: "主题", form_message: "内容", form_submit: "提交信息",
+    about_mission_title: "我们的使命", about_who_we_are: "关于我们", about_team: "核心团队",
+    about_feature_1: "高级策划", about_feature_2: "神经规划", about_feature_3: "全球支持",
+    cat_hotel: "酒店", cat_hostel: "旅舍", cat_restaurant: "餐厅", cat_nightclub: "夜总会", cat_beach: "海滩", cat_resort: "度假村", cat_activity: "活动", cat_ticket: "门票", cat_package: "套餐",
+    Europe: "欧洲", Asia: "亚洲", Oceania: "大洋洲", Africa: "非洲", Americas: "美洲"
   }
 };
 
@@ -208,7 +245,7 @@ export const MOCK_DEALS: Deal[] = [
     categories: ["Nightclub", "Ticket"],
     price: 75,
     originalPrice: 120,
-    image: "https://images.unsplash.com/photo-1514525253361-bee8718a300c?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1566054754541-286e1ce2862c?auto=format&fit=crop&w=1200&q=80",
     rating: 4.9,
     duration: "1 Night Entry",
     affiliateLink: "https://www.ticketmaster.com"

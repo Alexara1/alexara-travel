@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
-import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlogPost, Deal, Destination, GearProduct, ContactMessage } from '../../types';
 
@@ -13,7 +13,6 @@ const MediaInput: React.FC<{
     type: 'image' | 'video';
     recommendedDimensions?: string;
 }> = ({ label, value, onChange, accept = "image/*", type, recommendedDimensions }) => {
-    // Fixed typo: Changed INPUT_ELEMENT to HTMLInputElement
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -242,6 +241,31 @@ const AdminDashboard: React.FC = () => {
       markMessageRead(msg.id);
   };
 
+  const generateSitemap = () => {
+    const baseUrl = settings.canonicalUrl || 'https://alexara.com';
+    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+    
+    // Base Pages
+    ['/', '/destinations', '/deals', '/gear', '/blog', '/about', '/contact'].forEach(p => {
+      sitemap += `  <url>\n    <loc>${baseUrl}${p}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+    });
+
+    // Dynamic Posts
+    posts.forEach(p => {
+      sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.id}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
+    });
+
+    sitemap += `</urlset>`;
+    
+    const blob = new Blob([sitemap], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sitemap.xml';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const analyticsData = {
     visits: {
         total: 145892,
@@ -279,7 +303,6 @@ const AdminDashboard: React.FC = () => {
 
   const unreadCount = messages.filter(m => m.status === 'new').length;
 
-  // SEO Health Logic
   const getSEOHealth = () => {
     const titleLen = settings.metaTitle?.length || 0;
     const descLen = settings.metaDescription?.length || 0;
@@ -508,82 +531,97 @@ const AdminDashboard: React.FC = () => {
             </div>
         )}
 
-        {/* --- SEO TAB (REVAMPED) --- */}
+        {/* --- SEO TAB (IMPROVED) --- */}
         {activeTab === 'seo' && (
-            <div className="max-w-5xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center justify-between mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-800">SEO Intelligence</h1>
-                        <p className="text-sm text-gray-500 mt-1">Manage global meta tags, indexing, and social graph previews.</p>
+                        <h1 className="text-3xl font-bold text-gray-800">SEO Intelligence Center</h1>
+                        <p className="text-sm text-gray-500 mt-1">Advanced management of global search presence, crawlers, and metadata health.</p>
                     </div>
                     <div className="flex items-center gap-4">
                          <div className="flex items-center bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200">
                             <Activity className={`w-4 h-4 mr-2 ${seoHealth.every(h => h.status !== 'critical') ? 'text-green-500' : 'text-red-500'}`} />
-                            <span className="text-xs font-bold text-gray-700 uppercase">Live Health Score: {Math.round((seoHealth.filter(h => h.status === 'good').length / seoHealth.length) * 100)}%</span>
+                            <span className="text-xs font-bold text-gray-700 uppercase">SEO Health: {Math.round((seoHealth.filter(h => h.status === 'good').length / seoHealth.length) * 100)}%</span>
                          </div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left: Metadata Inputs */}
+                    {/* Left Column: Core Settings */}
                     <div className="lg:col-span-2 space-y-8">
                         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                             <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
-                                <SearchIcon className="w-5 h-5 mr-2 text-secondary" /> Global Search Metadata
+                                <SearchIcon className="w-5 h-5 mr-2 text-primary" /> Core Search Metadata
                             </h3>
-                            <div className="space-y-6">
+                            <div className="grid grid-cols-1 gap-6">
                                 <div>
-                                    <label className={labelClass}>Meta Title</label>
+                                    <label className={labelClass}>Site Meta Title</label>
                                     <input 
                                         type="text" 
                                         className={inputClass} 
                                         value={settings.metaTitle || ''} 
                                         onChange={(e) => updateSettings({ metaTitle: e.target.value })} 
-                                        placeholder="Site Title | Catchy Slogan"
+                                        placeholder="Alexara | Architecting the Future of Travel"
                                     />
-                                    <p className="text-[10px] text-gray-400 mt-1 font-bold">Characters: {settings.metaTitle?.length || 0} (Ideal: 50-60)</p>
+                                    <div className="flex justify-between mt-1 px-1">
+                                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Recommendation: 50-60 Characters</p>
+                                      <p className={`text-[10px] font-black ${settings.metaTitle?.length! >= 50 && settings.metaTitle?.length! <= 60 ? 'text-green-500' : 'text-gray-400'}`}>
+                                        Count: {settings.metaTitle?.length || 0}
+                                      </p>
+                                    </div>
                                 </div>
                                 <div>
-                                    <label className={labelClass}>Meta Description</label>
+                                    <label className={labelClass}>Site Meta Description</label>
                                     <textarea 
                                         className={inputClass} 
                                         rows={3}
                                         value={settings.metaDescription || ''} 
                                         onChange={(e) => updateSettings({ metaDescription: e.target.value })} 
-                                        placeholder="Brief site summary..."
+                                        placeholder="Describe your travel platform to the world..."
                                     />
-                                    <p className="text-[10px] text-gray-400 mt-1 font-bold">Characters: {settings.metaDescription?.length || 0} (Ideal: 120-160)</p>
+                                    <div className="flex justify-between mt-1 px-1">
+                                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Recommendation: 120-160 Characters</p>
+                                      <p className={`text-[10px] font-black ${settings.metaDescription?.length! >= 120 && settings.metaDescription?.length! <= 160 ? 'text-green-500' : 'text-gray-400'}`}>
+                                        Count: {settings.metaDescription?.length || 0}
+                                      </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label className={labelClass}>Meta Keywords (Comma separated)</label>
-                                    <input 
-                                        type="text" 
-                                        className={inputClass} 
-                                        value={settings.metaKeywords || ''} 
-                                        onChange={(e) => updateSettings({ metaKeywords: e.target.value })} 
-                                        placeholder="travel, adventure, luxury..."
-                                    />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                  <div>
+                                      <label className={labelClass}>Meta Keywords</label>
+                                      <input 
+                                          type="text" 
+                                          className={inputClass} 
+                                          value={settings.metaKeywords || ''} 
+                                          onChange={(e) => updateSettings({ metaKeywords: e.target.value })} 
+                                          placeholder="travel, luxury, ai, planning"
+                                      />
+                                  </div>
+                                  <div>
+                                      <label className={labelClass}>Canonical Home URL</label>
+                                      <input 
+                                          type="text" 
+                                          className={inputClass} 
+                                          value={settings.canonicalUrl || ''} 
+                                          onChange={(e) => updateSettings({ canonicalUrl: e.target.value })} 
+                                          placeholder="https://www.alexara.com"
+                                      />
+                                  </div>
                                 </div>
-                                <div>
-                                    <label className={labelClass}>Canonical URL</label>
-                                    <input 
-                                        type="text" 
-                                        className={inputClass} 
-                                        value={settings.canonicalUrl || ''} 
-                                        onChange={(e) => updateSettings({ metaKeywords: e.target.value })} 
-                                        placeholder="https://www.alexara.com"
-                                    />
-                                </div>
-                                <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
-                                    <div>
-                                        <h4 className="text-sm font-bold text-gray-800">Search Visibility</h4>
-                                        <p className="text-xs text-gray-400">Instruct search engines to index this site.</p>
+                                <div className="p-4 bg-slate-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                      <div className={`w-3 h-3 rounded-full ${settings.searchVisibility ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></div>
+                                      <div>
+                                          <h4 className="text-sm font-bold text-gray-800">Robots Indexing Status</h4>
+                                          <p className="text-[10px] text-gray-400 uppercase tracking-widest font-black">{settings.searchVisibility ? 'Indexing Enabled (Public)' : 'No-Index (Site Hidden)'}</p>
+                                      </div>
                                     </div>
                                     <button 
                                         onClick={() => updateSettings({ searchVisibility: !settings.searchVisibility })}
-                                        className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${settings.searchVisibility ? 'bg-green-500 text-white shadow-lg' : 'bg-red-500 text-white'}`}
+                                        className={`px-6 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all shadow-sm ${settings.searchVisibility ? 'bg-white text-gray-700 hover:bg-red-50 hover:text-red-500' : 'bg-primary text-white hover:bg-slate-800'}`}
                                     >
-                                        {settings.searchVisibility ? 'Indexing Enabled' : 'NoIndex (Hidden)'}
+                                        {settings.searchVisibility ? 'Disable Indexing' : 'Enable Indexing'}
                                     </button>
                                 </div>
                             </div>
@@ -591,126 +629,159 @@ const AdminDashboard: React.FC = () => {
 
                         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                             <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
-                                <Share2 className="w-5 h-5 mr-2 text-indigo-500" /> Social Graph Optimization (OG)
+                                <Share2 className="w-5 h-5 mr-2 text-indigo-500" /> Multi-Platform Social Graph (OG)
                             </h3>
-                            <p className="text-xs text-gray-500 mb-6 italic">Control how your site appears when shared on Facebook, Twitter, and LinkedIn.</p>
-                            
                             <MediaInput 
-                                label="Default Share Image" 
+                                label="Global OG Share Image" 
                                 type="image"
-                                recommendedDimensions="1200 x 630 px (PNG/JPG)"
+                                recommendedDimensions="1200 x 630 px (Optimal)"
                                 value={settings.ogImage} 
                                 onChange={(val) => updateSettings({ ogImage: val })} 
                             />
                             
-                            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="p-6 bg-blue-50/50 rounded-2xl border border-blue-100">
-                                    <div className="flex items-center gap-2 mb-4 text-blue-600">
-                                        <Facebook className="w-4 h-4" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest">Facebook Preview</span>
-                                    </div>
-                                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-                                        <div className="h-24 bg-gray-200 overflow-hidden">
-                                            {settings.ogImage && <img src={settings.ogImage} className="w-full h-full object-cover" />}
+                            <div className="mt-8 space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* FB Preview */}
+                                    <div className="p-5 bg-slate-50 rounded-2xl border border-gray-100">
+                                        <div className="flex items-center gap-2 mb-4 text-blue-600">
+                                            <Facebook className="w-4 h-4" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Facebook/Messenger</span>
                                         </div>
-                                        <div className="p-3">
-                                            <div className="text-[9px] text-gray-400 uppercase font-mono">alexara.com</div>
-                                            <div className="text-xs font-bold text-gray-800 truncate mt-0.5">{settings.metaTitle || 'Untitled'}</div>
-                                            <div className="text-[10px] text-gray-500 line-clamp-1 mt-0.5">{settings.metaDescription}</div>
+                                        <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden max-w-[300px] mx-auto">
+                                            <div className="h-32 bg-gray-200">
+                                                {settings.ogImage && <img src={settings.ogImage} className="w-full h-full object-cover" />}
+                                            </div>
+                                            <div className="p-3">
+                                                <div className="text-[10px] text-gray-400 uppercase font-mono truncate">alexara.com</div>
+                                                <div className="text-xs font-bold text-gray-800 truncate mt-1">{settings.metaTitle || 'Alexara Travel'}</div>
+                                                <div className="text-[10px] text-gray-500 line-clamp-1 mt-0.5">{settings.metaDescription}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* LinkedIn Preview */}
+                                    <div className="p-5 bg-slate-50 rounded-2xl border border-gray-100">
+                                        <div className="flex items-center gap-2 mb-4 text-indigo-600">
+                                            <Linkedin className="w-4 h-4" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">LinkedIn Professional</span>
+                                        </div>
+                                        <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden max-w-[300px] mx-auto">
+                                            <div className="h-40 bg-gray-200">
+                                                {settings.ogImage && <img src={settings.ogImage} className="w-full h-full object-cover" />}
+                                            </div>
+                                            <div className="p-3 bg-indigo-50/30">
+                                                <div className="text-xs font-bold text-gray-800 truncate">{settings.metaTitle || 'Alexara Travel'}</div>
+                                                <div className="text-[10px] text-gray-400 truncate mt-1">alexara.com • {settings.metaDescription?.substring(0,30)}...</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="p-6 bg-slate-900 rounded-2xl border border-slate-800">
-                                    <div className="flex items-center gap-2 mb-4 text-white">
-                                        <Twitter className="w-4 h-4" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Twitter Card Preview</span>
+                                {/* Twitter Preview */}
+                                <div className="p-5 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col md:flex-row gap-6">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 mb-4 text-white">
+                                            <Twitter className="w-4 h-4" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Twitter (X) Card</span>
+                                        </div>
+                                        <p className="text-[10px] text-gray-500 leading-relaxed">Large summary cards drive 40% more engagement on Twitter feeds.</p>
                                     </div>
-                                    <div className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700">
-                                        <div className="h-20 bg-slate-700">
+                                    <div className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 flex-1 min-w-[240px]">
+                                        <div className="h-28 bg-slate-700">
                                             {settings.ogImage && <img src={settings.ogImage} className="w-full h-full object-cover opacity-80" />}
                                         </div>
                                         <div className="p-3">
-                                            <div className="text-[10px] font-bold text-white truncate">{settings.metaTitle}</div>
-                                            <div className="text-[8px] text-gray-400 line-clamp-2 mt-0.5">{settings.metaDescription}</div>
+                                            <div className="text-xs font-bold text-white truncate">{settings.metaTitle}</div>
+                                            <div className="text-[10px] text-gray-400 line-clamp-2 mt-1">{settings.metaDescription}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                            <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
+                                <Code className="w-5 h-5 mr-2 text-primary" /> Advanced JSON-LD & Header Scripts
+                            </h3>
+                            <textarea 
+                                className={`${inputClass} font-mono text-xs h-40`} 
+                                value={settings.customScripts || ''} 
+                                onChange={(e) => updateSettings({ customScripts: e.target.value })} 
+                                placeholder='<script type="application/ld+json">...</script>'
+                            />
+                            <p className="text-[10px] text-gray-400 mt-2 italic">Add Google Analytics, Meta Pixel, or Organization Schema here. These scripts are injected directly into the site header.</p>
                         </div>
                     </div>
 
-                    {/* Right: Health & Sitemap */}
+                    {/* Right Column: Health & Tools */}
                     <div className="space-y-8">
                         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                             <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
-                                <Activity className="w-5 h-5 mr-2 text-primary" /> SEO Health Audit
+                                <Activity className="w-5 h-5 mr-2 text-secondary" /> Health Audit
                             </h3>
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {seoHealth.map((health, idx) => (
-                                    <div key={idx} className="flex flex-col p-3 rounded-xl border border-gray-50 bg-slate-50/50">
+                                    <div key={idx} className="p-3 rounded-xl border border-gray-50 bg-slate-50/50">
                                         <div className="flex items-center justify-between mb-1">
-                                            <span className="text-xs font-bold text-gray-700">{health.label}</span>
+                                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{health.label}</span>
                                             <div className={`w-2 h-2 rounded-full ${
-                                                health.status === 'good' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 
-                                                health.status === 'warning' ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.5)]' : 
-                                                'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]'
-                                            }`}></div>
+                                                health.status === 'good' ? 'bg-green-500' : 
+                                                health.status === 'warning' ? 'bg-orange-500' : 'bg-red-500'
+                                            } shadow-lg`}></div>
                                         </div>
-                                        <span className="text-[10px] text-gray-400">{health.info}</span>
+                                        <span className="text-xs font-bold text-gray-700">{health.info}</span>
                                     </div>
                                 ))}
-                            </div>
-                            <div className="mt-6 p-4 bg-primary text-white rounded-xl text-center">
-                                <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-1">Estimated Traffic Impact</p>
-                                <p className="text-lg font-bold font-serif">Optimal</p>
                             </div>
                         </div>
 
                         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                             <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
-                                <Map className="w-5 h-5 mr-2 text-secondary" /> Indexable Routes
+                                <Globe className="w-5 h-5 mr-2 text-primary" /> Crawler Control
                             </h3>
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded-lg">
-                                    <span className="font-mono text-gray-500">/blog</span>
-                                    <span className="text-green-500 font-bold">{posts.length} Items</span>
-                                </div>
-                                <div className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded-lg">
-                                    <span className="font-mono text-gray-500">/deals</span>
-                                    <span className="text-green-500 font-bold">{deals.length} Items</span>
-                                </div>
-                                <div className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded-lg">
-                                    <span className="font-mono text-gray-500">/destinations</span>
-                                    <span className="text-green-500 font-bold">{destinations.length} Items</span>
-                                </div>
-                                <div className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded-lg">
-                                    <span className="font-mono text-gray-500">/gear</span>
-                                    <span className="text-green-500 font-bold">{gear.length} Items</span>
-                                </div>
+                            <div className="mb-6">
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Editable robots.txt</label>
+                                <textarea 
+                                    className={`${inputClass} font-mono text-xs h-48`} 
+                                    value={settings.robotsTxt || ''} 
+                                    onChange={(e) => updateSettings({ robotsTxt: e.target.value })} 
+                                />
                             </div>
-                            <button className="w-full mt-6 py-3 border border-gray-200 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-50 flex items-center justify-center gap-2">
-                                <Activity className="w-4 h-4" /> Re-Scan Sitemap
-                            </button>
+                            <div className="space-y-3">
+                              <button onClick={() => {
+                                  const blob = new Blob([settings.robotsTxt || ''], { type: 'text/plain' });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = 'robots.txt';
+                                  a.click();
+                              }} className="w-full py-3 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+                                  <Download className="w-4 h-4" /> Download robots.txt
+                              </button>
+                              <button onClick={generateSitemap} className="w-full py-3 bg-secondary text-white rounded-xl text-xs font-bold hover:bg-teal-600 transition-colors flex items-center justify-center gap-2">
+                                  <FileJson className="w-4 h-4" /> Export sitemap.xml
+                              </button>
+                            </div>
                         </div>
-                        
-                        <div className="bg-slate-900 p-8 rounded-2xl shadow-xl text-white relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
-                                <Globe className="w-16 h-16" />
+
+                        <div className="bg-gradient-to-br from-indigo-900 to-slate-900 p-8 rounded-2xl shadow-xl text-white">
+                            <div className="flex items-center gap-3 mb-6">
+                              <div className="p-3 bg-white/10 rounded-xl">
+                                <Info className="w-5 h-5 text-secondary" />
+                              </div>
+                              <h4 className="text-lg font-serif font-bold">SEO Advice</h4>
                             </div>
-                            <h4 className="text-sm font-bold mb-4 flex items-center gap-2">
-                                <Info className="w-4 h-4 text-secondary" /> Robots Management
-                            </h4>
-                            <div className="text-[10px] font-mono text-blue-300 space-y-1 mb-6">
-                                <p>User-agent: *</p>
-                                <p>Allow: /</p>
-                                <p>Disallow: /admin</p>
-                                <p>Disallow: /login</p>
-                                <p>Sitemap: /sitemap.xml</p>
+                            <p className="text-sm text-indigo-100/70 leading-relaxed italic mb-6">"Google prioritizes experience, expertise, authoritativeness, and trustworthiness (E-E-A-T). Ensure your author profiles in the Blog section are complete to boost topical authority."</p>
+                            <div className="space-y-4">
+                               <div className="flex items-center gap-3 text-xs">
+                                  <CheckCircle className="w-4 h-4 text-green-400" />
+                                  <span>Site uses semantic HTML5</span>
+                               </div>
+                               <div className="flex items-center gap-3 text-xs">
+                                  <CheckCircle className="w-4 h-4 text-green-400" />
+                                  <span>Schema.org Markup detected</span>
+                               </div>
                             </div>
-                            <p className="text-[10px] text-gray-400 leading-relaxed italic">
-                                Crawlers are automatically blocked from accessing your administrative endpoints.
-                            </p>
                         </div>
                     </div>
                 </div>

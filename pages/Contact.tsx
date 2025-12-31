@@ -34,13 +34,28 @@ const Contact: React.FC = () => {
             <div className="bg-primary text-white p-10 md:w-2/5">
                 <h3 className="text-2xl font-bold mb-6">{t('contact_info_title')}</h3>
                 <div className="space-y-6">
+                    {address && (
+                        <div className="flex items-start space-x-4">
+                            <MapPin className="w-5 h-5 text-secondary mt-1 shrink-0" />
+                            <div>
+                                <p className="text-xs text-blue-200 uppercase tracking-wide">Address</p>
+                                <p className="font-medium whitespace-pre-line">{address}</p>
+                            </div>
+                        </div>
+                    )}
                     <div className="flex items-start space-x-4">
-                        <Phone className="w-5 h-5 text-secondary mt-1" />
-                        <div><p className="text-xs text-blue-200 uppercase tracking-wide">Phone</p><p className="font-medium">{phone}</p></div>
+                        <Phone className="w-5 h-5 text-secondary mt-1 shrink-0" />
+                        <div>
+                            <p className="text-xs text-blue-200 uppercase tracking-wide">Phone</p>
+                            <p className="font-medium">{phone}</p>
+                        </div>
                     </div>
                     <div className="flex items-start space-x-4">
-                        <Mail className="w-5 h-5 text-secondary mt-1" />
-                        <div><p className="text-xs text-blue-200 uppercase tracking-wide">Email</p><p className="font-medium">{email}</p></div>
+                        <Mail className="w-5 h-5 text-secondary mt-1 shrink-0" />
+                        <div>
+                            <p className="text-xs text-blue-200 uppercase tracking-wide">Email</p>
+                            <p className="font-medium">{email}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -50,6 +65,7 @@ const Contact: React.FC = () => {
                     <div className="h-full flex flex-col items-center justify-center text-center">
                         <CheckCircle2 className="w-12 h-12 text-green-600 mb-6" />
                         <h3 className="text-2xl font-bold text-gray-900 mb-2">Success!</h3>
+                        <p className="text-gray-500">Your message has been received. We'll get back to you shortly.</p>
                     </div>
                 ) : (
                     <form className="space-y-6" onSubmit={handleSubmit}>
@@ -59,7 +75,7 @@ const Contact: React.FC = () => {
                         </div>
                         <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('form_email')}</label><input name="email" required value={formData.email} onChange={handleChange} type="email" className={inputClasses} /></div>
                         <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('form_message')}</label><textarea name="message" required value={formData.message} onChange={handleChange} rows={4} className={inputClasses}></textarea></div>
-                        <button className="w-full bg-secondary hover:bg-teal-600 text-white font-bold py-3 rounded-lg flex items-center justify-center shadow-lg transform active:scale-95">
+                        <button className="w-full bg-secondary hover:bg-teal-600 text-white font-bold py-3 rounded-lg flex items-center justify-center shadow-lg transform active:scale-95 transition-all">
                             <Send className="w-4 h-4 mr-2" /> {t('form_submit')}
                         </button>
                     </form>
