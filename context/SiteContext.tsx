@@ -104,6 +104,33 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       canonical.setAttribute('href', settings.canonicalUrl);
     }
+
+    // Custom Scripts Injection (Google Analytics, etc)
+    if (settings.customScripts) {
+      let container = document.getElementById('custom-header-scripts');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'custom-header-scripts';
+        document.head.appendChild(container);
+      }
+      
+      // Use range to execute script tags within the HTML string
+      const range = document.createRange();
+      range.selectNode(document.head);
+      const fragment = range.createContextualFragment(settings.customScripts);
+      
+      container.innerHTML = '';
+      container.appendChild(fragment);
+      
+      // Re-run any scripts manually to ensure global variables are set
+      const scripts = container.querySelectorAll('script');
+      scripts.forEach((oldScript) => {
+        const newScript = document.createElement('script');
+        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+        oldScript.parentNode?.replaceChild(newScript, oldScript);
+      });
+    }
   }, [settings]);
 
   const updateSettings = (newSettings: Partial<SiteSettings>) => {

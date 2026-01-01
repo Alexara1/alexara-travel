@@ -11,13 +11,13 @@ const AIConcierge: React.FC = () => {
   const [input, setInput] = useState('');
   
   const welcomeMessages: Record<string, string> = {
-    EN: `Welcome to ${settings.siteName}. I'm your Neural Travel Specialist. Where shall we fly you to today?`,
-    ES: `Bienvenido a ${settings.siteName}. Soy su especialista en viajes neuronales. ¿A dónde volamos hoy?`,
-    FR: `Bienvenue chez ${settings.siteName}. Je suis votre spécialiste neural du voyage. Où devrions-nous vous emmener aujourd'hui ?`,
-    DE: `Willkommen bei ${settings.siteName}. Ich bin Ihr neuronaler Reise-Spezialist. Wohin sollen wir heute fliegen?`,
-    JP: `${settings.siteName}へようこそ。私はあなたのニューラル・トラベル・スペシャリストです。今日はどこへ飛びますか？`,
-    RU: `Добро пожаловать в ${settings.siteName}. Я ваш персональный ИИ-гид. Куда отправимся сегодня?`,
-    ZH: `欢迎来到 ${settings.siteName}。我是您的旅行 AI 助手。今天我们飞往哪里？`
+    EN: `Welcome to ${settings.siteName}. I'm your Neural Travel Specialist. How may I assist you today?`,
+    ES: `Bienvenido a ${settings.siteName}. Soy su especialista en viajes neuronales. ¿Cómo puedo ayudarle hoy?`,
+    FR: `Bienvenue chez ${settings.siteName}. Je suis votre spécialiste neural du voyage. Comment puis-je vous aider aujourd'hui ?`,
+    DE: `Willkommen bei ${settings.siteName}. Ich bin Ihr neuronaler Reise-Spezialist. Wie kann ich Ihnen heute helfen?`,
+    JP: `${settings.siteName}へようこそ。私はあなたのニューラル・トラベル・スペシャリストです。本日はどのようなお手伝いが必要ですか？`,
+    RU: `Добро пожаловать в ${settings.siteName}. Я ваш персональный ИИ-гид. Чем я могу быть полезен сегодня?`,
+    ZH: `欢迎来到 ${settings.siteName}。我是您的旅行 AI 助手。请问今天有什么可以帮您的？`
   };
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -47,10 +47,9 @@ const AIConcierge: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Create a fresh instance for each request to ensure the latest API key is used
       const apiKey = process.env.API_KEY;
       if (!apiKey) {
-        throw new Error("API_KEY is not defined in the environment.");
+        throw new Error("API_KEY_MISSING");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -58,9 +57,17 @@ const AIConcierge: React.FC = () => {
         model: 'gemini-3-flash-preview',
         config: {
           tools: [{ googleSearch: {} }],
-          systemInstruction: `You are the ${settings.siteName} AI Concierge. Your tone is professional, sophisticated, and inspiring. 
-          CRITICAL: You MUST respond in the following language: ${settings.language}.
-          Use Google Search to provide up-to-date travel advice, current weather, and local trending events. Recommend visiting the "Deals" page for specific bookings.`,
+          systemInstruction: `You are the ${settings.siteName} AI Concierge—a high-end, sophisticated travel architect.
+          
+          TONE: Professional, concise, bespoke, and inspiring.
+          
+          CONVERSATION STYLE:
+          1. If the user provides a short greeting (e.g., 'hi', 'hello', 'hey'), respond with a VERY brief, warm acknowledgment and ask a specific discovery question. (e.g., "Hello! Are we exploring new destinations, or looking for gear for your next journey?")
+          2. Avoid long-winded lists or feature descriptions unless the user explicitly asks for them.
+          3. Your goal is to guide them to Destinations, Deals, or the AI Planner.
+          4. If they ask for travel advice, use Google Search for up-to-date, real-world data.
+          
+          CRITICAL: You MUST respond in the following language: ${settings.language}.`,
         }
       });
 
@@ -73,8 +80,16 @@ const AIConcierge: React.FC = () => {
 
       setMessages(prev => [...prev, { role: 'model', text, sources }]);
     } catch (error: any) {
-      console.error("AI Concierge Failure:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble synthesizing a response. Please check your network connection or API configuration." }]);
+      console.error("AI Concierge Error:", error);
+      
+      let errorText = "I'm having trouble synthesizing a response. Please check your network connection.";
+      if (error?.status === 429 || error?.message?.includes('429')) {
+        errorText = "The AI service is currently at its free-tier limit. Please wait about 60 seconds.";
+      } else if (error.message === "API_KEY_MISSING") {
+        errorText = "Configuration Error: API Key not found.";
+      }
+
+      setMessages(prev => [...prev, { role: 'model', text: errorText }]);
     } finally {
       setIsTyping(false);
     }
@@ -98,7 +113,7 @@ const AIConcierge: React.FC = () => {
         </span>
       </button>
 
-      <div className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-[-20px_0_60_rgba(0,0,0,0.15)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col border-l border-gray-100 ${
+      <div className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-[-20px_0_60px_rgba(0,0,0,0.15)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col border-l border-gray-100 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-950 text-white relative overflow-hidden">
@@ -171,7 +186,7 @@ const AIConcierge: React.FC = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask our concierge..."
+              placeholder="How can I assist your journey?"
               className="w-full pl-6 pr-14 py-5 bg-gray-50 border border-gray-200 rounded-[2rem] text-[13px] focus:ring-2 focus:ring-secondary focus:bg-white outline-none transition-all placeholder-gray-400 font-medium"
             />
             <button type="submit" disabled={!input.trim() || isTyping} className="absolute right-2 top-1/2 -translate-y-1/2 p-3.5 bg-primary text-white rounded-[1.5rem] hover:bg-secondary transition-all disabled:opacity-30 shadow-lg active:scale-90">

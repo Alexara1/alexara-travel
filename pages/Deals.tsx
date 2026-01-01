@@ -2,7 +2,52 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
-import { Tag, Clock, Star, Check, MapPin, Search, Send, MailCheck, X, Building2, Bed, UtensilsCrossed, Music2, Palmtree, Tent, Sparkles, SlidersHorizontal, ChevronRight, Ticket, Package } from 'lucide-react';
+import { Tag, Clock, Star, Check, MapPin, Search, Send, MailCheck, X, Building2, Bed, UtensilsCrossed, Music2, Palmtree, Tent, Sparkles, SlidersHorizontal, ChevronRight, Ticket, Package, ImageIcon } from 'lucide-react';
+import { Deal } from '../types';
+
+const DealCard: React.FC<{ deal: Deal; t: (k: string) => string }> = ({ deal, t }) => {
+  const [imageError, setImageError] = useState(false);
+
+  return (
+    <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full border border-gray-100">
+      <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden flex items-center justify-center">
+        {imageError ? (
+          <div className="flex flex-col items-center justify-center text-gray-400 space-y-2">
+            <ImageIcon className="w-12 h-12 opacity-20" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Image Unavailable</span>
+          </div>
+        ) : (
+          <img 
+            src={deal.image} 
+            alt={deal.title} 
+            onError={() => setImageError(true)}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+          />
+        )}
+        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+          {deal.categories.map(cat => (
+            <span key={cat} className="bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-[10px] font-black uppercase text-gray-700 shadow-sm border border-white/50">
+              {t(`cat_${cat.toLowerCase()}`)}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="p-8 flex-1 flex flex-col">
+        <div className="text-xs font-bold text-secondary uppercase tracking-widest mb-3">{deal.location}</div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-8 group-hover:text-primary transition-colors leading-tight">{deal.title}</h3>
+        <div className="mt-auto flex items-center justify-between">
+          <div>
+            <div className="text-xs text-gray-400 line-through mb-1">${deal.originalPrice}</div>
+            <div className="text-3xl font-black text-primary">${deal.price}</div>
+          </div>
+          <a href={deal.affiliateLink} target="_blank" rel="noopener noreferrer" className="bg-primary hover:bg-slate-800 text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95">
+            {t('btn_book')}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Deals: React.FC = () => {
   const { deals, settings, t } = useSite();
@@ -82,31 +127,7 @@ const Deals: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredDeals.map((deal) => (
-                <div key={deal.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full border border-gray-100">
-                    <div className="relative h-64 bg-gray-100 overflow-hidden">
-                        <img src={deal.image} alt={deal.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                             {deal.categories.map(cat => (
-                                <span key={cat} className="bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-[10px] font-black uppercase text-gray-700 shadow-sm border border-white/50">
-                                    {t(`cat_${cat.toLowerCase()}`)}
-                                </span>
-                             ))}
-                        </div>
-                    </div>
-                    <div className="p-8 flex-1 flex flex-col">
-                        <div className="text-xs font-bold text-secondary uppercase tracking-widest mb-3">{deal.location}</div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-8 group-hover:text-primary transition-colors leading-tight">{deal.title}</h3>
-                        <div className="mt-auto flex items-center justify-between">
-                            <div>
-                                <div className="text-xs text-gray-400 line-through mb-1">${deal.originalPrice}</div>
-                                <div className="text-3xl font-black text-primary">${deal.price}</div>
-                            </div>
-                            <a href={deal.affiliateLink} target="_blank" rel="noopener" className="bg-primary hover:bg-slate-800 text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95">
-                                {t('btn_book')}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <DealCard key={deal.id} deal={deal} t={t} />
             ))}
         </div>
       </div>

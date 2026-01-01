@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Star, Sparkles, BrainCircuit, Navigation } from 'lucide-react';
+import { Search, ArrowRight, Star, Sparkles, BrainCircuit, Navigation, Quote, ShieldCheck, CheckCircle } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 
 const Home: React.FC = () => {
@@ -17,6 +17,33 @@ const Home: React.FC = () => {
     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80",
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80",
     "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=2000&q=80"
+  ];
+
+  const testimonials = [
+    {
+      id: 1,
+      name: t('review_1_author'),
+      location: t('review_1_loc'),
+      text: t('review_1_text'),
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80"
+    },
+    {
+      id: 2,
+      name: t('review_2_author'),
+      location: t('review_2_loc'),
+      text: t('review_2_text'),
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+    },
+    {
+      id: 3,
+      name: t('review_3_author'),
+      location: t('review_3_loc'),
+      text: t('review_3_text'),
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80"
+    }
   ];
 
   useEffect(() => {
@@ -92,7 +119,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Innovation Section - Updated Neural Navigator Visual */}
+      {/* Innovation Section */}
       <section className="py-32 bg-slate-950 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -116,20 +143,17 @@ const Home: React.FC = () => {
               
               <div className="relative h-[600px] w-full perspective-1000">
                   <div className="absolute top-0 left-0 w-full h-full bg-slate-900 border border-white/10 rounded-[3.5rem] shadow-3xl overflow-hidden p-0 flex flex-col group transition-transform duration-700 hover:rotate-y-2">
-                      {/* High-Visibility Tech Background */}
                       <div className="absolute inset-0 z-0">
                           <img 
                             src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80" 
                             alt="Neural Network Visualization" 
                             className="w-full h-full object-cover transition-transform duration-[20s] linear scale-110"
                           />
-                          {/* Gradient Overlays for Readability */}
                           <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/40 to-primary/20"></div>
                           <div className="absolute inset-0 bg-slate-950/30 backdrop-blur-[2px]"></div>
                           <div className="absolute inset-0 neural-mesh opacity-30"></div>
                       </div>
 
-                      {/* Content HUD - Sharp Glassmorphism */}
                       <div className="relative z-10 p-12 flex flex-col h-full">
                           <div className="flex items-center justify-between mb-12 bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-2xl">
                               <div className="flex items-center space-x-4">
@@ -144,44 +168,12 @@ const Home: React.FC = () => {
                                       </p>
                                   </div>
                               </div>
-                              <div className="flex space-x-2 bg-black/40 px-4 py-2 rounded-full border border-white/5">
-                                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                                  <div className="w-2 h-2 rounded-full bg-secondary/50"></div>
-                                  <div className="w-2 h-2 rounded-full bg-secondary/30"></div>
-                              </div>
                           </div>
-                          
                           <div className="flex-1 relative flex items-center justify-center">
-                              {/* Central Animated Node */}
                               <div className="relative">
                                   <div className="absolute -inset-12 bg-secondary/30 rounded-full blur-[50px] animate-pulse"></div>
-                                  <div className="absolute -inset-20 bg-primary/20 rounded-full blur-[80px] animate-pulse delay-700"></div>
                                   <BrainCircuit className="w-40 h-40 text-white relative z-10 drop-shadow-[0_0_20px_rgba(26,170,186,0.5)]" />
-                                  
-                                  {/* Orbital Rings */}
                                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 border border-white/10 rounded-full animate-[spin_10s_linear_infinite]"></div>
-                                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-dashed border border-secondary/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
-                              </div>
-                          </div>
-
-                          <div className="mt-auto bg-black/40 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 grid grid-cols-2 gap-8 shadow-2xl">
-                              <div>
-                                  <div className="flex justify-between items-center mb-2">
-                                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Processing Data</p>
-                                      <span className="text-[10px] text-secondary font-black">94%</span>
-                                  </div>
-                                  <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                                      <div className="bg-secondary h-full w-[94%] shadow-[0_0_10px_rgba(26,170,186,0.8)] animate-pulse"></div>
-                                  </div>
-                              </div>
-                              <div>
-                                  <div className="flex justify-between items-center mb-2">
-                                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Network Latency</p>
-                                      <span className="text-[10px] text-primary font-black">12ms</span>
-                                  </div>
-                                  <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                                      <div className="bg-primary h-full w-[12%]"></div>
-                                  </div>
                               </div>
                           </div>
                       </div>
@@ -191,6 +183,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Trending Destinations */}
       <section className="py-32 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
@@ -210,6 +203,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Exclusive Collections (Deals) */}
       <section className="py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-16 text-center">{t('home_exclusive_title')}</h2>
@@ -238,6 +232,94 @@ const Home: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section - Refined for Professional Affiliate Presence */}
+      <section className="py-40 bg-gray-50 relative overflow-hidden border-t border-gray-100">
+        {/* Background elements */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-24">
+            <div className="inline-flex items-center space-x-2 bg-secondary/10 text-secondary px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-[0.4em] mb-8 border border-secondary/10 shadow-sm">
+                <ShieldCheck className="w-4 h-4 mr-2" />
+                <span>Global Collective Trusted</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-serif font-bold text-primary mb-8 tracking-tight">{t('home_reviews_title')}</h2>
+            <p className="text-gray-500 max-w-2xl mx-auto text-xl leading-relaxed">{t('home_reviews_subtitle')}</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {testimonials.map((review) => (
+              <div key={review.id} className="bg-white p-12 rounded-[4rem] shadow-xl hover:shadow-3xl transition-all duration-700 border border-gray-100 flex flex-col group relative">
+                {/* Floating Icon */}
+                <div className="absolute -top-6 left-12 w-14 h-14 bg-primary rounded-3xl flex items-center justify-center text-white shadow-2xl rotate-6 group-hover:rotate-0 transition-transform duration-500">
+                    <Quote className="w-7 h-7" />
+                </div>
+                
+                <div className="flex mb-10 mt-6 space-x-1">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-accent fill-current drop-shadow-sm" />
+                  ))}
+                </div>
+
+                <div className="flex-1">
+                  <p className="text-gray-800 italic leading-relaxed text-xl mb-10 font-medium tracking-tight">"{review.text}"</p>
+                </div>
+
+                <div className="flex items-center pt-10 border-t border-slate-50 mt-auto">
+                  <div className="relative shrink-0">
+                    <img src={review.avatar} alt={review.name} className="w-16 h-16 rounded-2xl object-cover mr-6 shadow-xl border-4 border-white group-hover:scale-105 transition-transform" />
+                    <div className="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-white shadow-lg flex items-center justify-center" title="Verified Explorer">
+                        <CheckCircle className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+                  <div className="overflow-hidden">
+                    <h4 className="font-black text-gray-900 text-lg truncate">
+                        {review.name}
+                    </h4>
+                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] mt-1 flex items-center">
+                        <Navigation className="w-3 h-3 mr-1.5 text-secondary" />
+                        {review.location}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Social Proof Bar */}
+          <div className="mt-28 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+            <div className="inline-flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8 bg-white px-12 py-8 rounded-[3rem] shadow-2xl border border-gray-100 group">
+                <div className="flex -space-x-4">
+                    {[
+                        "https://randomuser.me/api/portraits/men/32.jpg",
+                        "https://randomuser.me/api/portraits/women/44.jpg",
+                        "https://randomuser.me/api/portraits/men/22.jpg",
+                        "https://randomuser.me/api/portraits/women/68.jpg",
+                        "https://randomuser.me/api/portraits/men/11.jpg"
+                    ].map((url, i) => (
+                        <img key={i} src={url} className="w-12 h-12 rounded-full border-4 border-white bg-slate-200 shadow-sm transition-transform group-hover:translate-x-1" alt="Explorer" />
+                    ))}
+                    <div className="w-12 h-12 rounded-full border-4 border-white bg-secondary flex items-center justify-center text-[10px] font-black text-white shadow-sm">+12k</div>
+                </div>
+                <div className="h-10 w-px bg-gray-100 hidden md:block"></div>
+                <div>
+                    <p className="text-lg font-bold text-gray-900 tracking-tight">Join <span className="text-secondary">50,000+</span> global collective members.</p>
+                    <div className="flex items-center justify-center md:justify-start mt-1">
+                        <div className="flex text-accent space-x-1 mr-2">
+                            {[1,2,3,4,5].map(i => <Star key={i} className="w-3 h-3 fill-current" />)}
+                        </div>
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">4.9/5 Average Discovery Rating</span>
+                    </div>
+                </div>
+                <Link to="/ai-planner" className="bg-primary text-white px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-lg hover:bg-slate-800 transition-all transform hover:-translate-y-1">
+                    Start Planning
+                </Link>
+            </div>
           </div>
         </div>
       </section>

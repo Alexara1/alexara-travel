@@ -50,7 +50,7 @@ const AIPlanner: React.FC = () => {
     try {
       const apiKey = process.env.API_KEY;
       if (!apiKey) {
-        throw new Error("API_KEY missing in production bundle.");
+        throw new Error("API_KEY_MISSING");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -85,8 +85,15 @@ const AIPlanner: React.FC = () => {
       }, 500);
 
     } catch (error: any) {
-      console.error("AI Planner Failure:", error);
-      setErrorMsg("Our neural network is encountering high latency. Please verify your API Key and network connection.");
+      console.error("AI Planner Error:", error);
+      
+      if (error?.status === 429 || error?.message?.includes('429')) {
+        setErrorMsg("The AI service is currently at its free-tier limit. Please wait about 60 seconds before trying your next synthesis.");
+      } else if (error.message === "API_KEY_MISSING") {
+        setErrorMsg("Production Configuration Error: The API_KEY environment variable is missing.");
+      } else {
+        setErrorMsg("Our neural network is encountering high latency. Please verify your connection or try again later.");
+      }
     } finally {
       setIsLoading(false);
       clearInterval(stepInterval);
