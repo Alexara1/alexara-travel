@@ -5,6 +5,23 @@ import { X, Send, Sparkles, User, Bot, Search, Compass } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { ChatMessage } from '../types';
 
+// Helper for exponential backoff retries
+const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 2000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      const isRateLimit = error?.status === 429 || error?.message?.includes('429');
+      if (isRateLimit && i < retries - 1) {
+        // Wait longer each time: 2s, 4s, 8s...
+        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        continue;
+      }
+      throw error;
+    }
+  }
+};
+
 const AIConcierge: React.FC = () => {
   const { settings } = useSite();
   const [isOpen, setIsOpen] = useState(false);
@@ -52,26 +69,31 @@ const AIConcierge: React.FC = () => {
         throw new Error("API_KEY_MISSING");
       }
 
-      const ai = new GoogleGenAI({ apiKey });
-      const chat = ai.chats.create({
-        model: 'gemini-3-flash-preview',
-        config: {
-          tools: [{ googleSearch: {} }],
-          systemInstruction: `You are the ${settings.siteName} AI Concierge—a high-end, sophisticated travel architect.
-          
-          TONE: Professional, concise, bespoke, and inspiring.
-          
-          CONVERSATION STYLE:
-          1. If the user provides a short greeting (e.g., 'hi', 'hello', 'hey'), respond with a VERY brief, warm acknowledgment and ask a specific discovery question. (e.g., "Hello! Are we exploring new destinations, or looking for gear for your next journey?")
-          2. Avoid long-winded lists or feature descriptions unless the user explicitly asks for them.
-          3. Your goal is to guide them to Destinations, Deals, or the AI Planner.
-          4. If they ask for travel advice, use Google Search for up-to-date, real-world data.
-          
-          CRITICAL: You MUST respond in the following language: ${settings.language}.`,
-        }
+      const response = await callWithRetry(async () => {
+        const ai = new GoogleGenAI({ apiKey });
+        return await ai.models.generateContent({
+          model: 'gemini-3-flash-preview',
+          contents: {
+            role: 'user',
+            parts: [{ text: userMessage }]
+          },
+          config: {
+            tools: [{ googleSearch: {} }],
+            systemInstruction: `You are the ${settings.siteName} AI Concierge—a high-end, sophisticated travel architect.
+            
+            TONE: Professional, concise, bespoke, and inspiring.
+            
+            CONVERSATION STYLE:
+            1. If the user provides a short greeting (e.g., 'hi', 'hello', 'hey'), respond with a VERY brief, warm acknowledgment and ask a specific discovery question.
+            2. Avoid long-winded lists or feature descriptions unless the user explicitly asks for them.
+            3. Your goal is to guide them to Destinations, Deals, or the AI Planner.
+            4. If they ask for travel advice, use Google Search for up-to-date, real-world data.
+            
+            CRITICAL: You MUST respond in the following language: ${settings.language}.`,
+          }
+        });
       });
 
-      const response = await chat.sendMessage({ message: userMessage });
       const text = response.text || "I apologize, my neural link is experiencing issues.";
       
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
@@ -84,7 +106,7 @@ const AIConcierge: React.FC = () => {
       
       let errorText = "I'm having trouble synthesizing a response. Please check your network connection.";
       if (error?.status === 429 || error?.message?.includes('429')) {
-        errorText = "The AI service is currently at its free-tier limit. Please wait about 60 seconds.";
+        errorText = "We're experiencing high demand. Please try sending your message again in about 30 seconds.";
       } else if (error.message === "API_KEY_MISSING") {
         errorText = "Configuration Error: API Key not found.";
       }

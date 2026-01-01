@@ -5,6 +5,23 @@ import { Sparkles, Send, Loader2, ExternalLink, RefreshCw, Save, Trash, Clock, C
 import { useSite } from '../context/SiteContext';
 import { Itinerary } from '../types';
 
+// Helper for exponential backoff retries
+const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 2500) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      const isRateLimit = error?.status === 429 || error?.message?.includes('429');
+      if (isRateLimit && i < retries - 1) {
+        // Wait longer each time: 2.5s, 5s, 10s...
+        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        continue;
+      }
+      throw error;
+    }
+  }
+};
+
 const AIPlanner: React.FC = () => {
   const { settings } = useSite();
   const [prompt, setPrompt] = useState('');
@@ -53,21 +70,23 @@ const AIPlanner: React.FC = () => {
         throw new Error("API_KEY_MISSING");
       }
 
-      const ai = new GoogleGenAI({ apiKey });
-      
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
-        contents: finalPrompt,
-        config: {
-          systemInstruction: `Act as a world-class luxury travel architect for ${settings.siteName}. 
-          CRITICAL: You MUST write the entire itinerary in the following language: ${settings.language}.
-          Generate a sophisticated multi-day itinerary.
-          Formatting Rules:
-          - Use "### Day X: [Title]" for daily headers.
-          - Include specific hotel and location names.
-          - Focus on high-end, exclusive experiences.`,
-          tools: [{ googleSearch: {} }],
-        }
+      const response = await callWithRetry(async () => {
+        const ai = new GoogleGenAI({ apiKey });
+        // Use flash-preview for much higher rate limits during public launch
+        return await ai.models.generateContent({
+          model: 'gemini-3-flash-preview',
+          contents: finalPrompt,
+          config: {
+            systemInstruction: `Act as a world-class luxury travel architect for ${settings.siteName}. 
+            CRITICAL: You MUST write the entire itinerary in the following language: ${settings.language}.
+            Generate a sophisticated multi-day itinerary.
+            Formatting Rules:
+            - Use "### Day X: [Title]" for daily headers.
+            - Include specific hotel and location names.
+            - Focus on high-end, exclusive experiences.`,
+            tools: [{ googleSearch: {} }],
+          }
+        });
       });
 
       const text = response.text;
@@ -88,7 +107,7 @@ const AIPlanner: React.FC = () => {
       console.error("AI Planner Error:", error);
       
       if (error?.status === 429 || error?.message?.includes('429')) {
-        setErrorMsg("The AI service is currently at its free-tier limit. Please wait about 60 seconds before trying your next synthesis.");
+        setErrorMsg("Our Neural core is currently serving many explorers. Please wait a moment and try your synthesis again.");
       } else if (error.message === "API_KEY_MISSING") {
         setErrorMsg("Production Configuration Error: The API_KEY environment variable is missing.");
       } else {
@@ -172,7 +191,7 @@ const AIPlanner: React.FC = () => {
         <div className="max-w-5xl mx-auto relative z-10 text-center">
             <div className="inline-flex items-center space-x-3 bg-white/5 backdrop-blur-3xl text-secondary px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[0.5em] mb-14 border border-white/10 shadow-2xl">
                 <Cpu className="w-4 h-4 text-secondary animate-pulse" />
-                <span>Neural Travel Architect Pro v5.0</span>
+                <span>Neural Travel Architect Pro v5.1</span>
             </div>
             
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-white mb-16 leading-[1] tracking-tight">
