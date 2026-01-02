@@ -70,7 +70,7 @@ const Deals: React.FC = () => {
 
   useEffect(() => { if (urlCountry) setSelectedCountry(urlCountry); }, [urlCountry]);
 
-  // Reset city when country changes to avoid impossible filters
+  // CRITICAL: Reset city filter if the country changes to prevent invalid filters
   useEffect(() => {
     setSelectedCity('All');
   }, [selectedCountry]);
@@ -89,7 +89,7 @@ const Deals: React.FC = () => {
 
   const countries = useMemo(() => ['All', ...Array.from(new Set(deals.map(d => d.location)))], [deals]);
   
-  // Dynamically filter cities based on selected country
+  // Dynamically update the list of available cities based on the selected country
   const cities = useMemo(() => {
     const filteredByCountry = selectedCountry === 'All' 
         ? deals 
@@ -116,7 +116,7 @@ const Deals: React.FC = () => {
 
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 mb-12 animate-in fade-in slide-in-from-top-4 duration-700">
           <div className="flex items-center gap-3 mb-8 text-primary font-bold uppercase tracking-widest text-xs">
-            <SlidersHorizontal className="w-4 h-4 text-secondary" /> <span>Search & Filter Architecture</span>
+            <SlidersHorizontal className="w-4 h-4 text-secondary" /> <span>Discovery Filters</span>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -154,14 +154,14 @@ const Deals: React.FC = () => {
             {/* Search Input */}
             <div className="lg:col-span-2">
                 <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 flex items-center">
-                    <Search className="w-3 h-3 mr-2 text-secondary" /> Instant Search
+                    <Search className="w-3 h-3 mr-2 text-secondary" /> Dynamic Search
                 </label>
                 <div className="relative">
                     <input 
                         type="text" 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search deals by name, city or country..."
+                        placeholder="Search deals by title, city or country..."
                         className="w-full p-4 pl-12 bg-gray-50 rounded-2xl border border-transparent focus:border-secondary focus:bg-white outline-none transition-all font-bold text-gray-700"
                     />
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
@@ -170,7 +170,7 @@ const Deals: React.FC = () => {
           </div>
 
           <div className="mt-10 pt-8 border-t border-gray-50">
-            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Experience Category</label>
+            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Discovery Categories</label>
             <div className="flex flex-wrap gap-2">
                 {categories.map((cat) => (
                     <button 
@@ -191,7 +191,7 @@ const Deals: React.FC = () => {
                     onClick={() => { setSelectedCountry('All'); setSelectedCity('All'); setSelectedCategory('All'); setSearchQuery(''); }} 
                     className="text-[10px] font-black text-red-400 hover:text-red-500 flex items-center uppercase tracking-widest bg-red-50 px-4 py-2 rounded-xl transition-colors"
                 >
-                    <X className="w-3.5 h-3.5 mr-2" /> Reset All Selections
+                    <X className="w-3.5 h-3.5 mr-2" /> Reset Architectural Filters
                 </button>
             </div>
           )}
@@ -206,7 +206,7 @@ const Deals: React.FC = () => {
                 <div className="col-span-full py-32 text-center bg-white rounded-[3rem] border border-dashed border-gray-200">
                     <ImageIcon className="w-16 h-16 mx-auto mb-6 text-gray-100" />
                     <h3 className="text-2xl font-serif font-bold text-gray-400">No results found.</h3>
-                    <p className="text-gray-300 text-sm mt-2">Try adjusting your filters to discover matching journeys.</p>
+                    <p className="text-gray-300 text-sm mt-2">Adjust your filters to discover matching journeys.</p>
                 </div>
             )}
         </div>

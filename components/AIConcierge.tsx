@@ -1,19 +1,22 @@
 
 import { GoogleGenAI } from "@google/genai";
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Sparkles, User, Bot, Search, Compass, RefreshCw } from 'lucide-react';
+import { X, Send, Sparkles, User, Bot, Search, Compass, RefreshCw, AlertCircle } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { ChatMessage } from '../types';
 
-// Robust retry logic
-const callWithRetry = async (fn: () => Promise<any>, retries = 5, delay = 3000) => {
+// Advanced retry with jitter to handle high-traffic Vercel deployments
+const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 4000) => {
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
     } catch (error: any) {
       const isRateLimit = error?.status === 429 || error?.message?.includes('429');
       if (isRateLimit && i < retries - 1) {
-        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        // Exponential backoff + jitter
+        const jitter = Math.random() * 1000;
+        const waitTime = (delay * Math.pow(2, i)) + jitter;
+        await new Promise(resolve => setTimeout(resolve, waitTime));
         continue;
       }
       throw error;
@@ -71,18 +74,19 @@ const AIConcierge: React.FC = () => {
 
       const response = await callWithRetry(async () => {
         const ai = new GoogleGenAI({ apiKey });
-        // Use gemini-3-flash-preview for maximum quota on free tier (15 RPM)
+        // gemini-3-flash-preview is prioritized for higher quota
         return await ai.models.generateContent({
           model: 'gemini-3-flash-preview',
           contents: { role: 'user', parts: [{ text: userMessage }] },
           config: {
             tools: [{ googleSearch: {} }],
-            systemInstruction: `You are the ${settings.siteName} AI Concierge. Respond in ${settings.language}. Help with travel planning, destinations, and deals. Be professional and high-end.`,
+            thinkingConfig: { thinkingBudget: 0 }, // Faster, lower token usage
+            systemInstruction: `You are the ${settings.siteName} AI Concierge. Respond in ${settings.language}. Be high-end, helpful, and concise.`,
           }
         });
       });
 
-      const text = response.text || "I apologize, I am unable to process that at the moment.";
+      const text = response.text || "I'm having trouble connecting to the synthesis core. Please try again.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
         ?.map((chunk: any) => chunk.web ? { uri: chunk.web.uri, title: chunk.web.title } : null)
         .filter(Boolean) as { uri: string; title: string }[];
@@ -90,10 +94,10 @@ const AIConcierge: React.FC = () => {
       setMessages(prev => [...prev, { role: 'model', text, sources }]);
     } catch (error: any) {
       console.error("AI Concierge Error:", error);
-      let errorText = "The neural link is unstable. Please try again.";
+      let errorText = "The neural connection was lost. Please attempt to re-sync.";
       
       if (error?.status === 429 || error?.message?.includes('429')) {
-        errorText = "The AI service is currently at maximum capacity. Please wait about 30 seconds and try re-sending your message.";
+        errorText = "We are currently experiencing high demand. Please wait about 30 seconds to re-send your inquiry.";
       }
 
       setMessages(prev => [...prev, { role: 'model', text: errorText }]);
@@ -127,7 +131,7 @@ const AIConcierge: React.FC = () => {
              </div>
              <div>
                 <h3 className="font-serif font-bold text-lg">AI Concierge</h3>
-                <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Neural Core Online</p>
+                <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Neural Core Active</p>
              </div>
           </div>
           <button onClick={() => setIsOpen(false)} className="p-2.5 hover:bg-white/10 rounded-xl transition-colors">
@@ -149,23 +153,23 @@ const AIConcierge: React.FC = () => {
                       msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'
                     }`}>
                         <p>{msg.text}</p>
-                        {msg.text.includes("capacity") && lastUserMessage && (
+                        {msg.text.includes("demand") && lastUserMessage && (
                           <button 
                             onClick={() => handleSend(undefined, lastUserMessage)}
-                            className="mt-4 flex items-center text-[10px] font-black uppercase tracking-widest text-secondary hover:underline"
+                            className="mt-4 flex items-center text-[10px] font-black uppercase tracking-widest text-secondary hover:underline group/retry"
                           >
-                            <RefreshCw className="w-3 h-3 mr-2" /> Attempt Re-Sync
+                            <RefreshCw className="w-3 h-3 mr-2 group-hover/retry:rotate-180 transition-transform" /> Attempt Re-Sync
                           </button>
                         )}
                         {msg.sources && msg.sources.length > 0 && (
                             <div className="mt-5 pt-4 border-t border-gray-100">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center">
-                                    <Search className="w-3 h-3 mr-2 text-secondary" /> Knowledge Nodes
+                                    <Search className="w-3 h-3 mr-2 text-secondary" /> Sources
                                 </p>
                                 <div className="flex flex-wrap gap-2">
                                     {msg.sources.slice(0, 3).map((source, sIdx) => (
                                     <a key={sIdx} href={source.uri} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-full transition-all border border-transparent hover:border-slate-300 truncate max-w-[180px] font-bold">
-                                        {source.title || 'Source'}
+                                        {source.title || 'Knowledge base'}
                                     </a>
                                     ))}
                                 </div>
@@ -196,7 +200,7 @@ const AIConcierge: React.FC = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="How can I assist your journey?"
+              placeholder="Inquire with our travel intelligence..."
               className="w-full pl-6 pr-14 py-5 bg-gray-50 border border-gray-200 rounded-[2rem] text-[13px] focus:ring-2 focus:ring-secondary focus:bg-white outline-none transition-all"
             />
             <button type="submit" disabled={!input.trim() || isTyping} className="absolute right-2 top-1/2 -translate-y-1/2 p-3.5 bg-primary text-white rounded-[1.5rem] hover:bg-secondary transition-all disabled:opacity-30 shadow-lg active:scale-90">

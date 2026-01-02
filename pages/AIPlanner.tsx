@@ -5,15 +5,16 @@ import { Sparkles, Send, Loader2, ExternalLink, RefreshCw, Save, Trash, Clock, C
 import { useSite } from '../context/SiteContext';
 import { Itinerary } from '../types';
 
-// Enhanced retry logic with exponential backoff
-const callWithRetry = async (fn: () => Promise<any>, retries = 5, delay = 4000) => {
+const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 5000) => {
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
     } catch (error: any) {
       const isRateLimit = error?.status === 429 || error?.message?.includes('429');
       if (isRateLimit && i < retries - 1) {
-        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        const jitter = Math.random() * 2000;
+        const waitTime = (delay * Math.pow(2.5, i)) + jitter; // Longer waits for planner
+        await new Promise(resolve => setTimeout(resolve, waitTime));
         continue;
       }
       throw error;
@@ -38,13 +39,8 @@ const AIPlanner: React.FC = () => {
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const loadingSteps: Record<string, string[]> = {
-    EN: ["Establishing Neural Uplink...", "Grounding Search Parameters...", "Analyzing Global Flight Tables...", "Synthesizing Luxury Accommodations...", "Orchestrating Niche Experiences...", "Finalizing Architectural Blueprint..."],
-    ES: ["Estableciendo enlace neuronal...", "Buscando parámetros...", "Analizando vuelos globales...", "Sintetizando alojamientos de lujo...", "Orquestando experiencias nicho...", "Finalizando plano arquitectónico..."],
-    FR: ["Établissement de la liaison neurale...", "Ancrage des paramètres de recherche...", "Analyse des tables de vols mondiaux...", "Synthèse d'hébergements de luxe...", "Orchestration d'expériences de niche...", "Finalisation du plan architectural..."],
-    DE: ["Aufbau der neuronalen Verbindung...", "Suchparameter verankern...", "Globale Flugtabellen analysieren...", "Synthese von Luxusunterkünften...", "Orchestrierung von Nischenerlebnissen...", "Finalisierung des Architekturplans..."],
-    JP: ["ニューラルリンクを確立中...", "検索パラメータを接地中...", "グローバルフライト表を分析中...", "豪華な宿泊施設を合成中...", "ニッチな体験を調整中...", "建築設計図を完成させています..."],
-    RU: ["Установка нейронного соединения...", "Поиск параметров в глобальной сети...", "Анализ таблиц мировых авиаперелетов...", "Подбор роскошных вариантов размещения...", "Создание уникальных впечатлений...", "Завершение архитектурного плана..."],
-    ZH: ["建立神经链接...", "正在搜索全球参数...", "分析全球航班表...", "综合高奢住宿方案...", "策划独特的小众体验...", "最终确定行程蓝图..."]
+    EN: ["Syncing with Global Data Nodes...", "Analyzing Recent Search Grounding...", "Synthesizing Luxury Tables...", "Architecting Custom Journey Paths...", "Finalizing Architectural Synthesis..."],
+    ES: ["Sincronizando con nodos de datos...", "Analizando búsquedas recientes...", "Sintetizando tablas de lujo...", "Arquitectando rutas personalizadas...", "Finalizando síntesis arquitectónica..."]
   };
 
   const currentSteps = loadingSteps[settings.language] || loadingSteps['EN'];
@@ -61,7 +57,7 @@ const AIPlanner: React.FC = () => {
 
     const stepInterval = setInterval(() => {
         setLoadingStep(prev => (prev < currentSteps.length - 1 ? prev + 1 : prev));
-    }, 3000);
+    }, 4000);
 
     try {
       const apiKey = process.env.API_KEY;
@@ -69,13 +65,13 @@ const AIPlanner: React.FC = () => {
 
       const response = await callWithRetry(async () => {
         const ai = new GoogleGenAI({ apiKey });
-        // gemini-3-flash-preview is explicitly used for its higher RPM (15) vs Pro (2)
         return await ai.models.generateContent({
           model: 'gemini-3-flash-preview',
           contents: finalPrompt,
           config: {
-            systemInstruction: `Act as a world-class luxury travel architect for ${settings.siteName}. CRITICAL: Respond in ${settings.language}. Create a sophisticated multi-day luxury itinerary. Use "### Day X: [Title]" for headers.`,
+            systemInstruction: `You are the master travel architect for ${settings.siteName}. Respond in ${settings.language}. Create a sophisticated luxury multi-day itinerary. Use headers like "### Day X: [Title]".`,
             tools: [{ googleSearch: {} }],
+            thinkingConfig: { thinkingBudget: 0 }
           }
         });
       });
@@ -96,9 +92,9 @@ const AIPlanner: React.FC = () => {
     } catch (error: any) {
       console.error("AI Planner Error:", error);
       if (error?.status === 429 || error?.message?.includes('429')) {
-        setErrorMsg("The AI engine is at current capacity. High demand detected. Please wait 30s and try the synthesis again.");
+        setErrorMsg("API Quota Reached. High demand detected on our servers. Please wait 30 seconds and attempt re-synthesis.");
       } else {
-        setErrorMsg("Neural link interrupted. Please try re-synthesizing.");
+        setErrorMsg("The neural connection was interrupted. Please check your credentials or try again.");
       }
     } finally {
       setIsLoading(false);
@@ -119,7 +115,7 @@ const AIPlanner: React.FC = () => {
     const newItinerary: Itinerary = {
       id: Date.now().toString(),
       title: prompt.substring(0, 40) + (prompt.length > 40 ? '...' : ''),
-      destination: "Global Discovery",
+      destination: "Global Voyager Plan",
       duration: "Custom Stay",
       content: generatedItinerary,
       createdAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -178,11 +174,11 @@ const AIPlanner: React.FC = () => {
         <div className="max-w-5xl mx-auto relative z-10 text-center">
             <div className="inline-flex items-center space-x-3 bg-white/5 backdrop-blur-3xl text-secondary px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[0.5em] mb-14 border border-white/10 shadow-2xl">
                 <Cpu className="w-4 h-4 text-secondary animate-pulse" />
-                <span>Neural Travel Architect Pro v5.1</span>
+                <span>Neural Travel Synthesis Core</span>
             </div>
             
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-white mb-16 leading-[1] tracking-tight">
-                Synthesize your <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-teal-200 to-accent italic">perfect escape.</span>
+                Design your <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-teal-200 to-accent italic">perfect escape.</span>
             </h1>
             
             <form onSubmit={(e) => { e.preventDefault(); generateItinerary(); }} className="relative max-w-3xl mx-auto group">
@@ -191,7 +187,7 @@ const AIPlanner: React.FC = () => {
                         type="text"
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        placeholder="7 days in Patagonia for solo adventure..."
+                        placeholder="7 days in Bali for wellness and surf..."
                         className="flex-1 bg-transparent px-8 py-6 text-xl text-gray-800 placeholder-gray-400 outline-none font-medium"
                     />
                     <button 
@@ -217,34 +213,34 @@ const AIPlanner: React.FC = () => {
                 </div>
                 <div>
                     <h3 className="text-4xl font-serif font-bold text-primary mb-4 tracking-tight">{currentSteps[loadingStep]}</h3>
-                    <p className="text-gray-400 text-sm uppercase tracking-[0.3em] font-bold">Synthesizing Global Data Nodes</p>
+                    <p className="text-gray-400 text-sm uppercase tracking-[0.3em] font-bold">Synthesizing Global Journey Nodes</p>
                 </div>
             </div>
         ) : errorMsg ? (
             <div className="bg-red-50 border-2 border-red-100 rounded-[4rem] p-20 text-center shadow-xl">
                 <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-10" />
-                <h3 className="text-3xl font-bold text-gray-900 mb-6">Neural Link Interrupted</h3>
+                <h3 className="text-3xl font-bold text-gray-900 mb-6">Neural Synthesis Error</h3>
                 <p className="text-red-700 max-w-md mx-auto leading-relaxed mb-10 text-lg">{errorMsg}</p>
                 <button 
                   onClick={() => generateItinerary()} 
-                  className="bg-primary hover:bg-slate-900 text-white px-10 py-5 rounded-2xl font-bold flex items-center mx-auto transition-all shadow-xl active:scale-95"
+                  className="bg-primary hover:bg-slate-900 text-white px-10 py-5 rounded-2xl font-bold flex items-center mx-auto transition-all shadow-xl active:scale-95 group/retry"
                 >
-                    <RefreshCw className="w-5 h-5 mr-3" /> Attempt Re-Synthesis
+                    <RefreshCw className="w-5 h-5 mr-3 group-hover/retry:rotate-180 transition-transform" /> Re-Attempt Synthesis
                 </button>
             </div>
         ) : generatedItinerary ? (
             <div className="bg-white rounded-[5rem] shadow-3xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-bottom-20 duration-1000">
                 <div className="p-14 md:p-20 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center bg-slate-50/90 backdrop-blur-3xl sticky top-20 z-30 shadow-sm">
                   <div>
-                    <h2 className="text-4xl font-serif font-bold text-primary mb-2">Master Itinerary</h2>
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Architected for: {prompt}</p>
+                    <h2 className="text-4xl font-serif font-bold text-primary mb-2">Synthesis Result</h2>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Plan architected for: {prompt}</p>
                   </div>
                   <div className="flex flex-wrap justify-center gap-5 mt-8 md:mt-0">
                       <button onClick={handleCopy} className="bg-white border border-gray-200 text-gray-600 px-10 py-6 rounded-3xl font-bold flex items-center hover:bg-gray-50 transition-all shadow-sm active:scale-95">
-                        {copied ? <Check className="w-6 h-6 mr-3 text-green-500" /> : <Copy className="w-6 h-6 mr-3" />} {copied ? 'Copied' : 'Copy Blueprint'}
+                        {copied ? <Check className="w-6 h-6 mr-3 text-green-500" /> : <Copy className="w-6 h-6 mr-3" />} {copied ? 'Copied' : 'Copy Plan'}
                       </button>
                       <button onClick={saveItinerary} className="bg-primary hover:bg-slate-900 text-white px-12 py-6 rounded-3xl font-bold flex items-center shadow-3xl transition-all active:scale-95">
-                        <Save className="w-6 h-6 mr-3" /> Archive Plan
+                        <Save className="w-6 h-6 mr-3" /> Archive Synthesis
                       </button>
                   </div>
                 </div>
@@ -256,7 +252,7 @@ const AIPlanner: React.FC = () => {
                         {sources.length > 0 && (
                             <div className="mt-32 pt-16 border-t border-gray-100 pl-14">
                                 <h4 className="text-xs font-black text-gray-400 uppercase tracking-[0.5em] mb-10 flex items-center">
-                                    <Globe2 className="w-5 h-5 mr-4 text-secondary" /> Intelligence Nodes
+                                    <Globe2 className="w-5 h-5 mr-4 text-secondary" /> Data Grounding Nodes
                                 </h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {sources.map((source, idx) => (
@@ -264,7 +260,7 @@ const AIPlanner: React.FC = () => {
                                             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-4 shadow-sm group-hover:scale-110 transition-transform">
                                                 <LinkIcon className="w-4 h-4 text-secondary" />
                                             </div>
-                                            <span className="text-sm font-bold text-gray-600 truncate flex-1">{source.title || 'Knowledge Base Node'}</span>
+                                            <span className="text-sm font-bold text-gray-600 truncate flex-1">{source.title || 'Source'}</span>
                                             <ExternalLink className="w-4 h-4 text-gray-300 ml-2" />
                                         </a>
                                     ))}
@@ -277,14 +273,14 @@ const AIPlanner: React.FC = () => {
         ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
                 <div className="lg:col-span-2 h-[600px] rounded-[5rem] overflow-hidden shadow-3xl relative group">
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" alt="Adventure" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1600&q=80" alt="Lake" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex flex-col justify-end p-20 text-white">
                         <div className="mb-6 flex items-center space-x-3 text-secondary">
                             <Sparkles className="w-6 h-6 animate-pulse" />
-                            <span className="text-xs font-bold uppercase tracking-[0.4em]">AI-Powered Precision</span>
+                            <span className="text-xs font-bold uppercase tracking-[0.4em]">Architected Journeys</span>
                         </div>
-                        <h4 className="text-6xl font-serif font-bold mb-4 leading-none">Infinite Discovery <br/> Awaits.</h4>
-                        <p className="text-blue-100/60 max-w-md font-light">Input your constraints above to synthesize a bespoke global itinerary based on real-time neural data.</p>
+                        <h4 className="text-6xl font-serif font-bold mb-4 leading-none">Your Next Chapter <br/> Starts Here.</h4>
+                        <p className="text-blue-100/60 max-w-md font-light">Input your vision above. Our synthesis core will orchestrate a custom global itinerary from real-time intelligence.</p>
                     </div>
                 </div>
                 <div className="bg-white rounded-[5rem] p-16 shadow-3xl border border-gray-100 flex flex-col h-full overflow-hidden">
@@ -304,8 +300,8 @@ const AIPlanner: React.FC = () => {
                     ) : (
                         <div className="flex-1 flex flex-col items-center justify-center text-center p-12 bg-slate-50/80 rounded-[4rem] border-2 border-dashed border-gray-200">
                             <History className="w-16 h-16 text-gray-200 mb-8" />
-                            <h5 className="font-bold text-gray-400 text-xs uppercase tracking-[0.5em]">Logs Empty</h5>
-                            <p className="text-[10px] text-gray-300 mt-4 leading-relaxed">Your journeys will appear here once archived.</p>
+                            <h5 className="font-bold text-gray-400 text-xs uppercase tracking-[0.5em]">No Plans Archived</h5>
+                            <p className="text-[10px] text-gray-300 mt-4 leading-relaxed">Synthesize a journey to populate your archive.</p>
                         </div>
                     )}
                 </div>
