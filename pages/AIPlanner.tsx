@@ -5,15 +5,14 @@ import { Sparkles, Send, Loader2, ExternalLink, RefreshCw, Save, Trash, Clock, C
 import { useSite } from '../context/SiteContext';
 import { Itinerary } from '../types';
 
-// Helper for exponential backoff retries
-const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 2500) => {
+// Enhanced retry logic with exponential backoff
+const callWithRetry = async (fn: () => Promise<any>, retries = 5, delay = 4000) => {
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
     } catch (error: any) {
       const isRateLimit = error?.status === 429 || error?.message?.includes('429');
       if (isRateLimit && i < retries - 1) {
-        // Wait longer each time: 2.5s, 5s, 10s...
         await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
         continue;
       }
@@ -66,24 +65,16 @@ const AIPlanner: React.FC = () => {
 
     try {
       const apiKey = process.env.API_KEY;
-      if (!apiKey) {
-        throw new Error("API_KEY_MISSING");
-      }
+      if (!apiKey) throw new Error("API_KEY_MISSING");
 
       const response = await callWithRetry(async () => {
         const ai = new GoogleGenAI({ apiKey });
-        // Use flash-preview for much higher rate limits during public launch
+        // gemini-3-flash-preview is explicitly used for its higher RPM (15) vs Pro (2)
         return await ai.models.generateContent({
           model: 'gemini-3-flash-preview',
           contents: finalPrompt,
           config: {
-            systemInstruction: `Act as a world-class luxury travel architect for ${settings.siteName}. 
-            CRITICAL: You MUST write the entire itinerary in the following language: ${settings.language}.
-            Generate a sophisticated multi-day itinerary.
-            Formatting Rules:
-            - Use "### Day X: [Title]" for daily headers.
-            - Include specific hotel and location names.
-            - Focus on high-end, exclusive experiences.`,
+            systemInstruction: `Act as a world-class luxury travel architect for ${settings.siteName}. CRITICAL: Respond in ${settings.language}. Create a sophisticated multi-day luxury itinerary. Use "### Day X: [Title]" for headers.`,
             tools: [{ googleSearch: {} }],
           }
         });
@@ -93,7 +84,6 @@ const AIPlanner: React.FC = () => {
       if (!text) throw new Error("EMPTY_RESPONSE");
 
       setGeneratedItinerary(text);
-      
       const extractedSources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
         ?.map((chunk: any) => chunk.web ? { uri: chunk.web.uri, title: chunk.web.title } : null)
         .filter(Boolean) as { uri: string; title: string }[];
@@ -105,13 +95,10 @@ const AIPlanner: React.FC = () => {
 
     } catch (error: any) {
       console.error("AI Planner Error:", error);
-      
       if (error?.status === 429 || error?.message?.includes('429')) {
-        setErrorMsg("Our Neural core is currently serving many explorers. Please wait a moment and try your synthesis again.");
-      } else if (error.message === "API_KEY_MISSING") {
-        setErrorMsg("Production Configuration Error: The API_KEY environment variable is missing.");
+        setErrorMsg("The AI engine is at current capacity. High demand detected. Please wait 30s and try the synthesis again.");
       } else {
-        setErrorMsg("Our neural network is encountering high latency. Please verify your connection or try again later.");
+        setErrorMsg("Neural link interrupted. Please try re-synthesizing.");
       }
     } finally {
       setIsLoading(false);
@@ -155,7 +142,7 @@ const AIPlanner: React.FC = () => {
         return (
           <div key={i} className="relative pl-14 pt-12 pb-14 group/day">
             <div className="absolute left-[23px] top-12 bottom-0 w-1 bg-slate-100 group-last/day:hidden"></div>
-            <div className="absolute left-0 top-12 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg shadow-xl z-10 group-hover/day:scale-110 transition-transform">
+            <div className="absolute left-0 top-12 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg shadow-xl z-10">
               {dayMatch[2]}
             </div>
             <h3 className="text-4xl font-serif font-bold text-primary mb-6">{dayMatch[3]}</h3>
@@ -175,7 +162,7 @@ const AIPlanner: React.FC = () => {
       if (line.trim().startsWith('-') || line.trim().startsWith('*')) {
           return (
             <div key={i} className="flex items-start mb-6 pl-14 group/bullet">
-               <div className="w-2.5 h-2.5 rounded-full bg-secondary/40 mt-2.5 mr-6 shrink-0 group-hover/bullet:scale-150 transition-transform"></div>
+               <div className="w-2.5 h-2.5 rounded-full bg-secondary/40 mt-2.5 mr-6 shrink-0"></div>
                <span className="text-gray-700 leading-relaxed font-medium text-lg">{line.replace(/^[-*]\s*/, '').trim()}</span>
             </div>
           );
@@ -225,10 +212,7 @@ const AIPlanner: React.FC = () => {
                 <div className="relative">
                     <div className="w-64 h-64 border-[12px] border-secondary/5 border-t-secondary rounded-full animate-spin"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="relative">
-                            <Sparkles className="w-16 h-16 text-secondary animate-pulse" />
-                            <div className="absolute -inset-4 bg-secondary/20 rounded-full blur-xl animate-ping"></div>
-                        </div>
+                        <Sparkles className="w-16 h-16 text-secondary animate-pulse" />
                     </div>
                 </div>
                 <div>
@@ -241,8 +225,11 @@ const AIPlanner: React.FC = () => {
                 <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-10" />
                 <h3 className="text-3xl font-bold text-gray-900 mb-6">Neural Link Interrupted</h3>
                 <p className="text-red-700 max-w-md mx-auto leading-relaxed mb-10 text-lg">{errorMsg}</p>
-                <button onClick={() => generateItinerary()} className="text-primary font-bold hover:underline flex items-center mx-auto">
-                    <RefreshCw className="w-5 h-5 mr-2" /> Attempt Re-Synthesis
+                <button 
+                  onClick={() => generateItinerary()} 
+                  className="bg-primary hover:bg-slate-900 text-white px-10 py-5 rounded-2xl font-bold flex items-center mx-auto transition-all shadow-xl active:scale-95"
+                >
+                    <RefreshCw className="w-5 h-5 mr-3" /> Attempt Re-Synthesis
                 </button>
             </div>
         ) : generatedItinerary ? (
@@ -269,7 +256,7 @@ const AIPlanner: React.FC = () => {
                         {sources.length > 0 && (
                             <div className="mt-32 pt-16 border-t border-gray-100 pl-14">
                                 <h4 className="text-xs font-black text-gray-400 uppercase tracking-[0.5em] mb-10 flex items-center">
-                                    <Globe2 className="w-5 h-5 mr-4 text-secondary" /> Verified Intelligence Sources
+                                    <Globe2 className="w-5 h-5 mr-4 text-secondary" /> Intelligence Nodes
                                 </h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {sources.map((source, idx) => (

@@ -1,19 +1,18 @@
 
 import { GoogleGenAI } from "@google/genai";
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Sparkles, User, Bot, Search, Compass } from 'lucide-react';
+import { X, Send, Sparkles, User, Bot, Search, Compass, RefreshCw } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { ChatMessage } from '../types';
 
-// Helper for exponential backoff retries
-const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 2000) => {
+// Robust retry logic
+const callWithRetry = async (fn: () => Promise<any>, retries = 5, delay = 3000) => {
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
     } catch (error: any) {
       const isRateLimit = error?.status === 429 || error?.message?.includes('429');
       if (isRateLimit && i < retries - 1) {
-        // Wait longer each time: 2s, 4s, 8s...
         await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
         continue;
       }
@@ -26,7 +25,11 @@ const AIConcierge: React.FC = () => {
   const { settings } = useSite();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
-  
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [lastUserMessage, setLastUserMessage] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const welcomeMessages: Record<string, string> = {
     EN: `Welcome to ${settings.siteName}. I'm your Neural Travel Specialist. How may I assist you today?`,
     ES: `Bienvenido a ${settings.siteName}. Soy su especialista en viajes neuronales. ¿Cómo puedo ayudarle hoy?`,
@@ -37,16 +40,11 @@ const AIConcierge: React.FC = () => {
     ZH: `欢迎来到 ${settings.siteName}。我是您的旅行 AI 助手。请问今天有什么可以帮您的？`
   };
 
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-
   useEffect(() => {
     setMessages([
         { role: 'model', text: welcomeMessages[settings.language] || welcomeMessages['EN'] }
     ]);
   }, [settings.language, settings.siteName]);
-
-  const [isTyping, setIsTyping] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -54,48 +52,37 @@ const AIConcierge: React.FC = () => {
     }
   }, [messages, isTyping]);
 
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isTyping) return;
+  const handleSend = async (e?: React.FormEvent, retryText?: string) => {
+    if (e) e.preventDefault();
+    const userMessage = retryText || input.trim();
+    if (!userMessage || isTyping) return;
 
-    const userMessage = input.trim();
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    if (!retryText) {
+      setInput('');
+      setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    }
+    
+    setLastUserMessage(userMessage);
     setIsTyping(true);
 
     try {
       const apiKey = process.env.API_KEY;
-      if (!apiKey) {
-        throw new Error("API_KEY_MISSING");
-      }
+      if (!apiKey) throw new Error("API_KEY_MISSING");
 
       const response = await callWithRetry(async () => {
         const ai = new GoogleGenAI({ apiKey });
+        // Use gemini-3-flash-preview for maximum quota on free tier (15 RPM)
         return await ai.models.generateContent({
           model: 'gemini-3-flash-preview',
-          contents: {
-            role: 'user',
-            parts: [{ text: userMessage }]
-          },
+          contents: { role: 'user', parts: [{ text: userMessage }] },
           config: {
             tools: [{ googleSearch: {} }],
-            systemInstruction: `You are the ${settings.siteName} AI Concierge—a high-end, sophisticated travel architect.
-            
-            TONE: Professional, concise, bespoke, and inspiring.
-            
-            CONVERSATION STYLE:
-            1. If the user provides a short greeting (e.g., 'hi', 'hello', 'hey'), respond with a VERY brief, warm acknowledgment and ask a specific discovery question.
-            2. Avoid long-winded lists or feature descriptions unless the user explicitly asks for them.
-            3. Your goal is to guide them to Destinations, Deals, or the AI Planner.
-            4. If they ask for travel advice, use Google Search for up-to-date, real-world data.
-            
-            CRITICAL: You MUST respond in the following language: ${settings.language}.`,
+            systemInstruction: `You are the ${settings.siteName} AI Concierge. Respond in ${settings.language}. Help with travel planning, destinations, and deals. Be professional and high-end.`,
           }
         });
       });
 
-      const text = response.text || "I apologize, my neural link is experiencing issues.";
-      
+      const text = response.text || "I apologize, I am unable to process that at the moment.";
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
         ?.map((chunk: any) => chunk.web ? { uri: chunk.web.uri, title: chunk.web.title } : null)
         .filter(Boolean) as { uri: string; title: string }[];
@@ -103,12 +90,10 @@ const AIConcierge: React.FC = () => {
       setMessages(prev => [...prev, { role: 'model', text, sources }]);
     } catch (error: any) {
       console.error("AI Concierge Error:", error);
+      let errorText = "The neural link is unstable. Please try again.";
       
-      let errorText = "I'm having trouble synthesizing a response. Please check your network connection.";
       if (error?.status === 429 || error?.message?.includes('429')) {
-        errorText = "We're experiencing high demand. Please try sending your message again in about 30 seconds.";
-      } else if (error.message === "API_KEY_MISSING") {
-        errorText = "Configuration Error: API Key not found.";
+        errorText = "The AI service is currently at maximum capacity. Please wait about 30 seconds and try re-sending your message.";
       }
 
       setMessages(prev => [...prev, { role: 'model', text: errorText }]);
@@ -126,10 +111,7 @@ const AIConcierge: React.FC = () => {
         }`}
         style={{ background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})` }}
       >
-        <div className="relative">
-          <Sparkles className="w-7 h-7 text-white group-hover:rotate-12 transition-transform" />
-          <div className="absolute -inset-2 bg-white/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        </div>
+        <Sparkles className="w-7 h-7 text-white group-hover:rotate-12 transition-transform" />
         <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 group-hover:ml-3 text-white text-[11px] font-bold uppercase tracking-[0.3em] whitespace-nowrap">
           Neural Concierge
         </span>
@@ -138,19 +120,17 @@ const AIConcierge: React.FC = () => {
       <div className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-[-20px_0_60px_rgba(0,0,0,0.15)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col border-l border-gray-100 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
-        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-950 text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-40"></div>
-          <div className="flex items-center space-x-4 relative z-10">
-             <div className="p-3 bg-white/10 rounded-2xl backdrop-blur-xl relative border border-white/10">
+        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-950 text-white">
+          <div className="flex items-center space-x-4">
+             <div className="p-3 bg-white/10 rounded-2xl border border-white/10">
                 <Compass className="w-5 h-5 text-secondary animate-pulse" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-950 shadow-lg"></div>
              </div>
              <div>
-                <h3 className="font-serif font-bold text-lg leading-tight tracking-tight">AI Concierge</h3>
-                <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Neural Core Active</p>
+                <h3 className="font-serif font-bold text-lg">AI Concierge</h3>
+                <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Neural Core Online</p>
              </div>
           </div>
-          <button onClick={() => setIsOpen(false)} className="p-2.5 hover:bg-white/10 rounded-xl transition-colors relative z-10 border border-transparent hover:border-white/10">
+          <button onClick={() => setIsOpen(false)} className="p-2.5 hover:bg-white/10 rounded-xl transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -166,13 +146,21 @@ const AIConcierge: React.FC = () => {
                 </div>
                 <div>
                     <div className={`p-5 rounded-[2rem] text-[13px] leading-relaxed shadow-sm ${
-                    msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'
+                      msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'
                     }`}>
                         <p>{msg.text}</p>
+                        {msg.text.includes("capacity") && lastUserMessage && (
+                          <button 
+                            onClick={() => handleSend(undefined, lastUserMessage)}
+                            className="mt-4 flex items-center text-[10px] font-black uppercase tracking-widest text-secondary hover:underline"
+                          >
+                            <RefreshCw className="w-3 h-3 mr-2" /> Attempt Re-Sync
+                          </button>
+                        )}
                         {msg.sources && msg.sources.length > 0 && (
                             <div className="mt-5 pt-4 border-t border-gray-100">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center">
-                                    <Search className="w-3 h-3 mr-2 text-secondary" /> Verified Sources
+                                    <Search className="w-3 h-3 mr-2 text-secondary" /> Knowledge Nodes
                                 </p>
                                 <div className="flex flex-wrap gap-2">
                                     {msg.sources.slice(0, 3).map((source, sIdx) => (
@@ -209,7 +197,7 @@ const AIConcierge: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="How can I assist your journey?"
-              className="w-full pl-6 pr-14 py-5 bg-gray-50 border border-gray-200 rounded-[2rem] text-[13px] focus:ring-2 focus:ring-secondary focus:bg-white outline-none transition-all placeholder-gray-400 font-medium"
+              className="w-full pl-6 pr-14 py-5 bg-gray-50 border border-gray-200 rounded-[2rem] text-[13px] focus:ring-2 focus:ring-secondary focus:bg-white outline-none transition-all"
             />
             <button type="submit" disabled={!input.trim() || isTyping} className="absolute right-2 top-1/2 -translate-y-1/2 p-3.5 bg-primary text-white rounded-[1.5rem] hover:bg-secondary transition-all disabled:opacity-30 shadow-lg active:scale-90">
               <Send className="w-4 h-4" />

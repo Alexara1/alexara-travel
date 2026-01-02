@@ -1,8 +1,12 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
-import { Tag, Clock, Star, Check, MapPin, Search, Send, MailCheck, X, Building2, Bed, UtensilsCrossed, Music2, Palmtree, Tent, Sparkles, SlidersHorizontal, ChevronRight, Ticket, Package, ImageIcon, Map as MapIcon } from 'lucide-react';
+import { 
+  MapPin, Search, X, Building2, Bed, UtensilsCrossed, 
+  Music2, Palmtree, Tent, Sparkles, SlidersHorizontal, 
+  Ticket, Package, ImageIcon, Map as MapIcon, Globe 
+} from 'lucide-react';
 import { Deal } from '../types';
 
 const DealCard: React.FC<{ deal: Deal; t: (k: string) => string }> = ({ deal, t }) => {
@@ -53,9 +57,8 @@ const DealCard: React.FC<{ deal: Deal; t: (k: string) => string }> = ({ deal, t 
 };
 
 const Deals: React.FC = () => {
-  const { deals, settings, t } = useSite();
+  const { deals, t } = useSite();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
   const urlCountry = queryParams.get('country');
@@ -67,7 +70,7 @@ const Deals: React.FC = () => {
 
   useEffect(() => { if (urlCountry) setSelectedCountry(urlCountry); }, [urlCountry]);
 
-  // Reset city when country changes
+  // Reset city when country changes to avoid impossible filters
   useEffect(() => {
     setSelectedCity('All');
   }, [selectedCountry]);
@@ -86,6 +89,7 @@ const Deals: React.FC = () => {
 
   const countries = useMemo(() => ['All', ...Array.from(new Set(deals.map(d => d.location)))], [deals]);
   
+  // Dynamically filter cities based on selected country
   const cities = useMemo(() => {
     const filteredByCountry = selectedCountry === 'All' 
         ? deals 
@@ -99,7 +103,8 @@ const Deals: React.FC = () => {
       const matchesCity = selectedCity === 'All' || deal.city === selectedCity;
       const matchesCategory = selectedCategory === 'All' || deal.categories.includes(selectedCategory as any);
       const matchesSearch = deal.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            deal.city.toLowerCase().includes(searchQuery.toLowerCase());
+                            deal.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            deal.location.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCountry && matchesCity && matchesCategory && matchesSearch;
     });
   }, [deals, selectedCountry, selectedCity, selectedCategory, searchQuery]);
@@ -111,14 +116,14 @@ const Deals: React.FC = () => {
 
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 mb-12 animate-in fade-in slide-in-from-top-4 duration-700">
           <div className="flex items-center gap-3 mb-8 text-primary font-bold uppercase tracking-widest text-xs">
-            <SlidersHorizontal className="w-4 h-4 text-secondary" /> <span>Bespoke Filter Architecture</span>
+            <SlidersHorizontal className="w-4 h-4 text-secondary" /> <span>Search & Filter Architecture</span>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Country Selector */}
             <div>
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 flex items-center">
-                <Globe className="w-3 h-3 mr-2" /> Country
+                <Globe className="w-3 h-3 mr-2 text-secondary" /> Country
               </label>
               <select 
                 value={selectedCountry} 
@@ -133,7 +138,7 @@ const Deals: React.FC = () => {
             {/* City Selector */}
             <div>
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 flex items-center">
-                <MapIcon className="w-3 h-3 mr-2" /> City
+                <MapIcon className="w-3 h-3 mr-2 text-secondary" /> City
               </label>
               <select 
                 value={selectedCity} 
@@ -149,14 +154,14 @@ const Deals: React.FC = () => {
             {/* Search Input */}
             <div className="lg:col-span-2">
                 <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 flex items-center">
-                    <Search className="w-3 h-3 mr-2" /> Quick Search
+                    <Search className="w-3 h-3 mr-2 text-secondary" /> Instant Search
                 </label>
                 <div className="relative">
                     <input 
                         type="text" 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search by name or city..."
+                        placeholder="Search deals by name, city or country..."
                         className="w-full p-4 pl-12 bg-gray-50 rounded-2xl border border-transparent focus:border-secondary focus:bg-white outline-none transition-all font-bold text-gray-700"
                     />
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
@@ -165,7 +170,7 @@ const Deals: React.FC = () => {
           </div>
 
           <div className="mt-10 pt-8 border-t border-gray-50">
-            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Discovery Categories</label>
+            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Experience Category</label>
             <div className="flex flex-wrap gap-2">
                 {categories.map((cat) => (
                     <button 
@@ -186,7 +191,7 @@ const Deals: React.FC = () => {
                     onClick={() => { setSelectedCountry('All'); setSelectedCity('All'); setSelectedCategory('All'); setSearchQuery(''); }} 
                     className="text-[10px] font-black text-red-400 hover:text-red-500 flex items-center uppercase tracking-widest bg-red-50 px-4 py-2 rounded-xl transition-colors"
                 >
-                    <X className="w-3.5 h-3.5 mr-2" /> Reset Architectural Filters
+                    <X className="w-3.5 h-3.5 mr-2" /> Reset All Selections
                 </button>
             </div>
           )}
@@ -200,8 +205,8 @@ const Deals: React.FC = () => {
             ) : (
                 <div className="col-span-full py-32 text-center bg-white rounded-[3rem] border border-dashed border-gray-200">
                     <ImageIcon className="w-16 h-16 mx-auto mb-6 text-gray-100" />
-                    <h3 className="text-2xl font-serif font-bold text-gray-400">No matching synthesis found.</h3>
-                    <p className="text-gray-300 text-sm mt-2">Try adjusting your neural search parameters.</p>
+                    <h3 className="text-2xl font-serif font-bold text-gray-400">No results found.</h3>
+                    <p className="text-gray-300 text-sm mt-2">Try adjusting your filters to discover matching journeys.</p>
                 </div>
             )}
         </div>
@@ -211,4 +216,3 @@ const Deals: React.FC = () => {
 };
 
 export default Deals;
-import { Globe } from 'lucide-react';
