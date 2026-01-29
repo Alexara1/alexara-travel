@@ -97,6 +97,8 @@ export interface SiteSettings {
   searchVisibility?: boolean; // robots index/noindex
   robotsTxt?: string;
   customScripts?: string; // JSON-LD, Analytics, etc
+  // Content Taxonomy
+  blogCategories: string[];
   // Monetization
   ads: {
     enabled: boolean;

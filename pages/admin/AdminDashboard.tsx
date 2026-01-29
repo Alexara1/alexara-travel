@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
-import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlogPost, Deal, Destination, GearProduct, ContactMessage } from '../../types';
 
@@ -87,13 +87,16 @@ const AdminDashboard: React.FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
   const [destForm, setDestForm] = useState<Partial<Destination>>({});
   const [dealForm, setDealForm] = useState<Partial<Deal>>({ categories: [] });
   const [gearForm, setGearForm] = useState<Partial<GearProduct>>({});
+  
+  const [newBlogCategory, setNewBlogCategory] = useState('');
 
-  const availableCategories = ['Hotel', 'Hostel', 'Restaurant', 'Nightclub', 'Beach', 'Resort', 'Activity', 'Ticket', 'Package'];
+  const availableDealCategories = ['Hotel', 'Hostel', 'Restaurant', 'Nightclub', 'Beach', 'Resort', 'Activity', 'Ticket', 'Package'];
 
   useEffect(() => {
     setEditingId(null);
@@ -142,7 +145,7 @@ const AdminDashboard: React.FC = () => {
             video: postForm.video,
             author: postForm.author || 'Admin',
             date: new Date().toLocaleDateString(),
-            tags: postForm.tags || ['Travel']
+            tags: postForm.tags || []
         } as BlogPost);
     } else if (editingId) {
         updatePost(editingId, postForm);
@@ -216,6 +219,39 @@ const AdminDashboard: React.FC = () => {
       } else {
           setDealForm({ ...dealForm, categories: [...current, cat as any] });
       }
+  };
+
+  const togglePostCategory = (cat: string) => {
+      const current = postForm.tags || [];
+      if (current.includes(cat)) {
+          setPostForm({ ...postForm, tags: current.filter(c => c !== cat) });
+      } else {
+          setPostForm({ ...postForm, tags: [...current, cat] });
+      }
+  };
+
+  const handleAddBlogCategory = () => {
+    if (!newBlogCategory.trim()) return;
+    const current = settings.blogCategories || [];
+    if (current.includes(newBlogCategory.trim())) {
+        alert("Category already exists.");
+        return;
+    }
+    updateSettings({ blogCategories: [...current, newBlogCategory.trim()] });
+    setNewBlogCategory('');
+  };
+
+  const handleRemoveBlogCategory = (cat: string) => {
+    if (window.confirm(`Are you sure you want to remove the category "${cat}"? Posts tagged with this will still keep the tag, but it will be removed from future choices.`)) {
+        updateSettings({ blogCategories: settings.blogCategories.filter(c => c !== cat) });
+    }
+  };
+
+  const copyPostLink = (id: string) => {
+      const url = `${window.location.origin}/#/blog/${id}`;
+      navigator.clipboard.writeText(url);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
   };
 
   const addSocialLink = () => {
@@ -903,58 +939,131 @@ const AdminDashboard: React.FC = () => {
         {/* --- POSTS TAB --- */}
         {activeTab === 'posts' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
-                        <span>{formMode === 'create' ? 'Create New Post' : 'Edit Post'}</span>
-                        {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
-                    </h3>
-                    <form onSubmit={savePost} className="space-y-4">
-                        <div>
-                            <label className={labelClass}>Title</label>
-                            <input type="text" className={inputClass} value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
-                        </div>
-                        <div>
-                            <label className={labelClass}>Excerpt</label>
-                            <textarea className={inputClass} rows={2} value={postForm.excerpt || ''} onChange={e => setPostForm({...postForm, excerpt: e.target.value})} />
-                        </div>
-                        <div>
-                            <label className={labelClass}>Content</label>
-                            <textarea className={inputClass} rows={10} value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                             <div>
-                                <label className={labelClass}>Author</label>
-                                <input type="text" className={inputClass} value={postForm.author || ''} onChange={e => setPostForm({...postForm, author: e.target.value})} />
+                <div className="space-y-8">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                            <span>{formMode === 'create' ? 'Create New Post' : 'Edit Post'}</span>
+                            {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                        </h3>
+                        <form onSubmit={savePost} className="space-y-4">
+                            <div>
+                                <label className={labelClass}>Title</label>
+                                <input type="text" className={inputClass} value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
                             </div>
-                        </div>
-                        
-                        <MediaInput 
-                            label="Featured Image" 
-                            type="image"
-                            recommendedDimensions="1200 x 800 px"
-                            value={postForm.image} 
-                            onChange={(val) => setPostForm({...postForm, image: val})} 
-                        />
-                        <MediaInput 
-                            label="Video" 
-                            type="video"
-                            accept="video/*"
-                            value={postForm.video} 
-                            onChange={(val) => setPostForm({...postForm, video: val})} 
-                        />
+                            <div>
+                                <label className={labelClass}>Excerpt</label>
+                                <textarea className={inputClass} rows={2} value={postForm.excerpt || ''} onChange={e => setPostForm({...postForm, excerpt: e.target.value})} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Content</label>
+                                <textarea className={inputClass} rows={10} value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className={labelClass}>Author</label>
+                                    <input type="text" className={inputClass} value={postForm.author || ''} onChange={e => setPostForm({...postForm, author: e.target.value})} />
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Categories (Select Tags)</label>
+                                    <div className="grid grid-cols-2 gap-2 mt-1 max-h-40 overflow-y-auto p-2 bg-gray-50 rounded-lg">
+                                        {(settings.blogCategories || []).map(cat => (
+                                            <label key={cat} className="flex items-center space-x-2 text-xs font-medium text-gray-600 cursor-pointer hover:text-primary transition-colors">
+                                                <input 
+                                                    type="checkbox" 
+                                                    checked={(postForm.tags || []).includes(cat)} 
+                                                    onChange={() => togglePostCategory(cat)}
+                                                    className="w-4 h-4 text-primary rounded"
+                                                />
+                                                <span>{cat}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <MediaInput 
+                                label="Featured Image" 
+                                type="image"
+                                recommendedDimensions="1200 x 800 px"
+                                value={postForm.image} 
+                                onChange={(val) => setPostForm({...postForm, image: val})} 
+                            />
+                            <MediaInput 
+                                label="Video" 
+                                type="video"
+                                accept="video/*"
+                                value={postForm.video} 
+                                onChange={(val) => setPostForm({...postForm, video: val})} 
+                            />
 
-                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
-                            {formMode === 'create' ? 'Publish Post' : 'Update Post'}
-                        </button>
-                    </form>
+                            <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                                {formMode === 'create' ? 'Publish Post' : 'Update Post'}
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* NEW: Blog Category Manager */}
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-lg font-bold mb-4 flex items-center text-primary">
+                            <Tag className="w-5 h-5 mr-2" /> Global Category Manager
+                        </h3>
+                        <p className="text-xs text-gray-400 mb-6">Manage the topics available for your articles and filters on the blog page.</p>
+                        
+                        <div className="flex gap-2 mb-6">
+                            <input 
+                                type="text" 
+                                placeholder="New category name..." 
+                                className={inputClass}
+                                value={newBlogCategory}
+                                onChange={(e) => setNewBlogCategory(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleAddBlogCategory();
+                                    }
+                                }}
+                            />
+                            <button 
+                                onClick={handleAddBlogCategory}
+                                className="bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-teal-600 transition-colors flex items-center shrink-0"
+                            >
+                                <Plus className="w-4 h-4 mr-1" /> Add
+                            </button>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                            {(settings.blogCategories || []).map((cat) => (
+                                <div key={cat} className="flex items-center gap-2 bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full text-xs font-bold border border-slate-200 group">
+                                    <span>{cat}</span>
+                                    <button 
+                                        onClick={() => handleRemoveBlogCategory(cat)}
+                                        className="text-slate-400 hover:text-red-500 transition-colors"
+                                    >
+                                        <X className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit">
                      <h3 className="text-xl font-bold mb-4">Manage Posts</h3>
-                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                     <div className="space-y-2 max-h-[800px] overflow-y-auto">
                          {posts.map(post => (
                              <div key={post.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
-                                 <span className="font-medium text-sm text-gray-800 truncate flex-1">{post.title}</span>
+                                 <div className="flex-1 truncate">
+                                     <span className="font-medium text-sm text-gray-800">{post.title}</span>
+                                     <div className="flex gap-1 mt-1">
+                                         {post.tags?.map(t => (
+                                             <span key={t} className="text-[9px] bg-secondary/10 text-secondary px-1 rounded font-bold">{t}</span>
+                                         ))}
+                                     </div>
+                                 </div>
                                  <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPostLink(post.id)} className="text-gray-400 hover:text-primary p-1" title="Copy Public URL">
+                                         {copiedId === post.id ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                                     </button>
                                      <button onClick={() => handleEdit(post.id, 'post')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
                                      <button onClick={() => deletePost(post.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
                                  </div>
@@ -1074,7 +1183,7 @@ const AdminDashboard: React.FC = () => {
                             <div>
                                 <label className={labelClass}>Categories (Select All That Apply)</label>
                                 <div className="grid grid-cols-2 gap-2 mt-1">
-                                    {availableCategories.map(cat => (
+                                    {availableDealCategories.map(cat => (
                                         <label key={cat} className="flex items-center space-x-2 text-xs font-medium text-gray-600 bg-gray-50 p-2 rounded-lg cursor-pointer hover:bg-gray-100">
                                             <input 
                                                 type="checkbox" 

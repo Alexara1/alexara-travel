@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Star, Sparkles, BrainCircuit, Navigation, Quote, ShieldCheck, CheckCircle } from 'lucide-react';
+import { Search, ArrowRight, Star, Sparkles, BrainCircuit, Navigation, Quote, ShieldCheck, CheckCircle, FileText, Bed, Plane, Map } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 
 const Home: React.FC = () => {
@@ -19,31 +19,11 @@ const Home: React.FC = () => {
     "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=2000&q=80"
   ];
 
-  const testimonials = [
-    {
-      id: 1,
-      name: t('review_1_author'),
-      location: t('review_1_loc'),
-      text: t('review_1_text'),
-      rating: 5,
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80"
-    },
-    {
-      id: 2,
-      name: t('review_2_author'),
-      location: t('review_2_loc'),
-      text: t('review_2_text'),
-      rating: 5,
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
-    },
-    {
-      id: 3,
-      name: t('review_3_author'),
-      location: t('review_3_loc'),
-      text: t('review_3_text'),
-      rating: 5,
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80"
-    }
+  const travelExpertise = [
+    { title: "Travel Guides", icon: <FileText className="w-8 h-8 text-secondary" />, desc: "In-depth travel guides to help you plan unforgettable trips with precision and local insight." },
+    { title: "Hotel Reviews", icon: <Bed className="w-8 h-8 text-secondary" />, desc: "Honest hotel reviews and accommodation recommendations from boutique stays to luxury resorts." },
+    { title: "Flight Deals", icon: <Plane className="w-8 h-8 text-secondary" />, desc: "Find the best flight deals and travel offers synthesized from millions of global data points." },
+    { title: "Destination Tips", icon: <Map className="w-8 h-8 text-secondary" />, desc: "Practical tips, itineraries, and advice for popular destinations around the world." }
   ];
 
   useEffect(() => {
@@ -116,6 +96,28 @@ const Home: React.FC = () => {
               </div>
             </form>
           </div>
+        </div>
+      </section>
+
+      {/* Travel Intent Section (Affiliate Compliance Requirement) */}
+      <section className="py-32 bg-white relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-20">
+                <h2 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-6">Expertise for Modern Explorers</h2>
+                <p className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">We provide original travel content designed to help you navigate the world with confidence.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                {travelExpertise.map((item, idx) => (
+                    <div key={idx} className="p-10 bg-gray-50 rounded-[3rem] border border-gray-100 hover:shadow-xl transition-all duration-500 group">
+                        <div className="mb-6 group-hover:scale-110 transition-transform">{item.icon}</div>
+                        <h3 className="text-2xl font-bold text-primary mb-4">{item.title}</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed mb-8">{item.desc}</p>
+                        <Link to="/blog" className="text-secondary font-bold text-sm flex items-center group/link">
+                            Explore {item.title} <ArrowRight className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                ))}
+            </div>
         </div>
       </section>
 
@@ -236,9 +238,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials Section - Refined for Professional Affiliate Presence */}
+      {/* Testimonials Section */}
       <section className="py-40 bg-gray-50 relative overflow-hidden border-t border-gray-100">
-        {/* Background elements */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
 
@@ -253,73 +254,34 @@ const Home: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {testimonials.map((review) => (
-              <div key={review.id} className="bg-white p-12 rounded-[4rem] shadow-xl hover:shadow-3xl transition-all duration-700 border border-gray-100 flex flex-col group relative">
-                {/* Floating Icon */}
+            {[1, 2, 3].map((id) => (
+              <div key={id} className="bg-white p-12 rounded-[4rem] shadow-xl hover:shadow-3xl transition-all duration-700 border border-gray-100 flex flex-col h-full group relative">
                 <div className="absolute -top-6 left-12 w-14 h-14 bg-primary rounded-3xl flex items-center justify-center text-white shadow-2xl rotate-6 group-hover:rotate-0 transition-transform duration-500">
                     <Quote className="w-7 h-7" />
                 </div>
                 
                 <div className="flex mb-10 mt-6 space-x-1">
-                  {[...Array(review.rating)].map((_, i) => (
+                  {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-accent fill-current drop-shadow-sm" />
                   ))}
                 </div>
 
                 <div className="flex-1">
-                  <p className="text-gray-800 italic leading-relaxed text-xl mb-10 font-medium tracking-tight">"{review.text}"</p>
+                  <p className="text-gray-800 italic leading-relaxed text-xl mb-10 font-medium tracking-tight">"{t(`review_${id}_text`)}"</p>
                 </div>
 
                 <div className="flex items-center pt-10 border-t border-slate-50 mt-auto">
-                  <div className="relative shrink-0">
-                    <img src={review.avatar} alt={review.name} className="w-16 h-16 rounded-2xl object-cover mr-6 shadow-xl border-4 border-white group-hover:scale-105 transition-transform" />
-                    <div className="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-white shadow-lg flex items-center justify-center" title="Verified Explorer">
-                        <CheckCircle className="w-3 h-3 text-white" />
-                    </div>
-                  </div>
+                  <img src={`https://images.unsplash.com/photo-${id === 1 ? '1494790108377-be9c29b29330' : id === 2 ? '1507003211169-0a1dd7228f2d' : '1438761681033-6461ffad8d80'}?auto=format&fit=crop&w=150&q=80`} alt="" className="w-16 h-16 rounded-2xl object-cover mr-6 shadow-xl border-4 border-white group-hover:scale-105 transition-transform" />
                   <div className="overflow-hidden">
-                    <h4 className="font-black text-gray-900 text-lg truncate">
-                        {review.name}
-                    </h4>
+                    <h4 className="font-black text-gray-900 text-lg truncate">{t(`review_${id}_author`)}</h4>
                     <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] mt-1 flex items-center">
                         <Navigation className="w-3 h-3 mr-1.5 text-secondary" />
-                        {review.location}
+                        {t(`review_${id}_loc`)}
                     </p>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
-          
-          {/* Social Proof Bar */}
-          <div className="mt-28 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-            <div className="inline-flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8 bg-white px-12 py-8 rounded-[3rem] shadow-2xl border border-gray-100 group">
-                <div className="flex -space-x-4">
-                    {[
-                        "https://randomuser.me/api/portraits/men/32.jpg",
-                        "https://randomuser.me/api/portraits/women/44.jpg",
-                        "https://randomuser.me/api/portraits/men/22.jpg",
-                        "https://randomuser.me/api/portraits/women/68.jpg",
-                        "https://randomuser.me/api/portraits/men/11.jpg"
-                    ].map((url, i) => (
-                        <img key={i} src={url} className="w-12 h-12 rounded-full border-4 border-white bg-slate-200 shadow-sm transition-transform group-hover:translate-x-1" alt="Explorer" />
-                    ))}
-                    <div className="w-12 h-12 rounded-full border-4 border-white bg-secondary flex items-center justify-center text-[10px] font-black text-white shadow-sm">+12k</div>
-                </div>
-                <div className="h-10 w-px bg-gray-100 hidden md:block"></div>
-                <div>
-                    <p className="text-lg font-bold text-gray-900 tracking-tight">Join <span className="text-secondary">50,000+</span> global collective members.</p>
-                    <div className="flex items-center justify-center md:justify-start mt-1">
-                        <div className="flex text-accent space-x-1 mr-2">
-                            {[1,2,3,4,5].map(i => <Star key={i} className="w-3 h-3 fill-current" />)}
-                        </div>
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">4.9/5 Average Discovery Rating</span>
-                    </div>
-                </div>
-                <Link to="/ai-planner" className="bg-primary text-white px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-lg hover:bg-slate-800 transition-all transform hover:-translate-y-1">
-                    Start Planning
-                </Link>
-            </div>
           </div>
         </div>
       </section>

@@ -17,6 +17,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   searchVisibility: true,
   robotsTxt: "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /login\n\nSitemap: https://alexara-travel.example.com/sitemap.xml",
   customScripts: "<!-- Add JSON-LD or Analytics scripts here -->",
+  blogCategories: ["Travel Guides", "Hotel Reviews", "Travel Tips", "Flight Deals", "Destinations"],
   ads: {
     enabled: true,
     headerBanner: "",
@@ -30,7 +31,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   contact: {
     address: "123 Adventure Ave, Suite 400\nNew York, NY 10001",
     phone: "+1 (555) 123-4567",
-    email: "hello@alexara.com"
+    email: "contact@alexaratravel.com"
   },
   adminEmail: "admin@alexara.com",
   adminPassword: "123"
@@ -47,7 +48,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     review_3_text: "Modern, fast, and incredibly intuitive. The interface itself makes me want to book my next flight right now.", review_3_author: "Elena R.", review_3_loc: "Madrid, Spain",
     footer_desc: "Inspiring wanderlust and connecting you with the world's most breathtaking destinations.",
     footer_quick_links: "Quick Links", footer_contact: "Contact Us", footer_newsletter: "Newsletter", footer_subscribe: "Subscribe",
-    footer_legal: "Legal & Trust", footer_privacy: "Privacy Policy", footer_terms: "Terms of Service", footer_disclaimer: "Affiliate Disclaimer",
+    footer_legal: "Legal & Trust", footer_privacy: "Privacy Policy", footer_terms: "Terms of Service", footer_disclaimer: "Affiliate Disclosure",
     dest_title: "Explore Destinations", dest_subtitle: "From bustling cities to serene beaches, find your perfect backdrop.", dest_featured_title: "France", dest_featured_desc: "The world's most visited country, offering art, history, and the Riviera.", dest_find_deals: "Find Deals in",
     gear_title: "Essential Gear", gear_subtitle: "Travel smarter and lighter with our curated tech and accessories.", gear_check_price: "Check Price", gear_no_results: "No gear found.",
     blog_title: "The Alexara Journal", blog_subtitle: "Stories, guides, and inspiration for the modern traveler.", blog_read_full: "Read Full Story", blog_read_more: "Read More",
@@ -62,7 +63,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     hero_badge: "Arquitectando el futuro de los viajes", hero_title_1: "Explora lo", hero_title_2: "Inexplorado.", search_placeholder: "¿A dónde te llevamos?", search_btn: "Iniciar Síntesis",
     home_innovation_badge: "Inteligencia de Viajes de Próxima Generación", home_innovation_title_1: "Arquitectura para", home_innovation_title_2: "Exploradores Modernos.", home_innovation_desc: "Más allá de una simple reserva. Utilizamos modelos avanzados para sintetizar millones de datos.",
     home_trending_title: "Destinos de Tendencia", home_exclusive_title: "Colecciones Exclusivas", home_reviews_title: "Voces del Explorador Moderno", home_reviews_subtitle: "Experiencias reales de nuestro colectivo global de viajeros.", 
-    review_1_text: "El planificador de IA sintetizó un viaje de 10 días a Japón que parecía curado por un historiador local. Ejecución absolutamente impecable.", review_1_author: "Julianna M.", review_1_loc: "San Francisco, EE. UU.",
+    review_1_text: "El planificador de IA sintetizó un viaje de 10 día a Japón que parecía curado por un historiador local. Ejecución absolutamente impecable.", review_1_author: "Julianna M.", review_1_loc: "San Francisco, EE. UU.",
     review_2_text: "Encontré una oferta para la costa de Amalfi que era un 40% más barata que en otras plataformas. Alexara es ahora mi recurso principal.", review_2_author: "Marcus V.", review_2_loc: "Berlín, Alemania",
     review_3_text: "Moderno, rápido e increíblemente intuitivo. La propia interfaz me dan ganas de reservar mi próximo vuelo ahora mismo.", review_3_author: "Elena R.", review_3_loc: "Madrid, España",
     footer_desc: "Inspirando el deseo de viajar y conectándote con los destinos más impresionantes del mundo.",
@@ -182,33 +183,43 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 export const MOCK_POSTS: BlogPost[] = [
   {
     id: "1",
-    title: "Top 10 Hidden Beaches in Thailand",
+    title: "Top 10 Hidden Beaches in Thailand: A Complete Guide",
     excerpt: "Discover the untouched paradises that tourists often miss. From Krabi to Koh Lipe, here are our top picks.",
-    content: "Thailand is famous for its beaches, but some of the best ones are hidden away. \nKoh Kood is a peaceful island in the eastern Gulf of Thailand, near the Cambodian border. It's often overlooked by travelers heading to the more famous Koh Chang, but those who make the journey are rewarded with crystal-clear waters and white sands. \nAnother gem is Railay Beach in Krabi, accessible only by boat due to the high limestone cliffs cutting off mainland access.",
+    content: "Thailand is famous for its beaches, but some of the best ones are hidden away. In this guide, we dive deep into the crystal waters of the Andaman sea. \nKoh Kood is a peaceful island in the eastern Gulf of Thailand, near the Cambodian border. It's often overlooked by travelers heading to the more famous Koh Chang, but those who make the journey are rewarded with crystal-clear waters and white sands. \nAnother gem is Railay Beach in Krabi, accessible only by boat due to the high limestone cliffs cutting off mainland access. We recommend staying at least 3 nights to truly experience the magic of the limestone formations at sunset.",
     image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1439&q=80",
     author: "Sarah Jenkins",
     date: "Oct 12, 2023",
-    tags: ["Thailand", "Beaches", "Travel Guide"]
+    tags: ["Travel Guides", "Thailand", "Beaches"]
   },
   {
     id: "2",
-    title: "How to Travel Europe on a Budget",
-    excerpt: "Backpacking through Europe doesn't have to break the bank. Learn the secrets of rail passes and hostels.",
-    content: "Europe can be expensive, but with the right planning, you can see it all for less. \nConsider traveling in the shoulder seasons (spring and fall) when prices for accommodation and flights drop significantly. \nUse the Eurail pass if you plan on visiting multiple countries, and look for hostels that offer free breakfast or communal kitchens to save on food costs.",
+    title: "Review: The Best Hotels for Couples in Paris 2024",
+    excerpt: "Looking for romance in the city of light? We've reviewed the top boutique stays for your next anniversary.",
+    content: "Paris is the ultimate destination for romance. After visiting over 15 properties this year, we've narrowed it down to the top three. \nOur first choice is a boutique hotel in Le Marais that offers unparalleled views of the Eiffel Tower from its private balconies. The service is impeccable, and the breakfast spread is purely artisanal. \nFor those on a tighter budget, we've also found a charming stay near Montmartre that doesn't compromise on the Parisian aesthetic. Read on for our full review and score breakdown for each location.",
     image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1470&q=80",
     author: "Mike Ross",
     date: "Sep 28, 2023",
-    tags: ["Europe", "Budget", "Tips"]
+    tags: ["Hotel Reviews", "Paris", "Romance"]
   },
   {
     id: "3",
-    title: "The Ultimate Packing List for 2024",
-    excerpt: "Don't forget the essentials. We've compiled the definitive checklist for international travel.",
-    content: "Packing is an art. Here is exactly what you need to bring for a 2 week trip. \nStart with a high-quality carry-on. Many airlines are becoming stricter with weight limits, so choose a lightweight shell. \nPacking cubes are your best friend for organization. Don't forget a universal travel adapter and a portable power bank, especially if you're navigating using your phone all day.",
+    title: "How to Find Cheap Flights: Pro Tips for 2024",
+    excerpt: "Don't overpay for your next trip. Learn the secrets of flight hacking and when to book for maximum savings.",
+    content: "Airfare is often the biggest expense in travel. We've spent years analyzing pricing trends to bring you this comprehensive guide. \nStart by using comparison tools like Google Flights and Skyscanner, but don't forget to check the airline's direct site for hidden deals. Booking on a Tuesday is no longer the magic bullet; instead, focus on the 'shoulder' days like Wednesday or Saturday for international routes. \nUsing a VPN can sometimes help, but the biggest factor is flexibility with your destination. Our 'Explore' feature on Alexara is designed to help you find the cheapest routes from your home airport.",
     image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1470&q=80",
     author: "Alex Chen",
     date: "Nov 05, 2023",
-    tags: ["Gear", "Tips", "Preparation"]
+    tags: ["Travel Tips", "Flight Deals", "Budget Travel"]
+  },
+  {
+    id: "4",
+    title: "7 Things to Do in Dubai for Adventure Seekers",
+    excerpt: "From desert safaris to skydiving over the Palm, Dubai is more than just luxury shopping.",
+    content: "Dubai is a playground for those who love adrenaline. While the city is known for its skyscrapers, the true heart of adventure lies in the dunes. \nWe recently took a sunrise desert safari and it was life-changing. Beyond the dunes, you can skydive at the famous Dropzone at the Palm Jumeirah or try indoor skiing at the Mall of the Emirates. \nFor a more cultural adventure, take an abra ride across the Dubai Creek for just 1 AED. This post covers our favorite high-octane activities and practical tips for the best experience.",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
+    author: "Alexara Team",
+    date: "Dec 01, 2023",
+    tags: ["Destinations", "Things to Do", "Dubai"]
   }
 ];
 

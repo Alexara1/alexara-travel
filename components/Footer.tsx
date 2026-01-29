@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, Share2, CheckCircle } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, Share2, CheckCircle, ShieldCheck } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 
 const getSocialIcon = (platform: string) => {
@@ -37,7 +37,9 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-serif font-bold text-white">{settings.siteName}</h3>
+            <h3 className="text-2xl font-serif font-bold text-white flex items-center">
+              <ShieldCheck className="w-6 h-6 mr-2 text-secondary" /> {settings.siteName}
+            </h3>
             <p className="text-gray-400 text-sm leading-relaxed">{t('footer_desc')}</p>
             <div className="flex flex-wrap gap-4 pt-2">
               {socialLinks.map((link, idx) => (
@@ -56,7 +58,7 @@ const Footer: React.FC = () => {
               <li><Link to="/deals" className="text-gray-400 hover:text-secondary text-sm transition-colors">{t('nav_deals')}</Link></li>
               <li><Link to="/gear" className="text-gray-400 hover:text-secondary text-sm transition-colors">{t('nav_gear')}</Link></li>
               <li><Link to="/blog" className="text-gray-400 hover:text-secondary text-sm transition-colors">{t('nav_blog')}</Link></li>
-              <li><Link to="/ai-planner" className="text-gray-400 hover:text-secondary text-sm transition-colors">{t('nav_planner')}</Link></li>
+              <li><Link to="/about" className="text-gray-400 hover:text-secondary text-sm transition-colors">{t('nav_about')}</Link></li>
             </ul>
           </div>
 
@@ -95,10 +97,12 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Utility Bar */}
+        {/* Bottom Utility Bar (Critically Updated for Approval) */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-500 font-bold uppercase tracking-wider">
           <p className="mb-4 md:mb-0">&copy; {new Date().getFullYear()} {settings.siteName}. All rights reserved.</p>
           <div className="flex flex-wrap justify-center gap-6">
+            <Link to="/about" className="hover:text-secondary transition-colors">About Us</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Contact Us</Link>
             <Link to="/privacy" className="hover:text-secondary transition-colors">{t('footer_privacy')}</Link>
             <Link to="/terms" className="hover:text-secondary transition-colors">{t('footer_terms')}</Link>
             <Link to="/disclaimer" className="hover:text-secondary transition-colors">{t('footer_disclaimer')}</Link>
