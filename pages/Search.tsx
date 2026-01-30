@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
@@ -127,7 +126,7 @@ const SearchResults: React.FC = () => {
                         </div>
                         <div className="space-y-4">
                             {results.posts.map(post => (
-                                <Link to={`/blog/${post.slug}`} key={post.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-6 hover:bg-gray-50 transition-colors">
+                                <Link to={`/blog/${post.id}`} key={post.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-6 hover:bg-gray-50 transition-colors">
                                     <img src={post.image} alt={post.title} className="w-20 h-20 rounded-lg object-cover" />
                                     <div>
                                         <h3 className="font-bold text-gray-900 group-hover:text-secondary">{post.title}</h3>

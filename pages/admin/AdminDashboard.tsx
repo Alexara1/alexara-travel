@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
-import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlogPost, Deal, Destination, GearProduct, ContactMessage } from '../../types';
-
-const generateSlug = (text: string): string => {
-    return text
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '') // Remove non-word characters (except spaces and hyphens)
-        .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with a single hyphen
-        .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
-};
 
 const MediaInput: React.FC<{
     label: string;
@@ -66,6 +57,9 @@ const MediaInput: React.FC<{
                     <span className="font-semibold mr-1">Recommended Size:</span> {recommendedDimensions}
                 </p>
             )}
+            {value && value.startsWith('data:') && (
+                <p className="text-xs text-green-600 mt-1">File uploaded successfully</p>
+            )}
              {value && type === 'image' && (
                 <div className="mt-2 h-20 w-32 bg-gray-100 rounded overflow-hidden border border-gray-200 relative">
                     <img src={value} alt="Preview" className="w-full h-full object-contain" />
@@ -93,7 +87,6 @@ const AdminDashboard: React.FC = () => {
   const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
   const [destForm, setDestForm] = useState<Partial<Destination>>({});
@@ -112,7 +105,6 @@ const AdminDashboard: React.FC = () => {
     setDealForm({ categories: [] });
     setGearForm({});
     setSelectedMessage(null);
-    setIsSlugManuallyEdited(false);
   }, [activeTab]);
 
   if (!isAdminMode) return <div className="p-8 text-center text-red-500 font-bold">Access Denied</div>;
@@ -125,11 +117,7 @@ const AdminDashboard: React.FC = () => {
   const handleEdit = (id: string, type: 'post' | 'dest' | 'deal' | 'gear') => {
     setEditingId(id);
     setFormMode('edit');
-    if (type === 'post') {
-      const p = posts.find(p => p.id === id);
-      setPostForm(p || {});
-      setIsSlugManuallyEdited(true); // Treat existing slugs as manually edited
-    }
+    if (type === 'post') setPostForm(posts.find(p => p.id === id) || {});
     if (type === 'dest') setDestForm(destinations.find(p => p.id === id) || {});
     if (type === 'deal') setDealForm(deals.find(p => p.id === id) || { categories: [] });
     if (type === 'gear') setGearForm(gear.find(p => p.id === id) || {});
@@ -142,34 +130,13 @@ const AdminDashboard: React.FC = () => {
     setDestForm({});
     setDealForm({ categories: [] });
     setGearForm({});
-    setIsSlugManuallyEdited(false);
-  };
-
-  const handlePostTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
-    const updates: Partial<BlogPost> = { title: newTitle };
-    
-    if (!isSlugManuallyEdited) {
-      updates.slug = generateSlug(newTitle);
-    }
-    
-    setPostForm({ ...postForm, ...updates });
-  };
-
-  const handlePostSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawSlug = e.target.value;
-    setIsSlugManuallyEdited(rawSlug !== '');
-    setPostForm({ ...postForm, slug: generateSlug(rawSlug) });
   };
 
   const savePost = (e: React.FormEvent) => {
     e.preventDefault();
-    const finalSlug = postForm.slug || (postForm.title ? generateSlug(postForm.title) : 'untitled-post');
-    
     if (formMode === 'create') {
         addPost({
             id: Date.now().toString(),
-            slug: finalSlug,
             title: postForm.title || 'Untitled',
             excerpt: postForm.excerpt || '',
             content: postForm.content || '',
@@ -180,7 +147,7 @@ const AdminDashboard: React.FC = () => {
             tags: postForm.tags || []
         } as BlogPost);
     } else if (editingId) {
-        updatePost(editingId, { ...postForm, slug: finalSlug });
+        updatePost(editingId, postForm);
     }
     handleCancel();
   };
@@ -279,10 +246,10 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const copyPostLink = (slug: string) => {
-      const url = `${window.location.origin}/blog/${slug}`;
+  const copyPostLink = (id: string) => {
+      const url = `${window.location.origin}/blog/${id}`;
       navigator.clipboard.writeText(url);
-      setCopiedId(slug);
+      setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -320,7 +287,7 @@ const AdminDashboard: React.FC = () => {
 
     // Dynamic Posts
     posts.forEach(p => {
-      sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
+      sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.id}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
     });
 
     sitemap += `</urlset>`;
@@ -980,33 +947,7 @@ const AdminDashboard: React.FC = () => {
                         <form onSubmit={savePost} className="space-y-4">
                             <div>
                                 <label className={labelClass}>Title</label>
-                                <input 
-                                  type="text" 
-                                  className={inputClass} 
-                                  placeholder="e.g., Best Hotels in Dubai"
-                                  value={postForm.title || ''} 
-                                  onChange={handlePostTitleChange} 
-                                />
-                            </div>
-                            <div>
-                                <label className={labelClass}>URL Slug (SEO Friendly)</label>
-                                <div className="relative">
-                                  <input 
-                                    type="text" 
-                                    className={inputClass} 
-                                    placeholder="best-hotels-in-dubai" 
-                                    value={postForm.slug || ''} 
-                                    onChange={handlePostSlugChange} 
-                                  />
-                                </div>
-                                <div className="mt-2 p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1 flex items-center">
-                                    <LinkIcon className="w-3 h-3 mr-1.5" /> Public URL Preview
-                                  </p>
-                                  <p className="text-xs font-mono text-slate-600 truncate">
-                                    {window.location.origin}/blog/<span className="text-primary font-bold">{postForm.slug || 'untitled-post'}</span>
-                                  </p>
-                                </div>
+                                <input type="text" className={inputClass} value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
                             </div>
                             <div>
                                 <label className={labelClass}>Excerpt</label>
@@ -1060,7 +1001,7 @@ const AdminDashboard: React.FC = () => {
                         </form>
                     </div>
 
-                    {/* Blog Category Manager */}
+                    {/* NEW: Blog Category Manager */}
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                         <h3 className="text-lg font-bold mb-4 flex items-center text-primary">
                             <Tag className="w-5 h-5 mr-2" /> Global Category Manager
@@ -1119,8 +1060,8 @@ const AdminDashboard: React.FC = () => {
                                      </div>
                                  </div>
                                  <div className="flex space-x-2 ml-2">
-                                     <button onClick={() => copyPostLink(post.slug)} className="text-gray-400 hover:text-primary p-1" title="Copy Public URL">
-                                         {copiedId === post.slug ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                                     <button onClick={() => copyPostLink(post.id)} className="text-gray-400 hover:text-primary p-1" title="Copy Public URL">
+                                         {copiedId === post.id ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
                                      </button>
                                      <button onClick={() => handleEdit(post.id, 'post')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
                                      <button onClick={() => deletePost(post.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
@@ -1128,6 +1069,499 @@ const AdminDashboard: React.FC = () => {
                              </div>
                          ))}
                      </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- DESTINATIONS TAB --- */}
+        {activeTab === 'destinations' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Destination' : 'Edit Destination'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveDest} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Name (Country Name)</label>
+                                <input type="text" className={inputClass} value={destForm.name || ''} onChange={e => setDestForm({...destForm, name: e.target.value})} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Continent</label>
+                                <input type="text" className={inputClass} value={destForm.continent || ''} onChange={e => setDestForm({...destForm, continent: e.target.value})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Description</label>
+                            <textarea className={inputClass} rows={3} value={destForm.description || ''} onChange={e => setDestForm({...destForm, description: e.target.value})} />
+                        </div>
+                        
+                        <MediaInput 
+                            label="Cover Image" 
+                            type="image"
+                            recommendedDimensions="800 x 600 px"
+                            value={destForm.image} 
+                            onChange={(val) => setDestForm({...destForm, image: val})} 
+                        />
+                        <MediaInput 
+                            label="Promo Video" 
+                            type="video"
+                            accept="video/*"
+                            value={destForm.video} 
+                            onChange={(val) => setDestForm({...destForm, video: val})} 
+                        />
+
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Destination' : 'Update Destination'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Current Destinations</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {destinations.map(d => (
+                             <div key={d.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <div className="flex-1 truncate">
+                                     <span className="font-medium text-sm text-gray-800">{d.name}</span>
+                                     <p className="text-[10px] text-gray-400">{deals.filter(deal => deal.location === d.name).length} Active Deals</p>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <Link to={`/deals?country=${encodeURIComponent(d.name)}`} target="_blank" className="text-gray-400 hover:text-secondary p-1" title="View Public Page">
+                                         <ExternalLink className="w-4 h-4" />
+                                     </Link>
+                                     <button onClick={() => handleEdit(d.id, 'dest')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteDestination(d.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- DEALS TAB --- */}
+        {activeTab === 'deals' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Deal' : 'Edit Deal'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveDeal} className="space-y-4">
+                        <div>
+                            <label className={labelClass}>Title</label>
+                            <input type="text" className={inputClass} value={dealForm.title || ''} onChange={e => setDealForm({...dealForm, title: e.target.value})} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Location (Select Destination)</label>
+                                <select 
+                                    className={inputClass} 
+                                    value={dealForm.location || ''} 
+                                    onChange={e => setDealForm({...dealForm, location: e.target.value})}
+                                    required
+                                >
+                                    <option value="" disabled>Choose a destination...</option>
+                                    {destinations.map(d => (
+                                        <option key={d.id} value={d.name}>{d.name}</option>
+                                    ))}
+                                    <option value="Other">Other (Not in Destinations)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className={labelClass}>City</label>
+                                <input type="text" className={inputClass} value={dealForm.city || ''} onChange={e => setDealForm({...dealForm, city: e.target.value})} />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className={labelClass}>Duration</label>
+                                <input type="text" className={inputClass} value={dealForm.duration || ''} onChange={e => setDealForm({...dealForm, duration: e.target.value})} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Categories (Select All That Apply)</label>
+                                <div className="grid grid-cols-2 gap-2 mt-1">
+                                    {availableDealCategories.map(cat => (
+                                        <label key={cat} className="flex items-center space-x-2 text-xs font-medium text-gray-600 bg-gray-50 p-2 rounded-lg cursor-pointer hover:bg-gray-100">
+                                            <input 
+                                                type="checkbox" 
+                                                checked={(dealForm.categories || []).includes(cat as any)} 
+                                                onChange={() => toggleDealCategory(cat)}
+                                                className="w-4 h-4 text-primary rounded"
+                                            />
+                                            <span>{cat}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Price ($)</label>
+                                <input type="number" className={inputClass} value={dealForm.price || ''} onChange={e => setDealForm({...dealForm, price: Number(e.target.value)})} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Original Price ($)</label>
+                                <input type="number" className={inputClass} value={dealForm.originalPrice || ''} onChange={e => setDealForm({...dealForm, originalPrice: Number(e.target.value)})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Affiliate Link (URL)</label>
+                            <input type="text" className={inputClass} placeholder="https://..." value={dealForm.affiliateLink || ''} onChange={e => setDealForm({...dealForm, affiliateLink: e.target.value})} />
+                        </div>
+                        
+                        <MediaInput 
+                            label="Deal Image" 
+                            type="image"
+                            recommendedDimensions="800 x 600 px"
+                            value={dealForm.image} 
+                            onChange={(val) => setDealForm({...dealForm, image: val})} 
+                        />
+                        <MediaInput 
+                            label="Deal Video" 
+                            type="video"
+                            accept="video/*"
+                            value={dealForm.video} 
+                            onChange={(val) => setDealForm({...dealForm, video: val})} 
+                        />
+
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Deal' : 'Update Deal'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Active Deals</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {deals.map(d => (
+                             <div key={d.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <div>
+                                     <span className="font-bold text-sm text-gray-800 truncate">{d.title}</span>
+                                     <div className="flex gap-1 mt-1">
+                                         <span className="text-[9px] bg-slate-200 text-slate-700 px-1 rounded font-bold uppercase">{d.location}</span>
+                                         {d.categories?.map(c => (
+                                             <span key={c} className="text-[9px] bg-blue-100 text-blue-700 px-1 rounded font-bold">{c}</span>
+                                         ))}
+                                     </div>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => handleEdit(d.id, 'deal')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteDeal(d.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- GEAR TAB --- */}
+        {activeTab === 'gear' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Gear' : 'Edit Gear'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveGear} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Name</label>
+                                <input type="text" className={inputClass} value={gearForm.name || ''} onChange={e => setGearForm({...gearForm, name: e.target.value})} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Category</label>
+                                <input type="text" className={inputClass} value={gearForm.category || ''} onChange={e => setGearForm({...gearForm, category: e.target.value})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Description</label>
+                            <textarea className={inputClass} rows={2} value={gearForm.description || ''} onChange={e => setGearForm({...gearForm, description: e.target.value})} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Price ($)</label>
+                                <input type="number" className={inputClass} value={gearForm.price || ''} onChange={e => setGearForm({...gearForm, price: Number(e.target.value)})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Affiliate Link (URL)</label>
+                            <input type="text" className={inputClass} placeholder="https://..." value={gearForm.affiliateLink || ''} onChange={e => setGearForm({...gearForm, affiliateLink: e.target.value})} />
+                        </div>
+
+                        <MediaInput 
+                            label="Product Image" 
+                            type="image"
+                            recommendedDimensions="500 x 500 px"
+                            value={gearForm.image} 
+                            onChange={(val) => setGearForm({...gearForm, image: val})} 
+                        />
+                        <MediaInput 
+                            label="Review Video" 
+                            type="video"
+                            accept="video/*"
+                            value={gearForm.video} 
+                            onChange={(val) => setGearForm({...gearForm, video: val})} 
+                        />
+
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Item' : 'Update Item'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Gear Inventory</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {gear.map(g => (
+                             <div key={g.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <span className="font-medium text-sm text-gray-800 truncate flex-1">{g.name}</span>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => handleEdit(g.id, 'gear')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteGear(g.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- THEME TAB --- */}
+        {activeTab === 'theme' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6">Customization</h3>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Site Name</label>
+                        <input type="text" className={inputClass} value={settings.siteName} onChange={(e) => updateSettings({ siteName: e.target.value })} />
+                    </div>
+                     <MediaInput 
+                        label="Site Logo" 
+                        type="image"
+                        recommendedDimensions="200 x 50 px (Transparent PNG recommended)"
+                        value={settings.logo} 
+                        onChange={(val) => updateSettings({ logo: val })} 
+                    />
+                     <div>
+                        <label className={labelClass}>Hero Title</label>
+                        <input type="text" className={inputClass} value={settings.heroTitle} onChange={(e) => updateSettings({ heroTitle: e.target.value })} />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className={labelClass}>Primary Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.primaryColor} onChange={(e) => updateSettings({ primaryColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.primaryColor}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Secondary Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.secondaryColor} onChange={(e) => updateSettings({ secondaryColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.secondaryColor}</span>
+                            </div>
+                        </div>
+                         <div>
+                            <label className={labelClass}>Accent Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.accentColor} onChange={(e) => updateSettings({ accentColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.accentColor}</span>
+                            </div>
+                        </div>
+                    </div>
+                     <div>
+                        <label className={labelClass}>Font Family</label>
+                        <select className={inputClass} value={settings.fontFamily} onChange={(e) => updateSettings({ fontFamily: e.target.value as any })}>
+                            <option value="Open Sans">Open Sans (Clean)</option>
+                            <option value="Roboto">Roboto (Modern)</option>
+                            <option value="Helvetica">Helvetica (Classic)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- CONTACT INFO TAB --- */}
+        {activeTab === 'contact' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <Mail className="w-6 h-6 mr-2 text-primary" /> Contact Information
+                </h3>
+                <p className="text-gray-500 mb-6 text-sm">Update the contact details displayed in the footer and on the contact page.</p>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Phone Number</label>
+                        <div className="flex items-center relative">
+                             <Phone className="w-5 h-5 text-gray-400 absolute left-3" />
+                             <input 
+                                type="text" 
+                                className={`${inputClass} pl-10`} 
+                                value={settings.contact?.phone || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), phone: e.target.value } })} 
+                                placeholder="+1 (555) 123-4567"
+                             />
+                        </div>
+                    </div>
+                    <div>
+                        <label className={labelClass}>Email Address</label>
+                        <div className="flex items-center relative">
+                             <Mail className="w-5 h-5 text-gray-400 absolute left-3" />
+                             <input 
+                                type="email" 
+                                className={`${inputClass} pl-10`} 
+                                value={settings.contact?.email || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), email: e.target.value } })} 
+                                placeholder="hello@example.com"
+                             />
+                        </div>
+                    </div>
+                    <div>
+                        <label className={labelClass}>Physical Address</label>
+                        <div className="flex items-start relative">
+                             <MapPin className="w-5 h-5 text-gray-400 absolute left-3 top-3" />
+                             <textarea 
+                                className={`${inputClass} pl-10`} 
+                                rows={3}
+                                value={settings.contact?.address || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), address: e.target.value } })} 
+                                placeholder="123 Street Name&#10;City, State, Zip"
+                             />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 ml-10">Line breaks will be preserved.</p>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SOCIAL MEDIA TAB --- */}
+        {activeTab === 'social' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-bold flex items-center">
+                        <Share2 className="w-6 h-6 mr-2 text-indigo-600" /> Social Media Links
+                    </h3>
+                    <button 
+                        onClick={addSocialLink}
+                        className="bg-primary text-white text-sm px-4 py-2 rounded-lg flex items-center hover:bg-slate-800 transition-colors"
+                    >
+                        <Plus className="w-4 h-4 mr-2" /> Add Link
+                    </button>
+                </div>
+                <div className="space-y-4">
+                    {(settings.socialMedia || []).map((link, index) => (
+                        <div key={index} className="flex gap-4 items-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                             <div className="w-1/3">
+                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 block">Platform</label>
+                                <select 
+                                    className="w-full border border-gray-300 p-2 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                    value={link.platform}
+                                    onChange={(e) => updateSocialLink(index, 'platform', e.target.value)}
+                                >
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Twitter">Twitter (X)</option>
+                                    <option value="Instagram">Instagram</option>
+                                    <option value="LinkedIn">LinkedIn</option>
+                                    <option value="YouTube">YouTube</option>
+                                    <option value="TikTok">TikTok</option>
+                                    <option value="Pinterest">Pinterest</option>
+                                    <option value="Reddit">Reddit</option>
+                                    <option value="Rutube">Rutube</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                             </div>
+                             <div className="flex-1">
+                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 block">URL</label>
+                                <input 
+                                    type="text" 
+                                    className="w-full border border-gray-300 p-2 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                    placeholder="https://..."
+                                    value={link.url}
+                                    onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
+                                />
+                             </div>
+                             <div className="pt-5">
+                                 <button 
+                                    onClick={() => removeSocialLink(index)}
+                                    className="text-red-500 hover:text-red-700 p-2 rounded hover:bg-red-50"
+                                >
+                                     <Trash className="w-5 h-5" />
+                                 </button>
+                             </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        {/* --- MONETIZATION / ADS TAB --- */}
+        {activeTab === 'ads' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-3xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <DollarSign className="w-6 h-6 mr-2 text-green-600" /> Monetization Settings
+                </h3>
+                <div className="space-y-6">
+                    <div className="flex items-center mb-4">
+                        <input 
+                            type="checkbox" 
+                            id="adsEnabled"
+                            checked={settings.ads?.enabled} 
+                            onChange={(e) => updateSettings({ ads: { ...settings.ads, enabled: e.target.checked } as any })}
+                            className="w-5 h-5 text-secondary rounded focus:ring-secondary mr-3"
+                        />
+                        <label htmlFor="adsEnabled" className="text-gray-800 font-bold">Enable Advertisements</label>
+                    </div>
+                    <div className={!settings.ads?.enabled ? 'opacity-50 pointer-events-none' : ''}>
+                        <div className="mb-6">
+                            <label className={labelClass}>Header Banner Code (Horizontal 728x90)</label>
+                            <textarea 
+                                className={`${inputClass} font-mono text-xs`} 
+                                rows={4} 
+                                placeholder="<script>...</script>"
+                                value={settings.ads?.headerBanner || ''}
+                                onChange={(e) => updateSettings({ ads: { ...settings.ads, headerBanner: e.target.value } as any })}
+                            />
+                        </div>
+                        <div>
+                            <label className={labelClass}>Sidebar Banner Code (Square 300x250)</label>
+                            <textarea 
+                                className={`${inputClass} font-mono text-xs`} 
+                                rows={4} 
+                                placeholder="<script>...</script>"
+                                value={settings.ads?.sidebarBanner || ''}
+                                onChange={(e) => updateSettings({ ads: { ...settings.ads, sidebarBanner: e.target.value } as any })}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SECURITY TAB --- */}
+        {activeTab === 'security' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <Shield className="w-6 h-6 mr-2 text-primary" /> Security Settings
+                </h3>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Admin Email</label>
+                        <input 
+                            type="email" 
+                            className={`${inputClass}`} 
+                            value={settings.adminEmail || ''} 
+                            onChange={(e) => updateSettings({ adminEmail: e.target.value })} 
+                        />
+                    </div>
+                    <div>
+                        <label className={labelClass}>Admin Password</label>
+                        <input 
+                            type="text" 
+                            className={`${inputClass}`} 
+                            value={settings.adminPassword || ''} 
+                            onChange={(e) => updateSettings({ adminPassword: e.target.value })} 
+                        />
+                    </div>
                 </div>
             </div>
         )}
