@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { SiteProvider, useSite } from './context/SiteContext';
@@ -66,7 +67,7 @@ const AppContent: React.FC = () => {
                 <Route path="/deals" element={<Layout><Deals /></Layout>} />
                 <Route path="/ai-planner" element={<Layout><AIPlanner /></Layout>} />
                 <Route path="/blog" element={<Layout><Blog /></Layout>} />
-                <Route path="/blog/:id" element={<Layout><BlogPost /></Layout>} />
+                <Route path="/blog/:slug" element={<Layout><BlogPost /></Layout>} />
                 <Route path="/gear" element={<Layout><Gear /></Layout>} />
                 <Route path="/search" element={<Layout><SearchResults /></Layout>} />
                 <Route path="/about" element={<Layout><About /></Layout>} />

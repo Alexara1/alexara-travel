@@ -65,7 +65,7 @@ const Blog: React.FC = () => {
         {/* Featured Post */}
         {featuredPost && activeCategory === 'All' && (
           <div className="mb-20">
-            <Link to={`/blog/${featuredPost.id}`} className="group block relative rounded-[3rem] overflow-hidden shadow-2xl h-[600px]">
+            <Link to={`/blog/${featuredPost.slug}`} className="group block relative rounded-[3rem] overflow-hidden shadow-2xl h-[600px]">
               <img src={featuredPost.image} alt={featuredPost.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent flex flex-col justify-end p-12 md:p-20">
                 <div className="max-w-4xl">
@@ -88,7 +88,7 @@ const Blog: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {(activeCategory === 'All' ? remainingPosts : filteredPosts).map((post) => (
                 <article key={post.id} className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full border border-gray-100 group">
-                <Link to={`/blog/${post.id}`} className="block h-64 overflow-hidden relative">
+                <Link to={`/blog/${post.slug}`} className="block h-64 overflow-hidden relative">
                     <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                     <div className="absolute top-4 left-4">
                         <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-primary shadow-sm">{post.tags[0]}</span>
@@ -99,10 +99,10 @@ const Blog: React.FC = () => {
                         <span className="flex items-center"><Calendar className="w-3 h-3 mr-1.5 text-secondary" /> {post.date}</span>
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-6 group-hover:text-secondary transition-colors leading-snug">
-                    <Link to={`/blog/${post.id}`}>{post.title}</Link>
+                    <Link to={`/blog/${post.slug}`}>{post.title}</Link>
                     </h3>
                     <p className="text-gray-500 text-sm mb-8 flex-1 leading-relaxed font-medium">{post.excerpt}</p>
-                    <Link to={`/blog/${post.id}`} className="text-primary font-black text-xs uppercase tracking-widest flex items-center group-hover:text-secondary transition-colors">
+                    <Link to={`/blog/${post.slug}`} className="text-primary font-black text-xs uppercase tracking-widest flex items-center group-hover:text-secondary transition-colors">
                         {t('blog_read_more')} <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>

@@ -37,6 +37,145 @@ export const INITIAL_SETTINGS: SiteSettings = {
   adminPassword: "123"
 };
 
+export const MOCK_POSTS: BlogPost[] = [
+  {
+    id: "1",
+    slug: "hidden-gems-of-the-amalfi-coast",
+    title: "Hidden Gems of the Amalfi Coast",
+    excerpt: "Beyond Positano and Amalfi lie secret coves and quiet villages that offer a true taste of Italian coastal life.",
+    content: "The Amalfi Coast is legendary, but most tourists only see the surface. To truly experience the region, you must head to villages like Atrani, the smallest town in Italy, or hike the Path of the Gods for views that defy description.\n\nIn this guide, we explore the lesser-known restaurants where nonnas still hand-roll pasta and the quiet beaches accessible only by boat.",
+    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+    author: "Elena Rossi",
+    date: "Oct 12, 2023",
+    tags: ["Travel Guides", "Destinations"]
+  },
+  {
+    id: "2",
+    slug: "minimalist-travel-packing-guide",
+    title: "The Art of Minimalist Travel",
+    excerpt: "How to pack for a two-week journey in a single carry-on without sacrificing style or utility.",
+    content: "Packing light is a superpower. It gives you mobility, saves money on baggage fees, and reduces stress. The key is a capsule wardrobe: pieces that all work together.\n\nInvest in high-quality merino wool, use packing cubes religiously, and remember—you can almost always do laundry at your destination.",
+    image: "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?auto=format&fit=crop&w=800&q=80",
+    author: "Marcus Vane",
+    date: "Nov 05, 2023",
+    tags: ["Travel Tips"]
+  },
+  {
+    id: "3",
+    slug: "tokyo-nightlife-synthesis",
+    title: "Tokyo After Dark: A Synthesis",
+    excerpt: "From the neon lights of Shinjuku to the quiet jazz bars of Shimokitazawa, Tokyo's nightlife is a world of its own.",
+    content: "When the sun goes down, Tokyo transforms. Golden Gai offers a glimpse into the past with its tiny themed bars, while Shibuya's clubs provide a high-energy dance experience.\n\nDon't miss the hidden vinyl bars where the acoustics are as important as the drinks.",
+    image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
+    author: "Julianna Mori",
+    date: "Dec 20, 2023",
+    tags: ["Destinations", "Travel Guides"]
+  }
+];
+
+export const MOCK_DEALS: Deal[] = [
+  {
+    id: "d1",
+    title: "Luxury Retreat in Santorini",
+    location: "Greece",
+    city: "Oia",
+    categories: ["Hotel", "Resort"],
+    price: 450,
+    originalPrice: 850,
+    image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
+    rating: 4.9,
+    duration: "5 Nights",
+    affiliateLink: "https://booking.com"
+  },
+  {
+    id: "d2",
+    title: "Kyoto Temple Stay Experience",
+    location: "Japan",
+    city: "Kyoto",
+    categories: ["Activity", "Package"],
+    price: 220,
+    originalPrice: 350,
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
+    rating: 4.8,
+    duration: "3 Days",
+    affiliateLink: "https://klook.com"
+  },
+  {
+    id: "d3",
+    title: "Parisian Rooftop Dining",
+    location: "France",
+    city: "Paris",
+    categories: ["Restaurant"],
+    price: 120,
+    originalPrice: 180,
+    image: "https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?auto=format&fit=crop&w=800&q=80",
+    rating: 4.7,
+    duration: "Evening",
+    affiliateLink: "https://opentable.com"
+  }
+];
+
+export const MOCK_DESTINATIONS: Destination[] = [
+  {
+    id: "dest1",
+    name: "Japan",
+    continent: "Asia",
+    description: "A perfect blend of ancient traditions and futuristic technology, from the cherry blossoms of Kyoto to the neon streets of Tokyo.",
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    id: "dest2",
+    name: "Greece",
+    continent: "Europe",
+    description: "Cradle of Western civilization, featuring crystal-clear waters, white-washed buildings, and thousands of years of history.",
+    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    id: "dest3",
+    name: "France",
+    continent: "Europe",
+    description: "A global hub of art, fashion, gastronomy, and culture, with diverse landscapes from the Alps to the French Riviera.",
+    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    id: "dest4",
+    name: "Iceland",
+    continent: "Europe",
+    description: "A land of dramatic landscapes with volcanoes, geysers, hot springs, and lava fields, perfectly framed by massive glaciers.",
+    image: "https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=800&q=80"
+  }
+];
+
+export const MOCK_GEAR: GearProduct[] = [
+  {
+    id: "g1",
+    name: "Noise-Cancelling Headphones",
+    description: "Industry-leading silence for long-haul flights and busy terminals.",
+    price: 349,
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80",
+    category: "Electronics",
+    affiliateLink: "https://amazon.com"
+  },
+  {
+    id: "g2",
+    name: "Minimalist Carry-On",
+    description: "Ultra-durable polycarbonate shell with built-in compression system.",
+    price: 275,
+    image: "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?auto=format&fit=crop&w=400&q=80",
+    category: "Luggage",
+    affiliateLink: "https://awaytravel.com"
+  },
+  {
+    id: "g3",
+    name: "Global Travel Adapter",
+    description: "Compact all-in-one plug for over 150 countries with 4 USB ports.",
+    price: 35,
+    image: "https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=400&q=80",
+    category: "Accessories",
+    affiliateLink: "https://amazon.com"
+  }
+];
+
 export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
   EN: {
     nav_home: "Home", nav_planner: "AI Planner", nav_destinations: "Destinations", nav_deals: "Deals", nav_blog: "Blog", nav_gear: "Gear", nav_about: "About", nav_contact: "Contact", btn_book: "Book Now",
@@ -141,177 +280,41 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
   RU: {
     nav_home: "Главная", nav_planner: "ИИ-Планировщик", nav_destinations: "Направления", nav_deals: "Предложения", nav_blog: "Блог", nav_gear: "Снаряжение", nav_about: "О нас", nav_contact: "Контакты", btn_book: "Забронировать",
     hero_badge: "Проектируем будущее путешествий", hero_title_1: "Исследуй", hero_title_2: "Неизведанное.", search_placeholder: "Куда полетим сегодня?", search_btn: "Начать синтез",
-    home_innovation_badge: "Интеллект для путешествий нового поколения", home_innovation_title_1: "Архитектура для", home_innovation_title_2: "Современных исследователей.", home_innovation_desc: "Больше, чем просто бронирование. Мы используем передовые модели для анализа миллионов данных.",
-    home_trending_title: "Популярные направления", home_exclusive_title: "Эксклюзивные коллекции", home_reviews_title: "Голоса современных исследователей", home_reviews_subtitle: "Реальный опыт нашего глобального сообщества путешественников.", 
-    review_1_text: "ИИ-планировщик составил 10-дневную поездку в Японию, которая ощущалась так, будто ее готовил местный историк. Безупречно.", review_1_author: "Джулианна М.", review_1_loc: "Сан-Франциско, США",
-    review_2_text: "Я нашел предложение для Амальфитанского побережья на 40% дешевле, чем на других платформах. Alexara теперь мой главный помощник.", review_2_author: "Маркус В.", review_2_loc: "Берлин, Германия",
-    review_3_text: "Современно, быстро и невероятно интуитивно. Сам интерфейс вызывает желание забронировать билет прямо сейчас.", review_3_author: "Елена Р.", review_3_loc: "Мадрид, Испания",
-    footer_desc: "Вдохновляем на путешествия и открываем для вас самые захватывающие уголки мира.",
-    footer_quick_links: "Быстрые ссылки", footer_contact: "Связаться с нами", footer_newsletter: "Рассылка", footer_subscribe: "Подписаться",
-    footer_legal: "Правовая информация", footer_privacy: "Политика конфиденциальности", footer_terms: "Условия использования", footer_disclaimer: "Отказ от ответственности",
-    dest_title: "Поиск направлений", dest_subtitle: "От шумных городов до безмятежных пляжей — найдите свой идеальный уголок.", dest_featured_title: "Франция", dest_featured_desc: "Самая посещаемая страна в мире, предлагающая искусство, историю и Ривьеру.", dest_find_deals: "Найти туры в",
-    gear_title: "Снаряжение", gear_subtitle: "Путешествуйте умнее и легче с нашими гаджетами и аксессурами.", gear_check_price: "Узнать цену", gear_no_results: "Ничего не найдено.",
-    blog_title: "Журнал Alexara", blog_subtitle: "Истории, путеводители и вдохновение для современного путешественника.", blog_read_full: "Читать полностью", blog_read_more: "Подробнее",
-    contact_title: "Связаться с нами", contact_info_title: "Контактная информация", form_first_name: "Имя", form_last_name: "Фамилия", form_email: "Email адрес", form_subject: "Тема", form_message: "Сообщение", form_submit: "Отправить",
-    about_mission_title: "Наша миссия", about_who_we_are: "Кто мы", about_team: "Познакомьтесь с визионерами",
-    about_feature_1: "Премиальное кураторство", about_feature_2: "Нейронное планирование", about_feature_3: "Глобальная поддержка",
-    cat_hotel: "Отель", cat_hostel: "Хостел", cat_restaurant: "Ресторан", cat_nightclub: "Ночной клуб", cat_beach: "Пляж", cat_resort: "Курорт", cat_activity: "Активность", cat_ticket: "Билет", cat_package: "Пакет",
-    Europe: "Европа", Asia: "Азия", Oceania: "Океания", Africa: "Африка", Americas: "Америка"
+    home_innovation_badge: "Интеллект для путешествий нового поколения", home_innovation_title_1: "Архитектура для", home_innovation_title_2: "Modern Explorers.", home_innovation_desc: "Beyond simple booking. We utilize advanced grounding models to synthesize millions of data points.",
+    home_trending_title: "Trending Destinations", home_exclusive_title: "Exclusive Collections", home_reviews_title: "Voices of the Modern Explorer", home_reviews_subtitle: "Real experiences from our global collective of travelers.", 
+    review_1_text: "The AI Planner synthesized a 10-day trip to Japan that felt like it was curated by a local historian. Absolutely flawless execution.", review_1_author: "Julianna M.", review_1_loc: "San Francisco, USA",
+    review_2_text: "I found a deal for the Amalfi Coast that was 40% cheaper than other platforms. Alexara is now my primary travel resource.", review_2_author: "Marcus V.", review_2_loc: "Berlin, Germany",
+    review_3_text: "Modern, fast, and incredibly intuitive. The interface itself makes me want to book my next flight right now.", review_3_author: "Elena R.", review_3_loc: "Madrid, Spain",
+    footer_desc: "Inspiring wanderlust and connecting you with the world's most breathtaking destinations.",
+    footer_quick_links: "Quick Links", footer_contact: "Contact Us", footer_newsletter: "Newsletter", footer_subscribe: "Subscribe",
+    footer_legal: "Legal & Trust", footer_privacy: "Privacy Policy", footer_terms: "Terms of Service", footer_disclaimer: "Affiliate Disclosure",
+    dest_title: "Explore Destinations", dest_subtitle: "From bustling cities to serene beaches, find your perfect backdrop.", dest_featured_title: "France", dest_featured_desc: "The world's most visited country, offering art, history, and the Riviera.", dest_find_deals: "Find Deals in",
+    gear_title: "Essential Gear", gear_subtitle: "Travel smarter and lighter with our curated tech and accessories.", gear_check_price: "Check Price", gear_no_results: "No gear found.",
+    blog_title: "The Alexara Journal", blog_subtitle: "Stories, guides, and inspiration for the modern traveler.", blog_read_full: "Read Full Story", blog_read_more: "Read More",
+    contact_title: "Get in Touch", contact_info_title: "Contact Information", form_first_name: "First Name", form_last_name: "Last Name", form_email: "Email Address", form_subject: "Subject", form_message: "Message", form_submit: "Send Message",
+    about_mission_title: "Our Mission", about_who_we_are: "Who We Are", about_team: "Meet the Visionaries",
+    about_feature_1: "Premium Curation", about_feature_2: "Neural Planning", about_feature_3: "Global Support",
+    cat_hotel: "Hotel", cat_hostel: "Hostel", cat_restaurant: "Restaurant", cat_nightclub: "Nightclub", cat_beach: "Beach", cat_resort: "Resort", cat_activity: "Activity", cat_ticket: "Ticket", cat_package: "Package",
+    Europe: "Europe", Asia: "Asia", Oceania: "Oceania", Africa: "Africa", Americas: "Americas"
   },
   ZH: {
-    nav_home: "首页", nav_planner: "AI 规划师", nav_destinations: "目的地", nav_deals: "优惠方案", nav_blog: "旅游博客", nav_gear: "旅行装备", nav_about: "关于我们", nav_contact: "联系我们", btn_book: "立即预订",
-    hero_badge: "构建旅游的未来", hero_title_1: "探索", hero_title_2: "未知领域。", search_placeholder: "我们要飞往哪里？", search_btn: "开始规划",
-    home_innovation_badge: "下一代旅行智能", home_innovation_title_1: "为", home_innovation_title_2: "现代探险者设计的架构。", home_innovation_desc: "超越简单的预订。我们利用先进的模型综合数百万个数据点。",
-    home_trending_title: "热门目的地", home_exclusive_title: "独家精选", home_reviews_title: "现代探险者之声", home_reviews_subtitle: "来自全球旅行者社区的真实体验。", 
-    review_1_text: "AI 规划师为我策划的 10 天日本行程就像是当地历史学家亲自打磨的。执行得非常完美。", review_1_author: "Julianna M.", review_1_loc: "美国旧金山",
-    review_2_text: "我在这里找到了比其他平台便宜 40% 的阿马尔菲海岸优惠。Alexara 现在是我首选的旅游资源。", review_2_author: "Marcus V.", review_2_loc: "德国柏林",
-    review_3_text: "现代、快捷且直观。界面设计精美，让人忍不住想立刻预订下一次飞行。", review_3_author: "Elena R.", review_3_loc: "西班牙马德里",
-    footer_desc: "激发流浪愿望，带您领略全球最令人叹為观止的目的地。",
-    footer_quick_links: "快速链接", footer_contact: "联系我们", footer_newsletter: "资讯订阅", footer_subscribe: "立即订阅",
-    footer_legal: "法律与信任", footer_privacy: "隐私政策", footer_terms: "服务条款", footer_disclaimer: "附属披露声明",
-    dest_title: "探索目的地", dest_subtitle: "从繁华都市到宁静海滩，寻找您的完美背景。", dest_featured_title: "法国", dest_featured_desc: "世界上访问量最大的国家，融合了艺术、历史和里维埃拉风情。", dest_find_deals: "查找优惠：",
-    gear_title: "必备装备", gear_subtitle: "使用我们精选的科技配件，让旅行更智能、更轻便。", gear_check_price: "查看价格", gear_no_results: "未找到相关装备。",
-    blog_title: "亚历克萨拉杂志", blog_subtitle: "为现代旅行者提供的故事、指南和灵感。", blog_read_full: "阅读全文", blog_read_more: "阅读更多",
-    contact_title: "取得联系", contact_info_title: "联系信息", form_first_name: "名", form_last_name: "姓", form_email: "电子邮件", form_subject: "主题", form_message: "内容", form_submit: "提交信息",
-    about_mission_title: "我们的使命", about_who_we_are: "关于我们", about_team: "核心团队",
-    about_feature_1: "高级策划", about_feature_2: "神经规划", about_feature_3: "全球支持",
+    nav_home: "首页", nav_planner: "AI规划师", nav_destinations: "目的地", nav_deals: "特价优惠", nav_blog: "博客", nav_gear: "旅行装备", nav_about: "关于我们", nav_contact: "联系我们", btn_book: "立即预订",
+    hero_badge: "勾勒未来旅行图景", hero_title_1: "探索", hero_title_2: "未知的世界。", search_placeholder: "你想飞往哪里？", search_btn: "开始规划",
+    home_innovation_badge: "新一代旅行智能", home_innovation_title_1: "专为", home_innovation_title_2: "现代探险家打造。", home_innovation_desc: "超越简单的预订。我们利用先进的模型整合数百万个数据点。",
+    home_trending_title: "热门目的地", home_exclusive_title: "独家收藏", home_reviews_title: "现代探险家的心声", home_reviews_subtitle: "来自我们全球旅行者群体的真实体验。", 
+    review_1_text: "AI规划师为我制定的10天日本行程就像是当地历史学家精心策划的一样。执行非常完美。", review_1_author: "Julianna M.", review_1_loc: "美国旧金山",
+    review_2_text: "我在Alexara上找到了比其他平台便宜40%的阿马尔菲海岸优惠。它现在是我的首选旅行资源。", review_2_author: "Marcus V.", review_2_loc: "德国柏林",
+    review_3_text: "现代、快捷且极其直观。界面设计让我忍不住想现在就预订下一趟航班。", review_3_author: "Elena R.", review_3_loc: "西班牙马德里",
+    footer_desc: "激发你的旅行欲望，带你领略世界上最令人惊叹的目的地。",
+    footer_quick_links: "快速链接", footer_contact: "联系我们", footer_newsletter: "时事通讯", footer_subscribe: "订阅",
+    footer_legal: "法律与信任", footer_privacy: "隐私政策", footer_terms: "服务条款", footer_disclaimer: "关联披露",
+    dest_title: "探索目的地", dest_subtitle: "从繁华的都市到宁静的海滩，寻找你完美的背景。", dest_featured_title: "法国", dest_featured_desc: "世界上游客最多的国家，拥有艺术、历史和里维埃拉海滨。", dest_find_deals: "查找特价优惠：",
+    gear_title: "必备装备", gear_subtitle: "使用我们精选的科技产品和配件，让旅行更智能、更轻便。", gear_check_price: "查看价格", gear_no_results: "未找到相关装备。",
+    blog_title: "Alexara 日志", blog_subtitle: "为现代旅行者提供的故事、指南和灵感。", blog_read_full: "阅读完整故事", blog_read_more: "阅读更多",
+    contact_title: "保持联系", contact_info_title: "联系信息", form_first_name: "名", form_last_name: "姓", form_email: "电子邮件地址", form_subject: "主题", form_message: "留言", form_submit: "发送消息",
+    about_mission_title: "我们的使命", about_who_we_are: "关于我们", about_team: "认识我们的愿景家",
+    about_feature_1: "优质策划", about_feature_2: "神经规划", about_feature_3: "全球支持",
     cat_hotel: "酒店", cat_hostel: "旅舍", cat_restaurant: "餐厅", cat_nightclub: "夜总会", cat_beach: "海滩", cat_resort: "度假村", cat_activity: "活动", cat_ticket: "门票", cat_package: "套餐",
     Europe: "欧洲", Asia: "亚洲", Oceania: "大洋洲", Africa: "非洲", Americas: "美洲"
   }
 };
-
-export const MOCK_POSTS: BlogPost[] = [
-  {
-    id: "1",
-    title: "Top 10 Hidden Beaches in Thailand: A Complete Guide",
-    excerpt: "Discover the untouched paradises that tourists often miss. From Krabi to Koh Lipe, here are our top picks.",
-    content: "Thailand is famous for its beaches, but some of the best ones are hidden away. In this guide, we dive deep into the crystal waters of the Andaman sea. \nKoh Kood is a peaceful island in the eastern Gulf of Thailand, near the Cambodian border. It's often overlooked by travelers heading to the more famous Koh Chang, but those who make the journey are rewarded with crystal-clear waters and white sands. \nAnother gem is Railay Beach in Krabi, accessible only by boat due to the high limestone cliffs cutting off mainland access. We recommend staying at least 3 nights to truly experience the magic of the limestone formations at sunset.",
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1439&q=80",
-    author: "Sarah Jenkins",
-    date: "Oct 12, 2023",
-    tags: ["Travel Guides", "Thailand", "Beaches"]
-  },
-  {
-    id: "2",
-    title: "Review: The Best Hotels for Couples in Paris 2024",
-    excerpt: "Looking for romance in the city of light? We've reviewed the top boutique stays for your next anniversary.",
-    content: "Paris is the ultimate destination for romance. After visiting over 15 properties this year, we've narrowed it down to the top three. \nOur first choice is a boutique hotel in Le Marais that offers unparalleled views of the Eiffel Tower from its private balconies. The service is impeccable, and the breakfast spread is purely artisanal. \nFor those on a tighter budget, we've also found a charming stay near Montmartre that doesn't compromise on the Parisian aesthetic. Read on for our full review and score breakdown for each location.",
-    image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1470&q=80",
-    author: "Mike Ross",
-    date: "Sep 28, 2023",
-    tags: ["Hotel Reviews", "Paris", "Romance"]
-  },
-  {
-    id: "3",
-    title: "How to Find Cheap Flights: Pro Tips for 2024",
-    excerpt: "Don't overpay for your next trip. Learn the secrets of flight hacking and when to book for maximum savings.",
-    content: "Airfare is often the biggest expense in travel. We've spent years analyzing pricing trends to bring you this comprehensive guide. \nStart by using comparison tools like Google Flights and Skyscanner, but don't forget to check the airline's direct site for hidden deals. Booking on a Tuesday is no longer the magic bullet; instead, focus on the 'shoulder' days like Wednesday or Saturday for international routes. \nUsing a VPN can sometimes help, but the biggest factor is flexibility with your destination. Our 'Explore' feature on Alexara is designed to help you find the cheapest routes from your home airport.",
-    image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1470&q=80",
-    author: "Alex Chen",
-    date: "Nov 05, 2023",
-    tags: ["Travel Tips", "Flight Deals", "Budget Travel"]
-  },
-  {
-    id: "4",
-    title: "7 Things to Do in Dubai for Adventure Seekers",
-    excerpt: "From desert safaris to skydiving over the Palm, Dubai is more than just luxury shopping.",
-    content: "Dubai is a playground for those who love adrenaline. While the city is known for its skyscrapers, the true heart of adventure lies in the dunes. \nWe recently took a sunrise desert safari and it was life-changing. Beyond the dunes, you can skydive at the famous Dropzone at the Palm Jumeirah or try indoor skiing at the Mall of the Emirates. \nFor a more cultural adventure, take an abra ride across the Dubai Creek for just 1 AED. This post covers our favorite high-octane activities and practical tips for the best experience.",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
-    author: "Alexara Team",
-    date: "Dec 01, 2023",
-    tags: ["Destinations", "Things to Do", "Dubai"]
-  }
-];
-
-export const MOCK_DEALS: Deal[] = [
-  {
-    id: "d1",
-    title: "Luxury Escape to Oia Heights",
-    location: "Greece",
-    city: "Santorini",
-    categories: ["Resort", "Hotel"],
-    price: 1299,
-    originalPrice: 1800,
-    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.9,
-    duration: "5 Days / 4 Nights",
-    affiliateLink: "https://www.agoda.com"
-  },
-  {
-    id: "d2",
-    title: "Kyoto Bamboo Grove Ryokan",
-    location: "Japan",
-    city: "Kyoto",
-    categories: ["Hotel", "Activity"],
-    price: 1550,
-    originalPrice: 2100,
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.8,
-    duration: "7 Days / 6 Nights",
-    affiliateLink: "https://www.travelpayouts.com"
-  },
-  {
-    id: "d3",
-    title: "Berlin Central Backpackers",
-    location: "Germany",
-    city: "Berlin",
-    categories: ["Hostel", "Activity"],
-    price: 45,
-    originalPrice: 60,
-    image: "https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.5,
-    duration: "Per Night",
-    affiliateLink: "https://www.hostelworld.com"
-  },
-  {
-    id: "d4",
-    title: "Tulum Beachfront Dining Experience",
-    location: "Mexico",
-    city: "Tulum",
-    categories: ["Restaurant", "Beach"],
-    price: 145,
-    originalPrice: 200,
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.6,
-    duration: "Full Evening",
-    affiliateLink: "https://www.opentable.com"
-  },
-  {
-    id: "d5",
-    title: "Swiss Alps Scenic Rail Journey",
-    location: "Switzerland",
-    city: "Zermatt",
-    categories: ["Activity", "Ticket"],
-    price: 185,
-    originalPrice: 250,
-    image: "https://images.unsplash.com/photo-1531310197839-ccf54634509e?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.9,
-    duration: "Full Day Pass",
-    affiliateLink: "https://www.raileurope.com"
-  },
-  {
-    id: "d6",
-    title: "Amalfi Coast Hidden Beach Tour",
-    location: "Italy",
-    city: "Positano",
-    categories: ["Beach", "Activity", "Ticket"],
-    price: 320,
-    originalPrice: 450,
-    image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.8,
-    duration: "8 Hours",
-    affiliateLink: "https://www.viator.com"
-  }
-];
-
-export const MOCK_DESTINATIONS: Destination[] = [
-  { id: "dest1", name: "Italy", continent: "Europe", description: "Experience the history, world-renowned cuisine, and breathtaking Amalfi Coast architecture.", image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest2", name: "Japan", continent: "Asia", description: "A perfect harmony of ancient tradition and futuristic innovation.", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest3", name: "Australia", continent: "Oceania", description: "Vibrant city life meets the wild outback and the Great Barrier Reef.", image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest4", name: "Morocco", continent: "Africa", description: "Wander through colorful souks and sleep under the stars in the Sahara desert.", image: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1200&q=80" },
-];
-
-export const MOCK_GEAR: GearProduct[] = [
-  { id: "g1", name: "Nomad Carry-On Pro", description: "Ultra-lightweight polycarbonate shell with 360 wheels.", price: 245, image: "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?auto=format&fit=crop&w=800&q=80", category: "Luggage", affiliateLink: "https://www.amazon.com" },
-  { id: "g2", name: "Universal Travel Adapter", description: "Works in 150+ countries with 4 USB ports.", price: 25, image: "https://images.unsplash.com/photo-1563968743333-044cef800494?auto=format&fit=crop&w=800&q=80", category: "Accessories", affiliateLink: "https://www.amazon.com" }
-];
