@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
 import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check } from 'lucide-react';
@@ -247,7 +248,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   const copyPostLink = (id: string) => {
-      const url = `${window.location.origin}/blog/${id}`;
+      const url = `${window.location.origin}/#/blog/${id}`;
       navigator.clipboard.writeText(url);
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
