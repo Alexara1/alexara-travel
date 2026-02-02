@@ -1,8 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
-import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlogPost, Deal, Destination, GearProduct, ContactMessage } from '../../types';
+
+const slugify = (text: string) => text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
 const MediaInput: React.FC<{
     label: string;
@@ -134,10 +137,14 @@ const AdminDashboard: React.FC = () => {
 
   const savePost = (e: React.FormEvent) => {
     e.preventDefault();
+    const title = postForm.title || 'Untitled';
+    const slug = postForm.slug || slugify(title);
+
     if (formMode === 'create') {
         addPost({
             id: Date.now().toString(),
-            title: postForm.title || 'Untitled',
+            slug: slug,
+            title: title,
             excerpt: postForm.excerpt || '',
             content: postForm.content || '',
             image: postForm.image || `https://picsum.photos/seed/${Date.now()}/800/600`,
@@ -147,7 +154,7 @@ const AdminDashboard: React.FC = () => {
             tags: postForm.tags || []
         } as BlogPost);
     } else if (editingId) {
-        updatePost(editingId, postForm);
+        updatePost(editingId, { ...postForm, slug });
     }
     handleCancel();
   };
@@ -246,10 +253,10 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const copyPostLink = (id: string) => {
-      const url = `${window.location.origin}/blog/${id}`;
+  const copyPostLink = (slug: string) => {
+      const url = `${window.location.origin}/blog/${slug}`;
       navigator.clipboard.writeText(url);
-      setCopiedId(id);
+      setCopiedId(slug);
       setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -287,7 +294,7 @@ const AdminDashboard: React.FC = () => {
 
     // Dynamic Posts
     posts.forEach(p => {
-      sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.id}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
+      sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
     });
 
     sitemap += `</urlset>`;
@@ -947,7 +954,22 @@ const AdminDashboard: React.FC = () => {
                         <form onSubmit={savePost} className="space-y-4">
                             <div>
                                 <label className={labelClass}>Title</label>
-                                <input type="text" className={inputClass} value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
+                                <input type="text" className={inputClass} value={postForm.title || ''} onChange={e => {
+                                    const title = e.target.value;
+                                    const updates: Partial<BlogPost> = { title };
+                                    if (formMode === 'create' || !postForm.slug) {
+                                        updates.slug = slugify(title);
+                                    }
+                                    setPostForm({...postForm, ...updates});
+                                }} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Slug (URL Key)</label>
+                                <div className="flex items-center gap-2">
+                                    <div className="bg-gray-50 border border-gray-300 p-2 rounded text-gray-400 text-sm select-none">/blog/</div>
+                                    <input type="text" className={inputClass} value={postForm.slug || ''} onChange={e => setPostForm({...postForm, slug: slugify(e.target.value)})} />
+                                </div>
+                                <p className="text-[10px] text-gray-400 mt-1">SEO-friendly URL identifier. Unique string for Google indexing.</p>
                             </div>
                             <div>
                                 <label className={labelClass}>Excerpt</label>
@@ -1050,18 +1072,21 @@ const AdminDashboard: React.FC = () => {
                      <h3 className="text-xl font-bold mb-4">Manage Posts</h3>
                      <div className="space-y-2 max-h-[800px] overflow-y-auto">
                          {posts.map(post => (
-                             <div key={post.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                             <div key={post.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100 group">
                                  <div className="flex-1 truncate">
-                                     <span className="font-medium text-sm text-gray-800">{post.title}</span>
-                                     <div className="flex gap-1 mt-1">
-                                         {post.tags?.map(t => (
-                                             <span key={t} className="text-[9px] bg-secondary/10 text-secondary px-1 rounded font-bold">{t}</span>
-                                         ))}
+                                     <span className="font-bold text-sm text-gray-800">{post.title}</span>
+                                     <div className="flex items-center gap-2 mt-1">
+                                         <span className="text-[10px] text-gray-400 font-mono">/{post.slug}</span>
+                                         <div className="flex gap-1">
+                                             {post.tags?.map(t => (
+                                                 <span key={t} className="text-[9px] bg-secondary/10 text-secondary px-1 rounded font-bold">{t}</span>
+                                             ))}
+                                         </div>
                                      </div>
                                  </div>
                                  <div className="flex space-x-2 ml-2">
-                                     <button onClick={() => copyPostLink(post.id)} className="text-gray-400 hover:text-primary p-1" title="Copy Public URL">
-                                         {copiedId === post.id ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                                     <button onClick={() => copyPostLink(post.slug)} className="text-gray-400 hover:text-primary p-1" title="Copy Public URL">
+                                         {copiedId === post.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
                                      </button>
                                      <button onClick={() => handleEdit(post.id, 'post')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
                                      <button onClick={() => deletePost(post.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>

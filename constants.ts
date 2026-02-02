@@ -84,7 +84,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     home_innovation_badge: "Intelligence de Voyage de Nouvelle Génération", home_innovation_title_1: "Architecture pour", home_innovation_title_2: "Explorateurs Modernos.", home_innovation_desc: "Bien plus qu'une simple réservation. Nous utilisons des modèles avancés pour synthétiser des millions de données.",
     home_trending_title: "Destinations Tendances", home_exclusive_title: "Collections Exclusives", home_reviews_title: "Voix de l'explorateur moderne", home_reviews_subtitle: "Expériences réelles de notre collectif mondial de voyageurs.", 
     review_1_text: "Le planificateur IA a synthétisé un voyage de 10 jours au Japon qui semblait avoir été organisé par un historien local. Exécution absolument parfaite.", review_1_author: "Julianna M.", review_1_loc: "San Francisco, USA",
-    review_2_text: "J'ai trouvé une offre pour la côte amalfitaine qui était 40 % moins chère que sur d'autres plateformes. Alexara est désormais ma ressource de voyage principale.", review_2_author: "Marcus V.", review_2_loc: "Berlin, Allemagne",
+    review_2_text: "J'ai trouvé une offre pour la côte amalfitaine qui était 40 % moins chère que sur d'autres plateformes. Alexara est désormais ma ressource de voyage principale.", review_2_author: "Marcus V.", review_2_loc: "Berlin, France",
     review_3_text: "Moderne, rapide et incroyablement intuitif. L'interface elle-même me donne envie de réserver mon prochain vol dès maintenant.", review_3_author: "Elena R.", review_3_loc: "Madrid, Espagne",
     footer_desc: "Inspirer l'envie de voyager et vous connecter aux destinations les plus époustouflantes du monde.",
     footer_quick_links: "Liens Rapides", footer_contact: "Contactez-nous", footer_newsletter: "Newsletter", footer_subscribe: "S'abonner",
@@ -183,6 +183,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 export const MOCK_POSTS: BlogPost[] = [
   {
     id: "1",
+    slug: "top-10-hidden-beaches-in-thailand",
     title: "Top 10 Hidden Beaches in Thailand: A Complete Guide",
     excerpt: "Discover the untouched paradises that tourists often miss. From Krabi to Koh Lipe, here are our top picks.",
     content: "Thailand is famous for its beaches, but some of the best ones are hidden away. In this guide, we dive deep into the crystal waters of the Andaman sea. \nKoh Kood is a peaceful island in the eastern Gulf of Thailand, near the Cambodian border. It's often overlooked by travelers heading to the more famous Koh Chang, but those who make the journey are rewarded with crystal-clear waters and white sands. \nAnother gem is Railay Beach in Krabi, accessible only by boat due to the high limestone cliffs cutting off mainland access. We recommend staying at least 3 nights to truly experience the magic of the limestone formations at sunset.",
@@ -193,6 +194,7 @@ export const MOCK_POSTS: BlogPost[] = [
   },
   {
     id: "2",
+    slug: "best-hotels-for-couples-in-paris-2024",
     title: "Review: The Best Hotels for Couples in Paris 2024",
     excerpt: "Looking for romance in the city of light? We've reviewed the top boutique stays for your next anniversary.",
     content: "Paris is the ultimate destination for romance. After visiting over 15 properties this year, we've narrowed it down to the top three. \nOur first choice is a boutique hotel in Le Marais that offers unparalleled views of the Eiffel Tower from its private balconies. The service is impeccable, and the breakfast spread is purely artisanal. \nFor those on a tighter budget, we've also found a charming stay near Montmartre that doesn't compromise on the Parisian aesthetic. Read on for our full review and score breakdown for each location.",
@@ -203,6 +205,7 @@ export const MOCK_POSTS: BlogPost[] = [
   },
   {
     id: "3",
+    slug: "how-to-find-cheap-flights-pro-tips-2024",
     title: "How to Find Cheap Flights: Pro Tips for 2024",
     excerpt: "Don't overpay for your next trip. Learn the secrets of flight hacking and when to book for maximum savings.",
     content: "Airfare is often the biggest expense in travel. We've spent years analyzing pricing trends to bring you this comprehensive guide. \nStart by using comparison tools like Google Flights and Skyscanner, but don't forget to check the airline's direct site for hidden deals. Booking on a Tuesday is no longer the magic bullet; instead, focus on the 'shoulder' days like Wednesday or Saturday for international routes. \nUsing a VPN can sometimes help, but the biggest factor is flexibility with your destination. Our 'Explore' feature on Alexara is designed to help you find the cheapest routes from your home airport.",
@@ -213,6 +216,7 @@ export const MOCK_POSTS: BlogPost[] = [
   },
   {
     id: "4",
+    slug: "7-things-to-do-in-dubai-for-adventure-seekers",
     title: "7 Things to Do in Dubai for Adventure Seekers",
     excerpt: "From desert safaris to skydiving over the Palm, Dubai is more than just luxury shopping.",
     content: "Dubai is a playground for those who love adrenaline. While the city is known for its skyscrapers, the true heart of adventure lies in the dunes. \nWe recently took a sunrise desert safari and it was life-changing. Beyond the dunes, you can skydive at the famous Dropzone at the Palm Jumeirah or try indoor skiing at the Mall of the Emirates. \nFor a more cultural adventure, take an abra ride across the Dubai Creek for just 1 AED. This post covers our favorite high-octane activities and practical tips for the best experience.",

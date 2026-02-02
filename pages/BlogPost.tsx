@@ -49,9 +49,9 @@ const getSocialColorClass = (platform: string) => {
 };
 
 const BlogPost: React.FC = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const { posts, settings } = useSite();
-  const post = posts.find(p => p.id === id);
+  const post = posts.find(p => p.slug === slug);
 
   if (!post) {
     return (
@@ -177,9 +177,9 @@ const BlogPost: React.FC = () => {
                         <Tag className="w-4 h-4 mr-2 text-secondary" /> Read Next
                     </h4>
                     <ul className="space-y-4">
-                        {posts.filter(p => p.id !== post.id).slice(0,3).map(p => (
+                        {posts.filter(p => p.slug !== post.slug).slice(0,3).map(p => (
                             <li key={p.id}>
-                                <Link to={`/blog/${p.id}`} className="group block">
+                                <Link to={`/blog/${p.slug}`} className="group block">
                                     <h5 className="text-sm font-bold text-gray-800 group-hover:text-secondary transition-colors line-clamp-2">{p.title}</h5>
                                     <span className="text-[10px] text-gray-400 uppercase tracking-tight">{p.date}</span>
                                 </Link>
