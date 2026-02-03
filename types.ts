@@ -31,6 +31,7 @@ export interface BlogPost {
 
 export interface Deal {
   id: string;
+  slug: string;
   title: string;
   location: string; // This acts as Country
   city: string;
@@ -46,6 +47,7 @@ export interface Deal {
 
 export interface GearProduct {
   id: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
@@ -57,6 +59,7 @@ export interface GearProduct {
 
 export interface Destination {
   id: string;
+  slug: string;
   name: string;
   continent: string;
   description: string;

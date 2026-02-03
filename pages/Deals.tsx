@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
 import { 
   MapPin, Search, X, Building2, Bed, UtensilsCrossed, 
   Music2, Palmtree, Tent, Sparkles, SlidersHorizontal, 
-  Ticket, Package, ImageIcon, Map as MapIcon, Globe 
+  Ticket, Package, ImageIcon, Map as MapIcon, Globe, ArrowRight
 } from 'lucide-react';
 import { Deal } from '../types';
 
@@ -41,15 +41,17 @@ const DealCard: React.FC<{ deal: Deal; t: (k: string) => string }> = ({ deal, t 
           <MapPin className="w-3 h-3" />
           <span>{deal.city}, {deal.location}</span>
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-8 group-hover:text-primary transition-colors leading-tight">{deal.title}</h3>
+        <h3 className="text-2xl font-bold text-gray-900 mb-8 group-hover:text-primary transition-colors leading-tight">
+          <Link to={`/deals/${deal.slug}`}>{deal.title}</Link>
+        </h3>
         <div className="mt-auto flex items-center justify-between">
           <div>
             <div className="text-xs text-gray-400 line-through mb-1">${deal.originalPrice}</div>
             <div className="text-3xl font-black text-primary">${deal.price}</div>
           </div>
-          <a href={deal.affiliateLink} target="_blank" rel="noopener noreferrer" className="bg-primary hover:bg-slate-800 text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95">
-            {t('btn_book')}
-          </a>
+          <Link to={`/deals/${deal.slug}`} className="bg-primary hover:bg-slate-800 text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center">
+             View Deal <ArrowRight className="ml-2 w-4 h-4" />
+          </Link>
         </div>
       </div>
     </div>
@@ -70,7 +72,7 @@ const Deals: React.FC = () => {
 
   useEffect(() => { if (urlCountry) setSelectedCountry(urlCountry); }, [urlCountry]);
 
-  // CRITICAL: Reset city filter if the country changes to prevent invalid filters
+  // Reset city filter if the country changes to prevent invalid filters
   useEffect(() => {
     setSelectedCity('All');
   }, [selectedCountry]);

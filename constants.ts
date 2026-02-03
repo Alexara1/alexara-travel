@@ -230,6 +230,7 @@ export const MOCK_POSTS: BlogPost[] = [
 export const MOCK_DEALS: Deal[] = [
   {
     id: "d1",
+    slug: "luxury-escape-oia-heights-santorini",
     title: "Luxury Escape to Oia Heights",
     location: "Greece",
     city: "Santorini",
@@ -243,6 +244,7 @@ export const MOCK_DEALS: Deal[] = [
   },
   {
     id: "d2",
+    slug: "kyoto-bamboo-grove-ryokan-stay",
     title: "Kyoto Bamboo Grove Ryokan",
     location: "Japan",
     city: "Kyoto",
@@ -256,6 +258,7 @@ export const MOCK_DEALS: Deal[] = [
   },
   {
     id: "d3",
+    slug: "berlin-central-backpackers-hostel",
     title: "Berlin Central Backpackers",
     location: "Germany",
     city: "Berlin",
@@ -269,6 +272,7 @@ export const MOCK_DEALS: Deal[] = [
   },
   {
     id: "d4",
+    slug: "tulum-beachfront-dining-experience",
     title: "Tulum Beachfront Dining Experience",
     location: "Mexico",
     city: "Tulum",
@@ -282,6 +286,7 @@ export const MOCK_DEALS: Deal[] = [
   },
   {
     id: "d5",
+    slug: "swiss-alps-scenic-rail-journey",
     title: "Swiss Alps Scenic Rail Journey",
     location: "Switzerland",
     city: "Zermatt",
@@ -295,6 +300,7 @@ export const MOCK_DEALS: Deal[] = [
   },
   {
     id: "d6",
+    slug: "amalfi-coast-hidden-beach-tour",
     title: "Amalfi Coast Hidden Beach Tour",
     location: "Italy",
     city: "Positano",
@@ -309,13 +315,13 @@ export const MOCK_DEALS: Deal[] = [
 ];
 
 export const MOCK_DESTINATIONS: Destination[] = [
-  { id: "dest1", name: "Italy", continent: "Europe", description: "Experience the history, world-renowned cuisine, and breathtaking Amalfi Coast architecture.", image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest2", name: "Japan", continent: "Asia", description: "A perfect harmony of ancient tradition and futuristic innovation.", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest3", name: "Australia", continent: "Oceania", description: "Vibrant city life meets the wild outback and the Great Barrier Reef.", image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest4", name: "Morocco", continent: "Africa", description: "Wander through colorful souks and sleep under the stars in the Sahara desert.", image: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1200&q=80" },
+  { id: "dest1", slug: "italy", name: "Italy", continent: "Europe", description: "Experience the history, world-renowned cuisine, and breathtaking Amalfi Coast architecture.", image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80" },
+  { id: "dest2", slug: "japan", name: "Japan", continent: "Asia", description: "A perfect harmony of ancient tradition and futuristic innovation.", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80" },
+  { id: "dest3", slug: "australia", name: "Australia", continent: "Oceania", description: "Vibrant city life meets the wild outback and the Great Barrier Reef.", image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=1200&q=80" },
+  { id: "dest4", slug: "morocco", name: "Morocco", continent: "Africa", description: "Wander through colorful souks and sleep under the stars in the Sahara desert.", image: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1200&q=80" },
 ];
 
 export const MOCK_GEAR: GearProduct[] = [
-  { id: "g1", name: "Nomad Carry-On Pro", description: "Ultra-lightweight polycarbonate shell with 360 wheels.", price: 245, image: "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?auto=format&fit=crop&w=800&q=80", category: "Luggage", affiliateLink: "https://www.amazon.com" },
-  { id: "g2", name: "Universal Travel Adapter", description: "Works in 150+ countries with 4 USB ports.", price: 25, image: "https://images.unsplash.com/photo-1563968743333-044cef800494?auto=format&fit=crop&w=800&q=80", category: "Accessories", affiliateLink: "https://www.amazon.com" }
+  { id: "g1", slug: "nomad-carry-on-pro", name: "Nomad Carry-On Pro", description: "Ultra-lightweight polycarbonate shell with 360 wheels.", price: 245, image: "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?auto=format&fit=crop&w=800&q=80", category: "Luggage", affiliateLink: "https://www.amazon.com" },
+  { id: "g2", slug: "universal-travel-adapter", name: "Universal Travel Adapter", description: "Works in 150+ countries with 4 USB ports.", price: 25, image: "https://images.unsplash.com/photo-1563968743333-044cef800494?auto=format&fit=crop&w=800&q=80", category: "Accessories", affiliateLink: "https://www.amazon.com" }
 ];

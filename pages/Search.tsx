@@ -73,7 +73,7 @@ const SearchResults: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {results.destinations.map(dest => (
-                                <Link to="/destinations" key={dest.id} className="bg-white rounded-xl shadow-sm overflow-hidden group border border-gray-100">
+                                <Link to={`/destinations/${dest.slug}`} key={dest.id} className="bg-white rounded-xl shadow-sm overflow-hidden group border border-gray-100">
                                     <div className="h-40 overflow-hidden">
                                         <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                     </div>
@@ -96,23 +96,23 @@ const SearchResults: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {results.deals.map(deal => (
-                                <div key={deal.id} className="bg-white rounded-xl shadow-sm overflow-hidden flex h-32 border border-gray-100">
+                                <Link to={`/deals/${deal.slug}`} key={deal.id} className="bg-white rounded-xl shadow-sm overflow-hidden flex h-32 border border-gray-100 group">
                                     <img src={deal.image} alt={deal.title} className="w-32 h-full object-cover" />
                                     <div className="p-4 flex-1 flex flex-col justify-between">
                                         <div>
-                                            <h3 className="font-bold text-gray-900 line-clamp-1">{deal.title}</h3>
+                                            <h3 className="font-bold text-gray-900 line-clamp-1 group-hover:text-secondary transition-colors">{deal.title}</h3>
                                             <div className="flex items-center text-xs text-gray-500 mt-1">
                                                 <MapPin className="w-3 h-3 mr-1" /> {deal.location}
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-end">
                                             <span className="text-lg font-bold text-secondary">${deal.price}</span>
-                                            <Link to="/deals" className="text-xs font-bold text-primary flex items-center hover:underline">
+                                            <span className="text-xs font-bold text-primary flex items-center hover:underline">
                                                 View Deal <ArrowRight className="w-3 h-3 ml-1" />
-                                            </Link>
+                                            </span>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </section>
@@ -127,10 +127,10 @@ const SearchResults: React.FC = () => {
                         </div>
                         <div className="space-y-4">
                             {results.posts.map(post => (
-                                <Link to={`/blog/${post.slug}`} key={post.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-6 hover:bg-gray-50 transition-colors">
+                                <Link to={`/blog/${post.slug}`} key={post.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-6 hover:bg-gray-50 transition-colors group">
                                     <img src={post.image} alt={post.title} className="w-20 h-20 rounded-lg object-cover" />
                                     <div>
-                                        <h3 className="font-bold text-gray-900 group-hover:text-secondary">{post.title}</h3>
+                                        <h3 className="font-bold text-gray-900 group-hover:text-secondary transition-colors">{post.title}</h3>
                                         <p className="text-sm text-gray-500 line-clamp-1 mt-1">{post.excerpt}</p>
                                     </div>
                                 </Link>
@@ -148,9 +148,9 @@ const SearchResults: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                             {results.gear.map(item => (
-                                <Link to="/gear" key={item.id} className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 text-center hover:shadow-md transition-shadow">
+                                <Link to={`/gear/${item.slug}`} key={item.id} className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 text-center hover:shadow-md transition-shadow group">
                                     <img src={item.image} alt={item.name} className="w-24 h-24 mx-auto object-contain mb-4" />
-                                    <h3 className="text-sm font-bold text-gray-900 line-clamp-1">{item.name}</h3>
+                                    <h3 className="text-sm font-bold text-gray-900 line-clamp-1 group-hover:text-secondary transition-colors">{item.name}</h3>
                                     <p className="text-secondary font-bold mt-1">${item.price}</p>
                                 </Link>
                             ))}

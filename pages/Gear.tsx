@@ -1,5 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
 import { ShoppingBag, ArrowUpRight, Search, X } from 'lucide-react';
 import AdContainer from '../components/AdContainer';
@@ -49,7 +50,7 @@ const Gear: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {filteredGear.map((item) => (
               <div key={item.id} className="group flex flex-col h-full bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="relative pt-[100%] bg-gray-50 overflow-hidden">
+                <Link to={`/gear/${item.slug}`} className="relative pt-[100%] bg-gray-50 overflow-hidden block">
                   {item.video ? (
                      <div className="absolute inset-0">
                          <video src={item.video} controls className="w-full h-full object-cover" />
@@ -63,20 +64,20 @@ const Gear: React.FC = () => {
                           <span className="bg-white/80 backdrop-blur text-xs font-bold px-2 py-1 rounded text-gray-600">{item.category}</span>
                       </div>
                    )}
-                </div>
+                </Link>
                 <div className="p-5 flex-1 flex flex-col">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{item.name}</h3>
-                  <p className="text-sm text-gray-500 mb-4 flex-1">{item.description}</p>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                    <Link to={`/gear/${item.slug}`}>{item.name}</Link>
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4 flex-1 line-clamp-2">{item.description}</p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-xl font-bold text-gray-900">${item.price}</span>
-                    <a 
-                      href={item.affiliateLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                    <Link 
+                      to={`/gear/${item.slug}`}
                       className="flex items-center text-sm font-bold text-secondary hover:text-teal-700 transition-colors"
                     >
-                      {t('gear_check_price')} <ArrowUpRight className="w-4 h-4 ml-1" />
-                    </a>
+                      View Details <ArrowUpRight className="w-4 h-4 ml-1" />
+                    </Link>
                   </div>
                 </div>
               </div>

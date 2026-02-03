@@ -8,10 +8,13 @@ import ScrollToTop from './components/ScrollToTop';
 import AIConcierge from './components/AIConcierge';
 import Home from './pages/Home';
 import Destinations from './pages/Destinations';
+import DestinationDetail from './pages/DestinationDetail';
 import Deals from './pages/Deals';
+import DealDetail from './pages/DealDetail';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Gear from './pages/Gear';
+import GearDetail from './pages/GearDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
@@ -64,11 +67,14 @@ const AppContent: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Layout><Home /></Layout>} />
                 <Route path="/destinations" element={<Layout><Destinations /></Layout>} />
+                <Route path="/destinations/:slug" element={<Layout><DestinationDetail /></Layout>} />
                 <Route path="/deals" element={<Layout><Deals /></Layout>} />
+                <Route path="/deals/:slug" element={<Layout><DealDetail /></Layout>} />
                 <Route path="/ai-planner" element={<Layout><AIPlanner /></Layout>} />
                 <Route path="/blog" element={<Layout><Blog /></Layout>} />
                 <Route path="/blog/:slug" element={<Layout><BlogPost /></Layout>} />
                 <Route path="/gear" element={<Layout><Gear /></Layout>} />
+                <Route path="/gear/:slug" element={<Layout><GearDetail /></Layout>} />
                 <Route path="/search" element={<Layout><SearchResults /></Layout>} />
                 <Route path="/about" element={<Layout><About /></Layout>} />
                 <Route path="/contact" element={<Layout><Contact /></Layout>} />

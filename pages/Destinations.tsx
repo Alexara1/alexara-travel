@@ -11,7 +11,7 @@ const Destinations: React.FC = () => {
     <div className="bg-gray-50 min-h-screen py-12 pt-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-6">{t('dest_title')}</h1>
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4">{t('dest_title')}</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {t('dest_subtitle')}
           </p>
@@ -25,7 +25,7 @@ const Destinations: React.FC = () => {
                 <h2 className="text-4xl font-bold text-white mb-2">{t('dest_featured_title')}</h2>
                 <p className="text-gray-200 mb-4 max-w-xl">{t('dest_featured_desc')}</p>
                 <Link 
-                  to={`/deals?country=${encodeURIComponent('France')}`} 
+                  to={`/destinations/france`} 
                   className="inline-flex items-center w-fit bg-white text-primary px-6 py-3 rounded-full font-bold hover:bg-secondary hover:text-white transition-all transform hover:scale-105"
                 >
                   {t('dest_find_deals')} {t('dest_featured_title')} <ArrowRight className="ml-2 w-4 h-4" />
@@ -36,7 +36,7 @@ const Destinations: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {destinations.map((dest) => (
-            <div key={dest.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div key={dest.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
               <div className="h-56 relative bg-black">
                 {dest.video ? (
                     <video src={dest.video} controls className="w-full h-full object-cover" />
@@ -50,18 +50,20 @@ const Destinations: React.FC = () => {
                     </div>
                 )}
               </div>
-              <div className="p-6">
+              <div className="p-6 flex-1 flex flex-col">
                 <h3 className="text-xl font-bold text-primary mb-2 flex items-center">
                   <MapPin className="w-5 h-5 mr-2 text-secondary" />
                   {dest.name}
                 </h3>
                 <p className="text-gray-600 mb-6 text-sm leading-relaxed line-clamp-3">{dest.description}</p>
-                <Link 
-                  to={`/deals?country=${encodeURIComponent(dest.name)}`} 
-                  className="block w-full text-center bg-primary text-white font-bold py-3 rounded-lg hover:bg-secondary transition-colors"
-                >
-                  {t('dest_find_deals')} {dest.name}
-                </Link>
+                <div className="mt-auto">
+                    <Link 
+                        to={`/destinations/${dest.slug}`} 
+                        className="block w-full text-center bg-primary text-white font-bold py-3 rounded-lg hover:bg-secondary transition-colors"
+                    >
+                        Explore {dest.name}
+                    </Link>
+                </div>
               </div>
             </div>
           ))}
