@@ -25,7 +25,7 @@ const Destinations: React.FC = () => {
                 <h2 className="text-4xl font-bold text-white mb-2">{t('dest_featured_title')}</h2>
                 <p className="text-gray-200 mb-4 max-w-xl">{t('dest_featured_desc')}</p>
                 <Link 
-                  to={`/destinations/france`} 
+                  to={`/deals?country=${encodeURIComponent(t('dest_featured_title'))}`} 
                   className="inline-flex items-center w-fit bg-white text-primary px-6 py-3 rounded-full font-bold hover:bg-secondary hover:text-white transition-all transform hover:scale-105"
                 >
                   {t('dest_find_deals')} {t('dest_featured_title')} <ArrowRight className="ml-2 w-4 h-4" />
@@ -58,10 +58,10 @@ const Destinations: React.FC = () => {
                 <p className="text-gray-600 mb-6 text-sm leading-relaxed line-clamp-3">{dest.description}</p>
                 <div className="mt-auto">
                     <Link 
-                        to={`/destinations/${dest.slug}`} 
+                        to={`/deals?country=${encodeURIComponent(dest.name)}`} 
                         className="block w-full text-center bg-primary text-white font-bold py-3 rounded-lg hover:bg-secondary transition-colors"
                     >
-                        Explore {dest.name}
+                        Explore {dest.name} Deals
                     </Link>
                 </div>
               </div>
