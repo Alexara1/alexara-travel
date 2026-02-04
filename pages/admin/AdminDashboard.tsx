@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
-import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon, Pulse } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon, Pulse, AlertCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlogPost, Deal, Destination, GearProduct, ContactMessage } from '../../types';
 
@@ -360,14 +360,14 @@ const AdminDashboard: React.FC = () => {
     
     // Base Pages
     ['/', '/destinations', '/deals', '/gear', '/blog', '/about', '/contact'].forEach(p => {
-      sitemap += `  <url>\n    <loc>${baseUrl}${p}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+      sitemap += `  <url>\n    <loc>${baseUrl}${p}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
     });
 
     // Dynamic Content
-    posts.forEach(p => { sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority Kent="0.6" />\n  </url>\n`; });
-    destinations.forEach(d => { sitemap += `  <url>\n    <loc>${baseUrl}/destinations/${d.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`; });
-    deals.forEach(d => { sitemap += `  <url>\n    <loc>${baseUrl}/deals/${d.slug}</loc>\n    <changefreq>daily</changefreq>\n    <priority Kent="0.7" />\n  </url>\n`; });
-    gear.forEach(g => { sitemap += `  <url>\n    <loc>${baseUrl}/gear/${g.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.5</priority>\n  </url>\n`; });
+    posts.forEach(p => { sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`; });
+    destinations.forEach(d => { sitemap += `  <url>\n    <loc>${baseUrl}/destinations/${d.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`; });
+    deals.forEach(d => { sitemap += `  <url>\n    <loc>${baseUrl}/deals/${d.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.7</priority>\n  </url>\n`; });
+    gear.forEach(g => { sitemap += `  <url>\n    <loc>${baseUrl}/gear/${g.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.5</priority>\n  </url>\n`; });
 
     sitemap += `</urlset>`;
     
@@ -1255,6 +1255,117 @@ const AdminDashboard: React.FC = () => {
                             value={settings.adminPassword || ''} 
                             onChange={(e) => updateSettings({ adminPassword: e.target.value })} 
                         />
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SEO & SITEMAP TAB --- */}
+        {activeTab === 'seo' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-6 flex items-center">
+                        <SearchIcon className="w-6 h-6 mr-2 text-primary" /> SEO Configuration
+                    </h3>
+                    <div className="space-y-6">
+                        <div>
+                            <label className={labelClass}>Meta Title</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                value={settings.metaTitle || ''} 
+                                onChange={(e) => updateSettings({ metaTitle: e.target.value })} 
+                                placeholder="Site Name | Primary Keywords"
+                            />
+                            <p className={`text-[10px] mt-1 font-bold ${settings.metaTitle?.length && settings.metaTitle.length > 60 ? 'text-red-500' : 'text-gray-400'}`}>
+                                {settings.metaTitle?.length || 0} / 60 characters recommended
+                            </p>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Meta Description</label>
+                            <textarea 
+                                className={inputClass} 
+                                rows={3}
+                                value={settings.metaDescription || ''} 
+                                onChange={(e) => updateSettings({ metaDescription: e.target.value })} 
+                                placeholder="A brief summary of your site for search engine results..."
+                            />
+                            <p className={`text-[10px] mt-1 font-bold ${settings.metaDescription?.length && settings.metaDescription.length > 160 ? 'text-red-500' : 'text-gray-400'}`}>
+                                {settings.metaDescription?.length || 0} / 160 characters recommended
+                            </p>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Meta Keywords (Comma separated)</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                value={settings.metaKeywords || ''} 
+                                onChange={(e) => updateSettings({ metaKeywords: e.target.value })} 
+                                placeholder="travel, destinations, deals"
+                            />
+                        </div>
+                        <div>
+                            <label className={labelClass}>Canonical URL</label>
+                            <input 
+                                type="url" 
+                                className={inputClass} 
+                                value={settings.canonicalUrl || ''} 
+                                onChange={(e) => updateSettings({ canonicalUrl: e.target.value })} 
+                                placeholder="https://www.alexaratravel.com"
+                            />
+                        </div>
+                        <div className="flex items-center p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <input 
+                                type="checkbox" 
+                                id="searchVisibility"
+                                checked={settings.searchVisibility} 
+                                onChange={(e) => updateSettings({ searchVisibility: e.target.checked })}
+                                className="w-5 h-5 text-secondary rounded focus:ring-secondary mr-3"
+                            />
+                            <label htmlFor="searchVisibility" className="text-sm font-bold text-gray-800 cursor-pointer">
+                                Allow search engines to index this site
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-8">
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-bold mb-6 flex items-center">
+                            <Activity className="w-6 h-6 mr-2 text-secondary" /> SEO Health
+                        </h3>
+                        <div className="space-y-4">
+                            {seoHealth.map((check, idx) => (
+                                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <p className="text-xs font-bold text-gray-700">{check.label}</p>
+                                        <p className="text-[10px] text-gray-500">{check.info}</p>
+                                    </div>
+                                    {check.status === 'good' ? (
+                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                    ) : check.status === 'warning' ? (
+                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                                    ) : (
+                                        <AlertCircle className="w-5 h-5 text-red-500" />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-slate-900 text-white p-8 rounded-xl shadow-xl">
+                        <h3 className="text-xl font-bold mb-4 flex items-center">
+                            <Globe className="w-6 h-6 mr-2 text-secondary" /> Sitemap Generator
+                        </h3>
+                        <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                            Generate a search-engine compatible XML sitemap containing all your destinations, deals, and articles.
+                        </p>
+                        <button 
+                            onClick={generateSitemap}
+                            className="w-full bg-secondary hover:bg-teal-600 text-white py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center"
+                        >
+                            <Download className="w-4 h-4 mr-2" /> Generate & Download Sitemap.xml
+                        </button>
                     </div>
                 </div>
             </div>
