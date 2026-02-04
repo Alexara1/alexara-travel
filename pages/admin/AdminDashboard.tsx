@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
-import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon, Pulse, AlertCircle } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon, Pulse, AlertCircle, FileCode } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlogPost, Deal, Destination, GearProduct, ContactMessage } from '../../types';
 
@@ -355,19 +355,28 @@ const AdminDashboard: React.FC = () => {
   };
 
   const generateSitemap = () => {
-    const baseUrl = settings.canonicalUrl || 'https://alexara.com';
+    const baseUrl = settings.canonicalUrl || window.location.origin;
+    const today = new Date().toISOString().split('T')[0];
     let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     
+    const addUrl = (path: string, freq: string, priority: string) => {
+      sitemap += `  <url>\n    <loc>${baseUrl}${path}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
+    };
+
     // Base Pages
-    ['/', '/destinations', '/deals', '/gear', '/blog', '/about', '/contact'].forEach(p => {
-      sitemap += `  <url>\n    <loc>${baseUrl}${p}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
-    });
+    addUrl('/', 'daily', '1.0');
+    addUrl('/destinations', 'weekly', '0.8');
+    addUrl('/deals', 'daily', '0.9');
+    addUrl('/gear', 'weekly', '0.7');
+    addUrl('/blog', 'daily', '0.8');
+    addUrl('/about', 'monthly', '0.5');
+    addUrl('/contact', 'monthly', '0.5');
 
     // Dynamic Content
-    posts.forEach(p => { sitemap += `  <url>\n    <loc>${baseUrl}/blog/${p.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`; });
-    destinations.forEach(d => { sitemap += `  <url>\n    <loc>${baseUrl}/destinations/${d.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`; });
-    deals.forEach(d => { sitemap += `  <url>\n    <loc>${baseUrl}/deals/${d.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.7</priority>\n  </url>\n`; });
-    gear.forEach(g => { sitemap += `  <url>\n    <loc>${baseUrl}/gear/${g.slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.5</priority>\n  </url>\n`; });
+    posts.forEach(p => addUrl(`/blog/${p.slug}`, 'weekly', '0.6'));
+    destinations.forEach(d => addUrl(`/destinations/${d.slug}`, 'monthly', '0.6'));
+    deals.forEach(d => addUrl(`/deals/${d.slug}`, 'daily', '0.7'));
+    gear.forEach(g => addUrl(`/gear/${g.slug}`, 'weekly', '0.5'));
 
     sitemap += `</urlset>`;
     
@@ -403,12 +412,15 @@ const AdminDashboard: React.FC = () => {
     const titleLen = settings.metaTitle?.length || 0;
     const descLen = settings.metaDescription?.length || 0;
     const keywordsCount = settings.metaKeywords?.split(',').filter(k => k.trim()).length || 0;
+    const hasOgImage = !!settings.ogImage;
+    const hasCanonical = !!settings.canonicalUrl;
     
     return [
       { label: 'Meta Title Length', status: titleLen >= 50 && titleLen <= 60 ? 'good' : (titleLen > 0 ? 'warning' : 'critical'), info: `${titleLen} characters (Ideal: 50-60)` },
       { label: 'Meta Description Length', status: descLen >= 120 && descLen <= 160 ? 'good' : (descLen > 0 ? 'warning' : 'critical'), info: `${descLen} characters (Ideal: 120-160)` },
       { label: 'Keywords Density', status: keywordsCount >= 3 ? 'good' : 'warning', info: `${keywordsCount} keywords defined` },
-      { label: 'Canonical URL', status: settings.canonicalUrl ? 'good' : 'warning', info: settings.canonicalUrl ? 'Present' : 'Missing' },
+      { label: 'Social Preview (OG Image)', status: hasOgImage ? 'good' : 'warning', info: hasOgImage ? 'Configured' : 'Using site logo (Default)' },
+      { label: 'Canonical URL', status: hasCanonical ? 'good' : 'warning', info: hasCanonical ? 'Present' : 'Missing' },
       { label: 'Search Visibility', status: settings.searchVisibility ? 'good' : 'critical', info: settings.searchVisibility ? 'Indexing Enabled' : 'NoIndex (Hidden)' }
     ];
   };
@@ -452,7 +464,7 @@ const AdminDashboard: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto h-screen">
-        {/* --- STATS TAB (UPDATED FOR LIVE DATA) --- */}
+        {/* --- STATS TAB --- */}
         {activeTab === 'stats' && (
             <div>
                 <div className="flex items-center justify-between mb-8">
@@ -741,7 +753,7 @@ const AdminDashboard: React.FC = () => {
             </div>
         )}
 
-        {/* --- POSTS TAB --- Kent-fixed */}
+        {/* --- POSTS TAB --- */}
         {activeTab === 'posts' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-8">
@@ -1304,6 +1316,13 @@ const AdminDashboard: React.FC = () => {
                                 placeholder="travel, destinations, deals"
                             />
                         </div>
+                        <MediaInput 
+                            label="OpenGraph Social Image" 
+                            type="image" 
+                            recommendedDimensions="1200 x 630 px" 
+                            value={settings.ogImage} 
+                            onChange={(val) => updateSettings({ ogImage: val })} 
+                        />
                         <div>
                             <label className={labelClass}>Canonical URL</label>
                             <input 
@@ -1330,6 +1349,20 @@ const AdminDashboard: React.FC = () => {
                 </div>
 
                 <div className="space-y-8">
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-bold mb-6 flex items-center">
+                            <FileCode className="w-6 h-6 mr-2 text-indigo-500" /> Robots.txt Editor
+                        </h3>
+                        <textarea 
+                            className={`${inputClass} font-mono text-xs`} 
+                            rows={8}
+                            value={settings.robotsTxt || ''} 
+                            onChange={(e) => updateSettings({ robotsTxt: e.target.value })} 
+                            placeholder="User-agent: *&#10;Allow: /"
+                        />
+                        <p className="text-[10px] text-gray-400 mt-2 italic leading-tight">Advanced: Use this to block crawlers from private directories (e.g. /admin).</p>
+                    </div>
+
                     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
                         <h3 className="text-xl font-bold mb-6 flex items-center">
                             <Activity className="w-6 h-6 mr-2 text-secondary" /> SEO Health
