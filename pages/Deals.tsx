@@ -5,12 +5,19 @@ import { useSite } from '../context/SiteContext';
 import { 
   MapPin, Search, X, Building2, Bed, UtensilsCrossed, 
   Music2, Palmtree, Tent, Sparkles, SlidersHorizontal, 
-  Ticket, Package, ImageIcon, Map as MapIcon, Globe, ArrowRight
+  Ticket, Package, ImageIcon, Map as MapIcon, Globe, ArrowRight, Tag as TagIcon
 } from 'lucide-react';
 import { Deal } from '../types';
 
 const DealCard: React.FC<{ deal: Deal; t: (k: string) => string }> = ({ deal, t }) => {
   const [imageError, setImageError] = useState(false);
+
+  // Fallback helper for manual categories that aren't in translations
+  const getCategoryLabel = (cat: string) => {
+    const key = `cat_${cat.toLowerCase()}`;
+    const translated = t(key);
+    return translated !== key ? translated : cat;
+  };
 
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full border border-gray-100">
@@ -31,7 +38,7 @@ const DealCard: React.FC<{ deal: Deal; t: (k: string) => string }> = ({ deal, t 
         <div className="absolute top-4 left-4 flex flex-wrap gap-2">
           {deal.categories.map(cat => (
             <span key={cat} className="bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-[10px] font-black uppercase text-gray-700 shadow-sm border border-white/50">
-              {t(`cat_${cat.toLowerCase()}`)}
+              {getCategoryLabel(cat)}
             </span>
           ))}
         </div>
@@ -59,7 +66,7 @@ const DealCard: React.FC<{ deal: Deal; t: (k: string) => string }> = ({ deal, t 
 };
 
 const Deals: React.FC = () => {
-  const { deals, t } = useSite();
+  const { deals, settings, t } = useSite();
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
@@ -72,26 +79,36 @@ const Deals: React.FC = () => {
 
   useEffect(() => { if (urlCountry) setSelectedCountry(urlCountry); }, [urlCountry]);
 
-  // Reset city filter if the country changes to prevent invalid filters
   useEffect(() => {
     setSelectedCity('All');
   }, [selectedCountry]);
 
-  const categories = [
-    { name: 'All', key: 'All', icon: Sparkles },
-    { name: 'Hotel', key: 'cat_hotel', icon: Building2 },
-    { name: 'Hostel', key: 'cat_hostel', icon: Bed },
-    { name: 'Restaurant', key: 'cat_restaurant', icon: UtensilsCrossed },
-    { name: 'Nightclub', key: 'cat_nightclub', icon: Music2 },
-    { name: 'Beach', key: 'cat_beach', icon: Palmtree },
-    { name: 'Resort', key: 'cat_resort', icon: Tent },
-    { name: 'Ticket', key: 'cat_ticket', icon: Ticket },
-    { name: 'Package', key: 'cat_package', icon: Package }
-  ];
+  // Icons for default categories
+  const iconMap: Record<string, any> = {
+    'Hotel': Building2,
+    'Hostel': Bed,
+    'Restaurant': UtensilsCrossed,
+    'Nightclub': Music2,
+    'Beach': Palmtree,
+    'Resort': Tent,
+    'Ticket': Ticket,
+    'Package': Package
+  };
+
+  const categories = useMemo(() => {
+    const list = settings.dealCategories || ["Hotel", "Hostel", "Restaurant", "Nightclub", "Beach", "Resort", "Ticket", "Package"];
+    return [
+      { name: 'All', key: 'All', icon: Sparkles },
+      ...list.map(cat => ({
+        name: cat,
+        key: `cat_${cat.toLowerCase()}`,
+        icon: iconMap[cat] || TagIcon
+      }))
+    ];
+  }, [settings.dealCategories]);
 
   const countries = useMemo(() => ['All', ...Array.from(new Set(deals.map(d => d.location)))], [deals]);
   
-  // Dynamically update the list of available cities based on the selected country
   const cities = useMemo(() => {
     const filteredByCountry = selectedCountry === 'All' 
         ? deals 
@@ -103,7 +120,7 @@ const Deals: React.FC = () => {
     return deals.filter(deal => {
       const matchesCountry = selectedCountry === 'All' || deal.location === selectedCountry;
       const matchesCity = selectedCity === 'All' || deal.city === selectedCity;
-      const matchesCategory = selectedCategory === 'All' || deal.categories.includes(selectedCategory as any);
+      const matchesCategory = selectedCategory === 'All' || deal.categories.includes(selectedCategory);
       const matchesSearch = deal.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                             deal.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
                             deal.location.toLowerCase().includes(searchQuery.toLowerCase());
@@ -122,7 +139,6 @@ const Deals: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Country Selector */}
             <div>
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 flex items-center">
                 <Globe className="w-3 h-3 mr-2 text-secondary" /> Country
@@ -137,7 +153,6 @@ const Deals: React.FC = () => {
               </select>
             </div>
 
-            {/* City Selector */}
             <div>
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 flex items-center">
                 <MapIcon className="w-3 h-3 mr-2 text-secondary" /> City
@@ -153,7 +168,6 @@ const Deals: React.FC = () => {
               </select>
             </div>
 
-            {/* Search Input */}
             <div className="lg:col-span-2">
                 <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 flex items-center">
                     <Search className="w-3 h-3 mr-2 text-secondary" /> Dynamic Search
@@ -174,29 +188,21 @@ const Deals: React.FC = () => {
           <div className="mt-10 pt-8 border-t border-gray-50">
             <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Discovery Categories</label>
             <div className="flex flex-wrap gap-2">
-                {categories.map((cat) => (
-                    <button 
-                        key={cat.name} 
-                        onClick={() => setSelectedCategory(cat.name)} 
-                        className={`px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest border transition-all flex items-center gap-2 shadow-sm ${selectedCategory === cat.name ? 'bg-primary text-white border-primary scale-105' : 'bg-white text-gray-600 border-gray-100 hover:border-secondary'}`}
-                    >
-                        <cat.icon className={`w-3.5 h-3.5 ${selectedCategory === cat.name ? 'text-secondary' : 'text-gray-300'}`} />
-                        {cat.key === 'All' ? 'All Experiences' : t(cat.key)}
-                    </button>
-                ))}
+                {categories.map((cat) => {
+                    const label = t(cat.key) !== cat.key ? t(cat.key) : cat.name;
+                    return (
+                        <button 
+                            key={cat.name} 
+                            onClick={() => setSelectedCategory(cat.name)} 
+                            className={`px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest border transition-all flex items-center gap-2 shadow-sm ${selectedCategory === cat.name ? 'bg-primary text-white border-primary scale-105' : 'bg-white text-gray-600 border-gray-100 hover:border-secondary'}`}
+                        >
+                            <cat.icon className={`w-3.5 h-3.5 ${selectedCategory === cat.name ? 'text-secondary' : 'text-gray-300'}`} />
+                            {label}
+                        </button>
+                    );
+                })}
             </div>
           </div>
-
-          {(selectedCountry !== 'All' || selectedCity !== 'All' || selectedCategory !== 'All' || searchQuery) && (
-            <div className="mt-8 flex justify-end">
-                <button 
-                    onClick={() => { setSelectedCountry('All'); setSelectedCity('All'); setSelectedCategory('All'); setSearchQuery(''); }} 
-                    className="text-[10px] font-black text-red-400 hover:text-red-500 flex items-center uppercase tracking-widest bg-red-50 px-4 py-2 rounded-xl transition-colors"
-                >
-                    <X className="w-3.5 h-3.5 mr-2" /> Reset Architectural Filters
-                </button>
-            </div>
-          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

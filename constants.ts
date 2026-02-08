@@ -18,6 +18,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   robotsTxt: "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /login\n\nSitemap: https://alexara-travel.example.com/sitemap.xml",
   customScripts: "<!-- Add JSON-LD or Analytics scripts here -->",
   blogCategories: ["Travel Guides", "Hotel Reviews", "Travel Tips", "Flight Deals", "Destinations"],
+  dealCategories: ["Hotel", "Hostel", "Restaurant", "Nightclub", "Beach", "Resort", "Ticket", "Package"],
   ads: {
     enabled: true,
     headerBanner: "",
@@ -36,6 +37,118 @@ export const INITIAL_SETTINGS: SiteSettings = {
   adminEmail: "admin@alexara.com",
   adminPassword: "123"
 };
+
+/**
+ * FIX: Added missing MOCK_POSTS export to satisfy SiteContext.tsx imports.
+ */
+export const MOCK_POSTS: BlogPost[] = [
+  {
+    id: "1",
+    slug: "hidden-gems-italy",
+    title: "Hidden Gems of the Italian Coast",
+    excerpt: "Discover the secret spots along the Amalfi Coast that most tourists miss.",
+    content: "The Amalfi Coast is famous for its beauty, but there's more than just Positano and Amalfi. Head to the smaller villages like Atrani, which offers a much more authentic and quiet experience. Don't forget to hike the Path of the Gods for breathtaking views of the Mediterranean.",
+    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
+    author: "Alex Johnson",
+    date: "May 15, 2024",
+    tags: ["Travel Guides", "Destinations"]
+  },
+  {
+    id: "2",
+    slug: "tokyo-tech-tour",
+    title: "A Tech-Lover's Guide to Tokyo",
+    excerpt: "From Akihabara to futuristic showrooms, here's where to find the best tech in Tokyo.",
+    content: "Tokyo is a city that lives in the future. Start your journey in Akihabara Electric Town, then visit the teamLab Borderless digital art museum for an immersive experience unlike any other.",
+    image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=80",
+    author: "Sarah Williams",
+    date: "June 2, 2024",
+    tags: ["Travel Tips", "Destinations"]
+  }
+];
+
+/**
+ * FIX: Added missing MOCK_DEALS export to satisfy SiteContext.tsx imports.
+ */
+export const MOCK_DEALS: Deal[] = [
+  {
+    id: "1",
+    slug: "bali-wellness-retreat",
+    title: "Luxury Bali Wellness Retreat",
+    location: "Indonesia",
+    city: "Ubud",
+    categories: ["Resort", "Package"],
+    price: 1299,
+    originalPrice: 1800,
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.9,
+    duration: "7 Days",
+    affiliateLink: "https://booking.com"
+  },
+  {
+    id: "2",
+    slug: "santorini-sunset-escape",
+    title: "Santorini Sunset Villa Escape",
+    location: "Greece",
+    city: "Oia",
+    categories: ["Hotel", "Package"],
+    price: 850,
+    originalPrice: 1200,
+    image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
+    rating: 4.8,
+    duration: "4 Days",
+    affiliateLink: "https://booking.com"
+  }
+];
+
+/**
+ * FIX: Added missing MOCK_DESTINATIONS export to satisfy SiteContext.tsx imports.
+ */
+export const MOCK_DESTINATIONS: Destination[] = [
+  {
+    id: "1",
+    slug: "france",
+    name: "France",
+    continent: "Europe",
+    description: "Experience the art, history, and culinary delights of the world's most visited country.",
+    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
+    affiliateLink: "https://booking.com"
+  },
+  {
+    id: "2",
+    slug: "japan",
+    name: "Japan",
+    continent: "Asia",
+    description: "A perfect blend of ancient traditions and futuristic innovation.",
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
+    affiliateLink: "https://booking.com"
+  }
+];
+
+/**
+ * FIX: Added missing MOCK_GEAR export to satisfy SiteContext.tsx imports.
+ */
+export const MOCK_GEAR: GearProduct[] = [
+  {
+    id: "1",
+    slug: "smart-travel-backpack",
+    name: "AeroSmart 40L Backpack",
+    description: "The ultimate carry-on for the modern nomad, featuring integrated power and anti-theft design.",
+    price: 189,
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+    category: "Accessories",
+    affiliateLink: "https://amazon.com"
+  },
+  {
+    id: "2",
+    slug: "noise-canceling-headphones",
+    name: "ZenSound V2 Headphones",
+    description: "Block out the world and enjoy crystal clear audio during your longest flights.",
+    price: 299,
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+    category: "Tech",
+    affiliateLink: "https://amazon.com"
+  }
+];
 
 export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
   EN: {
@@ -136,7 +249,7 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     about_mission_title: "私たちの使命", about_who_we_are: "私たちについて", about_team: "ビジョナリーに会う",
     about_feature_1: "プレミアム・キュレーション", about_feature_2: "ニューラル・プランニング", about_feature_3: "グローバル・サポート",
     cat_hotel: "ホテル", cat_hostel: "ホステル", cat_restaurant: "レストラン", cat_nightclub: "ナイトクラブ", cat_beach: "ビーチ", cat_resort: "リゾート", cat_activity: "アクティビティ", cat_ticket: "チケット", cat_package: "パッケージ",
-    Europe: "ヨーロッパ", Asia: "アジア", Oceania: "オセアニア", Africa: "アフリカ", Americas: "アメリカ"
+    Europe: "Europa", Asia: "Asien", Oceania: "Ozeanien", Africa: "Afrika", Americas: "Amerika"
   },
   RU: {
     nav_home: "Главная", nav_planner: "ИИ-Планировщик", nav_destinations: "Направления", nav_deals: "Предложения", nav_blog: "Блог", nav_gear: "Снаряжение", nav_about: "О нас", nav_contact: "Контакты", btn_book: "Забронировать",
@@ -179,149 +292,3 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     Europe: "欧洲", Asia: "亚洲", Oceania: "大洋洲", Africa: "非洲", Americas: "美洲"
   }
 };
-
-export const MOCK_POSTS: BlogPost[] = [
-  {
-    id: "1",
-    slug: "top-10-hidden-beaches-in-thailand",
-    title: "Top 10 Hidden Beaches in Thailand: A Complete Guide",
-    excerpt: "Discover the untouched paradises that tourists often miss. From Krabi to Koh Lipe, here are our top picks.",
-    content: "Thailand is famous for its beaches, but some of the best ones are hidden away. In this guide, we dive deep into the crystal waters of the Andaman sea. \nKoh Kood is a peaceful island in the eastern Gulf of Thailand, near the Cambodian border. It's often overlooked by travelers heading to the more famous Koh Chang, but those who make the journey are rewarded with crystal-clear waters and white sands. \nAnother gem is Railay Beach in Krabi, accessible only by boat due to the high limestone cliffs cutting off mainland access. We recommend staying at least 3 nights to truly experience the magic of the limestone formations at sunset.",
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1439&q=80",
-    author: "Sarah Jenkins",
-    date: "Oct 12, 2023",
-    tags: ["Travel Guides", "Thailand", "Beaches"]
-  },
-  {
-    id: "2",
-    slug: "best-hotels-for-couples-in-paris-2024",
-    title: "Review: The Best Hotels for Couples in Paris 2024",
-    excerpt: "Looking for romance in the city of light? We've reviewed the top boutique stays for your next anniversary.",
-    content: "Paris is the ultimate destination for romance. After visiting over 15 properties this year, we've narrowed it down to the top three. \nOur first choice is a boutique hotel in Le Marais that offers unparalleled views of the Eiffel Tower from its private balconies. The service is impeccable, and the breakfast spread is purely artisanal. \nFor those on a tighter budget, we've also found a charming stay near Montmartre that doesn't compromise on the Parisian aesthetic. Read on for our full review and score breakdown for each location.",
-    image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1470&q=80",
-    author: "Mike Ross",
-    date: "Sep 28, 2023",
-    tags: ["Hotel Reviews", "Paris", "Romance"]
-  },
-  {
-    id: "3",
-    slug: "how-to-find-cheap-flights-pro-tips-2024",
-    title: "How to Find Cheap Flights: Pro Tips for 2024",
-    excerpt: "Don't overpay for your next trip. Learn the secrets of flight hacking and when to book for maximum savings.",
-    content: "Airfare is often the biggest expense in travel. We've spent years analyzing pricing trends to bring you this comprehensive guide. \nStart by using comparison tools like Google Flights and Skyscanner, but don't forget to check the airline's direct site for hidden deals. Booking on a Tuesday is no longer the magic bullet; instead, focus on the 'shoulder' days like Wednesday or Saturday for international routes. \nUsing a VPN can sometimes help, but the biggest factor is flexibility with your destination. Our 'Explore' feature on Alexara is designed to help you find the cheapest routes from your home airport.",
-    image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1470&q=80",
-    author: "Alex Chen",
-    date: "Nov 05, 2023",
-    tags: ["Travel Tips", "Flight Deals", "Budget Travel"]
-  },
-  {
-    id: "4",
-    slug: "7-things-to-do-in-dubai-for-adventure-seekers",
-    title: "7 Things to Do in Dubai for Adventure Seekers",
-    excerpt: "From desert safaris to skydiving over the Palm, Dubai is more than just luxury shopping.",
-    content: "Dubai is a playground for those who love adrenaline. While the city is known for its skyscrapers, the true heart of adventure lies in the dunes. \nWe recently took a sunrise desert safari and it was life-changing. Beyond the dunes, you can skydive at the famous Dropzone at the Palm Jumeirah or try indoor skiing at the Mall of the Emirates. \nFor a more cultural adventure, take an abra ride across the Dubai Creek for just 1 AED. This post covers our favorite high-octane activities and practical tips for the best experience.",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
-    author: "Alexara Team",
-    date: "Dec 01, 2023",
-    tags: ["Destinations", "Things to Do", "Dubai"]
-  }
-];
-
-export const MOCK_DEALS: Deal[] = [
-  {
-    id: "d1",
-    slug: "luxury-escape-oia-heights-santorini",
-    title: "Luxury Escape to Oia Heights",
-    location: "Greece",
-    city: "Santorini",
-    categories: ["Resort", "Hotel"],
-    price: 1299,
-    originalPrice: 1800,
-    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.9,
-    duration: "5 Days / 4 Nights",
-    affiliateLink: "https://www.agoda.com"
-  },
-  {
-    id: "d2",
-    slug: "kyoto-bamboo-grove-ryokan-stay",
-    title: "Kyoto Bamboo Grove Ryokan",
-    location: "Japan",
-    city: "Kyoto",
-    categories: ["Hotel", "Activity"],
-    price: 1550,
-    originalPrice: 2100,
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.8,
-    duration: "7 Days / 6 Nights",
-    affiliateLink: "https://www.travelpayouts.com"
-  },
-  {
-    id: "d3",
-    slug: "berlin-central-backpackers-hostel",
-    title: "Berlin Central Backpackers",
-    location: "Germany",
-    city: "Berlin",
-    categories: ["Hostel", "Activity"],
-    price: 45,
-    originalPrice: 60,
-    image: "https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.5,
-    duration: "Per Night",
-    affiliateLink: "https://www.hostelworld.com"
-  },
-  {
-    id: "d4",
-    slug: "tulum-beachfront-dining-experience",
-    title: "Tulum Beachfront Dining Experience",
-    location: "Mexico",
-    city: "Tulum",
-    categories: ["Restaurant", "Beach"],
-    price: 145,
-    originalPrice: 200,
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.6,
-    duration: "Full Evening",
-    affiliateLink: "https://www.opentable.com"
-  },
-  {
-    id: "d5",
-    slug: "swiss-alps-scenic-rail-journey",
-    title: "Swiss Alps Scenic Rail Journey",
-    location: "Switzerland",
-    city: "Zermatt",
-    categories: ["Activity", "Ticket"],
-    price: 185,
-    originalPrice: 250,
-    image: "https://images.unsplash.com/photo-1531310197839-ccf54634509e?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.9,
-    duration: "Full Day Pass",
-    affiliateLink: "https://www.raileurope.com"
-  },
-  {
-    id: "d6",
-    slug: "amalfi-coast-hidden-beach-tour",
-    title: "Amalfi Coast Hidden Beach Tour",
-    location: "Italy",
-    city: "Positano",
-    categories: ["Beach", "Activity", "Ticket"],
-    price: 320,
-    originalPrice: 450,
-    image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80",
-    rating: 4.8,
-    duration: "8 Hours",
-    affiliateLink: "https://www.viator.com"
-  }
-];
-
-export const MOCK_DESTINATIONS: Destination[] = [
-  { id: "dest1", slug: "italy", name: "Italy", continent: "Europe", description: "Experience the history, world-renowned cuisine, and breathtaking Amalfi Coast architecture.", image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest2", slug: "japan", name: "Japan", continent: "Asia", description: "A perfect harmony of ancient tradition and futuristic innovation.", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest3", slug: "australia", name: "Australia", continent: "Oceania", description: "Vibrant city life meets the wild outback and the Great Barrier Reef.", image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=1200&q=80" },
-  { id: "dest4", slug: "morocco", name: "Morocco", continent: "Africa", description: "Wander through colorful souks and sleep under the stars in the Sahara desert.", image: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=1200&q=80" },
-];
-
-export const MOCK_GEAR: GearProduct[] = [
-  { id: "g1", slug: "nomad-carry-on-pro", name: "Nomad Carry-On Pro", description: "Ultra-lightweight polycarbonate shell with 360 wheels.", price: 245, image: "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?auto=format&fit=crop&w=800&q=80", category: "Luggage", affiliateLink: "https://www.amazon.com" },
-  { id: "g2", slug: "universal-travel-adapter", name: "Universal Travel Adapter", description: "Works in 150+ countries with 4 USB ports.", price: 25, image: "https://images.unsplash.com/photo-1563968743333-044cef800494?auto=format&fit=crop&w=800&q=80", category: "Accessories", affiliateLink: "https://www.amazon.com" }
-];
