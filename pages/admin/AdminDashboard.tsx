@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
 import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon, Pulse, AlertCircle, FileCode } from 'lucide-react';
@@ -157,6 +156,8 @@ const AdminDashboard: React.FC = () => {
 
     return () => clearInterval(interval);
   }, [activeTab]);
+
+  const availableDealCategories = ['Hotel', 'Hostel', 'Restaurant', 'Nightclub', 'Beach', 'Resort', 'Ticket', 'Package'];
 
   useEffect(() => {
     setEditingId(null);
@@ -326,23 +327,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleAddDealCategory = () => {
-    if (!customDealCat.trim()) return;
-    const cat = customDealCat.trim();
-    const current = settings.dealCategories || [];
-    if (!current.includes(cat)) {
-        updateSettings({ dealCategories: [...current, cat] });
-    }
-    toggleDealCategory(cat);
-    setCustomDealCat('');
-  };
-
-  const handleRemoveDealCategory = (cat: string) => {
-    if (window.confirm(`Remove "${cat}" from the master category list?`)) {
-        updateSettings({ dealCategories: settings.dealCategories.filter(c => c !== cat) });
-    }
-  };
-
   const copyPublicLink = (type: 'blog' | 'destinations' | 'deals' | 'gear', slug: string) => {
       const url = `${window.location.origin}/${type}/${slug}`;
       navigator.clipboard.writeText(url);
@@ -356,6 +340,7 @@ const AdminDashboard: React.FC = () => {
     updateSettings({ socialMedia: newLinks });
   };
 
+  // Fix: Added missing updateSocialLink function
   const updateSocialLink = (index: number, field: 'platform' | 'url', value: string) => {
     const newLinks = [...(settings.socialMedia || [])];
     newLinks[index] = { ...newLinks[index], [field]: value };
@@ -427,7 +412,7 @@ const AdminDashboard: React.FC = () => {
 
   const unreadCount = messages.filter(m => m.status === 'new').length;
 
-  const seoHealth = () => {
+  const getSEOHealth = () => {
     const titleLen = settings.metaTitle?.length || 0;
     const descLen = settings.metaDescription?.length || 0;
     const keywordsCount = settings.metaKeywords?.split(',').filter(k => k.trim()).length || 0;
@@ -443,6 +428,8 @@ const AdminDashboard: React.FC = () => {
       { label: 'Search Visibility', status: settings.searchVisibility ? 'good' : 'critical', info: settings.searchVisibility ? 'Indexing Enabled' : 'NoIndex (Hidden)' }
     ];
   };
+
+  const seoHealth = getSEOHealth();
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
@@ -582,6 +569,81 @@ const AdminDashboard: React.FC = () => {
                         <p className="text-2xl font-bold text-gray-800 mt-1 tabular-nums">{analyticsData.visits.yearly.toLocaleString()}</p>
                      </div>
                 </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 lg:col-span-2">
+                         <div className="flex items-center justify-between mb-6">
+                            <h3 className="font-bold text-gray-800 text-lg flex items-center">
+                                <Globe className="w-5 h-5 mr-2 text-gray-500" /> Geographic Distribution
+                            </h3>
+                            <button className="text-[10px] text-secondary font-black uppercase tracking-widest hover:underline">Real-Time Heatmap</button>
+                         </div>
+                         <div className="space-y-4">
+                             {analyticsData.geo.map((item, index) => (
+                                 <div key={item.country} className="flex items-center">
+                                     <span className="w-32 text-xs font-bold text-gray-600 truncate">{item.country}</span>
+                                     <div className="flex-1 mx-4 bg-gray-100 rounded-full h-2 overflow-hidden">
+                                         <div 
+                                            className="bg-secondary h-full rounded-full transition-all duration-1000" 
+                                            style={{ width: `${item.percentage}%`, opacity: 1 - (index * 0.1) }}
+                                         ></div>
+                                     </div>
+                                     <span className="w-12 text-[10px] font-black text-gray-800 text-right tabular-nums">{item.percentage}%</span>
+                                     <span className="w-20 text-[10px] text-gray-400 text-right ml-2 tabular-nums">{(item.count + Math.floor(analyticsData.visits.total / 1000)).toLocaleString()}</span>
+                                 </div>
+                             ))}
+                         </div>
+                     </div>
+                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                         <h3 className="font-bold text-gray-800 text-lg mb-6 flex items-center">
+                            <Activity className="w-5 h-5 mr-2 text-gray-400" /> Device Usage
+                         </h3>
+                         <div className="flex flex-col justify-center h-64 space-y-6">
+                             <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                        <span className="text-xs font-bold text-gray-600">Mobile Synthesis</span>
+                                    </div>
+                                    <span className="text-sm font-black text-gray-800 tabular-nums">{analyticsData.devices.mobile.toFixed(1)}%</span>
+                                </div>
+                                <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-blue-500 h-full transition-all duration-1000" style={{ width: `${analyticsData.devices.mobile}%` }}></div>
+                                </div>
+                             </div>
+
+                             <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 rounded-full bg-indigo-500 mr-2"></div>
+                                        <span className="text-xs font-bold text-gray-600">Desktop Interface</span>
+                                    </div>
+                                    <span className="text-sm font-black text-gray-800 tabular-nums">{analyticsData.devices.desktop.toFixed(1)}%</span>
+                                </div>
+                                <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-indigo-500 h-full transition-all duration-1000" style={{ width: `${analyticsData.devices.desktop}%` }}></div>
+                                </div>
+                             </div>
+
+                             <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 rounded-full bg-teal-400 mr-2"></div>
+                                        <span className="text-xs font-bold text-gray-600">Tablet Terminal</span>
+                                    </div>
+                                    <span className="text-sm font-black text-gray-800 tabular-nums">{analyticsData.devices.tablet.toFixed(1)}%</span>
+                                </div>
+                                <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-teal-400 h-full transition-all duration-1000" style={{ width: `${analyticsData.devices.tablet}%` }}></div>
+                                </div>
+                             </div>
+
+                             <div className="pt-4 border-t border-gray-100 mt-4">
+                                 <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest text-center">Architecting Real-Time Data Flow</p>
+                             </div>
+                         </div>
+                     </div>
+                </div>
             </div>
         )}
 
@@ -661,6 +723,27 @@ const AdminDashboard: React.FC = () => {
                                 <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100 text-gray-800 leading-relaxed whitespace-pre-wrap min-h-[200px]">
                                     {selectedMessage.message}
                                 </div>
+                                
+                                <div className="mt-8 pt-8 border-t border-gray-100">
+                                    <h4 className="text-sm font-bold text-gray-700 mb-4 uppercase tracking-wider">Actions</h4>
+                                    <div className="flex gap-4">
+                                        <a 
+                                            href={`mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject}`}
+                                            className="bg-primary text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-slate-800 transition-colors flex items-center"
+                                        >
+                                            <Mail className="w-4 h-4 mr-2" /> Reply via Email
+                                        </a>
+                                        <button 
+                                            onClick={() => {
+                                                alert("Message marked as resolved.");
+                                                markMessageRead(selectedMessage.id);
+                                            }}
+                                            className="border border-gray-200 text-gray-600 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-gray-50 transition-colors flex items-center"
+                                        >
+                                            <CheckCircle className="w-4 h-4 mr-2" /> Mark Resolved
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-center text-gray-400">
@@ -708,12 +791,127 @@ const AdminDashboard: React.FC = () => {
                                 <label className={labelClass}>Content</label>
                                 <textarea className={inputClass} rows={10} value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
                             </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className={labelClass}>Author</label>
+                                    <input type="text" className={inputClass} value={postForm.author || ''} onChange={e => setPostForm({...postForm, author: e.target.value})} />
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Categories (Select Tags)</label>
+                                    <div className="grid grid-cols-2 gap-2 mt-1 max-h-40 overflow-y-auto p-2 bg-gray-50 rounded-lg">
+                                        {(settings.blogCategories || []).map(cat => (
+                                            <label key={cat} className="flex items-center space-x-2 text-xs font-medium text-gray-600 cursor-pointer hover:text-primary transition-colors">
+                                                <input type="checkbox" checked={(postForm.tags || []).includes(cat)} onChange={() => togglePostCategory(cat)} className="w-4 h-4 text-primary rounded" />
+                                                <span>{cat}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
                             <MediaInput label="Featured Image" type="image" recommendedDimensions="1200 x 800 px" value={postForm.image} onChange={(val) => setPostForm({...postForm, image: val})} />
+                            <MediaInput label="Video" type="video" accept="video/*" value={postForm.video} onChange={(val) => setPostForm({...postForm, video: val})} />
                             <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
                                 {formMode === 'create' ? 'Publish Post' : 'Update Post'}
                             </button>
                         </form>
                     </div>
+                </div>
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit">
+                     <h3 className="text-xl font-bold mb-4">Manage Posts</h3>
+                     <div className="space-y-2 max-h-[800px] overflow-y-auto">
+                         {posts.map(post => (
+                             <div key={post.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100 group">
+                                 <div className="flex-1 truncate">
+                                     <span className="font-bold text-sm text-gray-800">{post.title}</span>
+                                     <div className="flex items-center gap-2 mt-1">
+                                         <span className="text-[10px] text-gray-400 font-mono">/{post.slug}</span>
+                                     </div>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPublicLink('blog', post.slug)} className="text-gray-400 hover:text-primary p-1">
+                                         {copiedId === post.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
+                                     </button>
+                                     <button onClick={() => handleEdit(post.id, 'post')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deletePost(post.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- DESTINATIONS TAB --- */}
+        {activeTab === 'destinations' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Destination' : 'Edit Destination'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveDest} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Name (Country Name)</label>
+                                <input type="text" className={inputClass} value={destForm.name || ''} onChange={e => {
+                                    const name = e.target.value;
+                                    const updates: Partial<Destination> = { name };
+                                    if (formMode === 'create' || !destForm.slug) { updates.slug = slugify(name); }
+                                    setDestForm({...destForm, ...updates});
+                                }} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Continent</label>
+                                <input type="text" className={inputClass} value={destForm.continent || ''} onChange={e => setDestForm({...destForm, continent: e.target.value})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Slug (URL Key)</label>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-gray-50 border border-gray-300 p-2 rounded text-gray-400 text-sm select-none">/destinations/</div>
+                                <input type="text" className={inputClass} value={destForm.slug || ''} onChange={e => setDestForm({...destForm, slug: slugify(e.target.value)})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Description</label>
+                            <textarea className={inputClass} rows={3} value={destForm.description || ''} onChange={e => setDestForm({...destForm, description: e.target.value})} />
+                        </div>
+                        <div>
+                            <label className={labelClass}>Global Affiliate Link (e.g. Agoda Search)</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://agoda.com/search?city=..."
+                                value={destForm.affiliateLink || ''} 
+                                onChange={e => setDestForm({...destForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
+                        <MediaInput label="Cover Image" type="image" recommendedDimensions="800 x 600 px" value={destForm.image} onChange={(val) => setDestForm({...destForm, image: val})} />
+                        <MediaInput label="Promo Video" type="video" accept="video/*" value={destForm.video} onChange={(val) => setDestForm({...destForm, video: val})} />
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Destination' : 'Update Destination'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Current Destinations</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {destinations.map(d => (
+                             <div key={d.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <div className="flex-1 truncate">
+                                     <span className="font-medium text-sm text-gray-800">{d.name}</span>
+                                     <p className="text-[10px] text-gray-400">/{d.slug}</p>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPublicLink('destinations', d.slug)} className="text-gray-400 hover:text-primary p-1">
+                                         {copiedId === d.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
+                                     </button>
+                                     <button onClick={() => handleEdit(d.id, 'dest')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteDestination(d.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
                 </div>
             </div>
         )}
@@ -726,7 +924,7 @@ const AdminDashboard: React.FC = () => {
                          <span>{formMode === 'create' ? 'Add Deal' : 'Edit Deal'}</span>
                          {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
                     </h3>
-                    <form onSubmit={saveDeal} className="space-y-6">
+                    <form onSubmit={saveDeal} className="space-y-4">
                         <div>
                             <label className={labelClass}>Title</label>
                             <input type="text" className={inputClass} value={dealForm.title || ''} onChange={e => {
@@ -736,14 +934,20 @@ const AdminDashboard: React.FC = () => {
                                 setDealForm({...dealForm, ...updates});
                             }} />
                         </div>
-                        
+                        <div>
+                            <label className={labelClass}>Slug (URL Key)</label>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-gray-50 border border-gray-300 p-2 rounded text-gray-400 text-sm select-none">/deals/</div>
+                                <input type="text" className={inputClass} value={dealForm.slug || ''} onChange={e => setDealForm({...dealForm, slug: slugify(e.target.value)})} />
+                            </div>
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                              <div>
-                                <label className={labelClass}>Location (Country)</label>
+                                <label className={labelClass}>Location (Select Destination)</label>
                                 <select className={inputClass} value={dealForm.location || ''} onChange={e => setDealForm({...dealForm, location: e.target.value})} required>
                                     <option value="" disabled>Choose a destination...</option>
                                     {destinations.map(d => ( <option key={d.id} value={d.name}>{d.name}</option> ))}
-                                    <option value="Other">Other</option>
+                                    <option value="Other">Other (Not in Destinations)</option>
                                 </select>
                             </div>
                             <div>
@@ -752,51 +956,54 @@ const AdminDashboard: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* --- ENHANCED DEAL CATEGORIES --- */}
+                        {/* --- DEAL CATEGORIES --- */}
                         <div>
-                            <label className={labelClass}>Experience Categories</label>
-                            <div className="flex flex-wrap gap-2 mb-4 bg-gray-50 p-5 rounded-[2rem] border border-gray-100">
-                                {(settings.dealCategories || []).map(cat => (
-                                    <div key={cat} className="group relative flex items-center">
-                                        <button 
-                                            type="button"
-                                            onClick={() => toggleDealCategory(cat)} 
-                                            className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
-                                                (dealForm.categories || []).includes(cat) 
-                                                ? 'bg-secondary text-white border-secondary shadow-md' 
-                                                : 'bg-white text-gray-400 border-gray-200 hover:border-secondary shadow-sm'
-                                            }`}
-                                        >
-                                            {cat}
-                                        </button>
-                                        <button 
-                                            type="button"
-                                            onClick={(e) => { e.stopPropagation(); handleRemoveDealCategory(cat); }}
-                                            className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                                        >
-                                            <X className="w-3 h-3" />
-                                        </button>
-                                    </div>
+                            <label className={labelClass}>Categories</label>
+                            <div className="flex flex-wrap gap-2 mb-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                {availableDealCategories.map(cat => (
+                                    <button 
+                                        key={cat} 
+                                        type="button"
+                                        onClick={() => toggleDealCategory(cat)} 
+                                        className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all ${
+                                            (dealForm.categories || []).includes(cat) 
+                                            ? 'bg-secondary text-white border-secondary' 
+                                            : 'bg-white text-gray-400 border-gray-200 hover:border-secondary'
+                                        }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                                {(dealForm.categories || []).filter(c => !availableDealCategories.includes(c)).map(custom => (
+                                     <button 
+                                        key={custom} 
+                                        type="button"
+                                        onClick={() => toggleDealCategory(custom)} 
+                                        className="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-primary text-white border-primary border transition-all"
+                                    >
+                                        {custom}
+                                    </button>
                                 ))}
                             </div>
                             <div className="flex gap-2">
-                                <div className="relative flex-1">
-                                    <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
-                                    <input 
-                                        type="text" 
-                                        className={`${inputClass} pl-10`} 
-                                        placeholder="Add a new custom category (e.g. Museum)"
-                                        value={customDealCat}
-                                        onChange={(e) => setCustomDealCat(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddDealCategory())}
-                                    />
-                                </div>
+                                <input 
+                                    type="text" 
+                                    className="flex-1 border border-gray-300 p-2 rounded text-sm text-gray-900 bg-white" 
+                                    placeholder="Add manual category..."
+                                    value={customDealCat}
+                                    onChange={(e) => setCustomDealCat(e.target.value)}
+                                />
                                 <button 
                                     type="button"
-                                    onClick={handleAddDealCategory}
-                                    className="bg-primary text-white px-6 py-2 rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors shadow-md flex items-center"
+                                    onClick={() => {
+                                        if (customDealCat.trim()) {
+                                            toggleDealCategory(customDealCat.trim());
+                                            setCustomDealCat('');
+                                        }
+                                    }}
+                                    className="bg-gray-200 px-4 py-2 rounded text-xs font-bold text-gray-700 hover:bg-gray-300 transition-colors"
                                 >
-                                    <Plus className="w-4 h-4 mr-2" /> Add
+                                    Add
                                 </button>
                             </div>
                         </div>
@@ -805,39 +1012,481 @@ const AdminDashboard: React.FC = () => {
                              <div><label className={labelClass}>Price ($)</label><input type="number" className={inputClass} value={dealForm.price || ''} onChange={e => setDealForm({...dealForm, price: Number(e.target.value)})} /></div>
                              <div><label className={labelClass}>Original Price ($)</label><input type="number" className={inputClass} value={dealForm.originalPrice || ''} onChange={e => setDealForm({...dealForm, originalPrice: Number(e.target.value)})} /></div>
                         </div>
-                        
                         <div>
-                            <label className={labelClass}>Affiliate Booking Link</label>
-                            <input type="text" className={inputClass} placeholder="https://..." value={dealForm.affiliateLink || ''} onChange={e => setDealForm({...dealForm, affiliateLink: e.target.value})} />
+                            <label className={labelClass}>Affiliate Link</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://partner-site.com/tracking-url"
+                                value={dealForm.affiliateLink || ''} 
+                                onChange={e => setDealForm({...dealForm, affiliateLink: e.target.value})} 
+                            />
                         </div>
-                        
-                        <MediaInput label="Deal Hero Image" type="image" recommendedDimensions="1200 x 800 px" value={dealForm.image} onChange={(val) => setDealForm({...dealForm, image: val})} />
-                        
-                        <button type="submit" className="w-full bg-primary text-white py-4 rounded-[1.5rem] font-bold text-lg hover:bg-slate-800 transition-all shadow-xl active:scale-95">
-                            {formMode === 'create' ? 'Synthesize New Deal' : 'Update Existing Deal'}
+                        <MediaInput label="Deal Image" type="image" recommendedDimensions="800 x 600 px" value={dealForm.image} onChange={(val) => setDealForm({...dealForm, image: val})} />
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Deal' : 'Update Deal'}
                         </button>
                     </form>
                 </div>
                  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                     <h3 className="text-xl font-bold mb-4">Active Synthesis Grid</h3>
-                     <div className="space-y-2 max-h-[800px] overflow-y-auto">
+                     <h3 className="text-xl font-bold mb-4">Active Deals</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
                          {deals.map(d => (
-                             <div key={d.id} className="flex justify-between items-center p-4 bg-gray-50 rounded-2xl border border-gray-100 group hover:border-secondary transition-all">
+                             <div key={d.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
                                  <div>
-                                     <span className="font-bold text-sm text-gray-800 truncate block">{d.title}</span>
-                                     <div className="flex gap-2 mt-2">
-                                         {d.categories.slice(0, 2).map(c => (
-                                             <span key={c} className="text-[8px] bg-white border border-gray-200 px-1.5 py-0.5 rounded text-gray-400 uppercase font-black">{c}</span>
-                                         ))}
-                                     </div>
+                                     <span className="font-bold text-sm text-gray-800 truncate">{d.title}</span>
+                                     <p className="text-[10px] text-gray-400">/{d.slug}</p>
                                  </div>
-                                 <div className="flex space-x-2 ml-4">
-                                     <button onClick={() => handleEdit(d.id, 'deal')} className="p-2 bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all"><Edit className="w-4 h-4" /></button>
-                                     <button onClick={() => deleteDeal(d.id)} className="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><Trash className="w-4 h-4" /></button>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPublicLink('deals', d.slug)} className="text-gray-400 hover:text-primary p-1">
+                                         {copiedId === d.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
+                                     </button>
+                                     <button onClick={() => handleEdit(d.id, 'deal')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteDeal(d.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
                                  </div>
                              </div>
                          ))}
                      </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- GEAR TAB --- */}
+        {activeTab === 'gear' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Gear' : 'Edit Gear'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveGear} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Name</label>
+                                <input type="text" className={inputClass} value={gearForm.name || ''} onChange={e => {
+                                    const name = e.target.value;
+                                    const updates: Partial<GearProduct> = { name };
+                                    if (formMode === 'create' || !gearForm.slug) { updates.slug = slugify(name); }
+                                    setGearForm({...gearForm, ...updates});
+                                }} />
+                            </div>
+                            <div><label className={labelClass}>Category</label><input type="text" className={inputClass} value={gearForm.category || ''} onChange={e => setGearForm({...gearForm, category: e.target.value})} /></div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Slug (URL Key)</label>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-gray-50 border border-gray-300 p-2 rounded text-gray-400 text-sm select-none">/gear/</div>
+                                <input type="text" className={inputClass} value={gearForm.slug || ''} onChange={e => setGearForm({...gearForm, slug: slugify(e.target.value)})} />
+                            </div>
+                        </div>
+                        <div><label className={labelClass}>Description</label><textarea className={inputClass} rows={2} value={gearForm.description || ''} onChange={e => setGearForm({...gearForm, description: e.target.value})} /></div>
+                        <div><label className={labelClass}>Price ($)</label><input type="number" className={inputClass} value={gearForm.price || ''} onChange={e => setGearForm({...gearForm, price: Number(e.target.value)})} /></div>
+                        <div>
+                            <label className={labelClass}>Affiliate Link</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://amazon.com/product-affiliate-url"
+                                value={gearForm.affiliateLink || ''} 
+                                onChange={e => setGearForm({...gearForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
+                        <MediaInput label="Product Image" type="image" recommendedDimensions="500 x 500 px" value={gearForm.image} onChange={(val) => setGearForm({...gearForm, image: val})} />
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Item' : 'Update Item'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Gear Inventory</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {gear.map(g => (
+                             <div key={g.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <div className="flex-1 truncate">
+                                     <span className="font-medium text-sm text-gray-800">{g.name}</span>
+                                     <p className="text-[10px] text-gray-400">/{g.slug}</p>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPublicLink('gear', g.slug)} className="text-gray-400 hover:text-primary p-1">
+                                         {copiedId === g.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
+                                     </button>
+                                     <button onClick={() => handleEdit(g.id, 'gear')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteGear(g.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- THEME TAB --- */}
+        {activeTab === 'theme' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6">Customization</h3>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Site Name</label>
+                        <input type="text" className={inputClass} value={settings.siteName} onChange={(e) => updateSettings({ siteName: e.target.value })} />
+                    </div>
+                     <MediaInput 
+                        label="Site Logo" 
+                        type="image"
+                        recommendedDimensions="200 x 50 px (Transparent PNG recommended)"
+                        value={settings.logo} 
+                        onChange={(val) => updateSettings({ logo: val })} 
+                    />
+                     <div>
+                        <label className={labelClass}>Hero Title</label>
+                        <input type="text" className={inputClass} value={settings.heroTitle} onChange={(e) => updateSettings({ heroTitle: e.target.value })} />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className={labelClass}>Primary Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.primaryColor} onChange={(e) => updateSettings({ primaryColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.primaryColor}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Secondary Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.secondaryColor} onChange={(e) => updateSettings({ secondaryColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.secondaryColor}</span>
+                            </div>
+                        </div>
+                         <div>
+                            <label className={labelClass}>Accent Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.accentColor} onChange={(e) => updateSettings({ accentColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.accentColor}</span>
+                            </div>
+                        </div>
+                    </div>
+                     <div>
+                        <label className={labelClass}>Font Family</label>
+                        <select className={inputClass} value={settings.fontFamily} onChange={(e) => updateSettings({ fontFamily: e.target.value as any })}>
+                            <option value="Open Sans">Open Sans (Clean)</option>
+                            <option value="Roboto">Roboto (Modern)</option>
+                            <option value="Helvetica">Helvetica (Classic)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- CONTACT INFO TAB --- */}
+        {activeTab === 'contact' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <Mail className="w-6 h-6 mr-2 text-primary" /> Contact Information
+                </h3>
+                <p className="text-gray-500 mb-6 text-sm">Update the contact details displayed in the footer and on the contact page.</p>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Phone Number</label>
+                        <div className="flex items-center relative">
+                             <Phone className="w-5 h-5 text-gray-400 absolute left-3" />
+                             <input 
+                                type="text" 
+                                className={`${inputClass} pl-10`} 
+                                value={settings.contact?.phone || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), phone: e.target.value } })} 
+                                placeholder="+1 (555) 123-4567"
+                             />
+                        </div>
+                    </div>
+                    <div>
+                        <label className={labelClass}>Email Address</label>
+                        <div className="flex items-center relative">
+                             <Mail className="w-5 h-5 text-gray-400 absolute left-3" />
+                             <input 
+                                type="email" 
+                                className={`${inputClass} pl-10`} 
+                                value={settings.contact?.email || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), email: e.target.value } })} 
+                                placeholder="hello@example.com"
+                             />
+                        </div>
+                    </div>
+                    <div>
+                        <label className={labelClass}>Physical Address</label>
+                        <div className="flex items-start relative">
+                             <MapPin className="w-5 h-5 text-gray-400 absolute left-3 top-3" />
+                             <textarea 
+                                className={`${inputClass} pl-10`} 
+                                rows={3}
+                                value={settings.contact?.address || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), address: e.target.value } })} 
+                                placeholder="123 Street Name&#10;City, State, Zip"
+                             />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 ml-10">Line breaks will be preserved.</p>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SOCIAL MEDIA TAB --- */}
+        {activeTab === 'social' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-bold flex items-center">
+                        <Share2 className="w-6 h-6 mr-2 text-indigo-600" /> Social Media Links
+                    </h3>
+                    <button 
+                        onClick={addSocialLink}
+                        className="bg-primary text-white text-sm px-4 py-2 rounded-lg flex items-center hover:bg-slate-800 transition-colors"
+                    >
+                        <Plus className="w-4 h-4 mr-2" /> Add Link
+                    </button>
+                </div>
+                <div className="space-y-4">
+                    {(settings.socialMedia || []).map((link, index) => (
+                        <div key={index} className="flex gap-4 items-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                             <div className="w-1/3">
+                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 block">Platform</label>
+                                <select 
+                                    className="w-full border border-gray-300 p-2 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                    value={link.platform}
+                                    onChange={(e) => updateSocialLink(index, 'platform', e.target.value)}
+                                >
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Twitter">Twitter (X)</option>
+                                    <option value="Instagram">Instagram</option>
+                                    <option value="LinkedIn">LinkedIn</option>
+                                    <option value="YouTube">YouTube</option>
+                                    <option value="TikTok">TikTok</option>
+                                    <option value="Pinterest">Pinterest</option>
+                                    <option value="Reddit">Reddit</option>
+                                    <option value="Rutube">Rutube</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                             </div>
+                             <div className="flex-1">
+                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 block">URL</label>
+                                <input 
+                                    type="text" 
+                                    className="w-full border border-gray-300 p-2 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                    placeholder="https://..."
+                                    value={link.url}
+                                    onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
+                                />
+                             </div>
+                             <div className="pt-5">
+                                 <button 
+                                    onClick={() => removeSocialLink(index)}
+                                    className="text-red-500 hover:text-red-700 p-2 rounded hover:bg-red-50"
+                                >
+                                     <Trash className="w-5 h-5" />
+                                 </button>
+                             </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        {/* --- MONETIZATION / ADS TAB --- */}
+        {activeTab === 'ads' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-3xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <DollarSign className="w-6 h-6 mr-2 text-green-600" /> Monetization Settings
+                </h3>
+                <div className="space-y-6">
+                    <div className="flex items-center mb-4">
+                        <input 
+                            type="checkbox" 
+                            id="adsEnabled"
+                            checked={settings.ads?.enabled} 
+                            onChange={(e) => updateSettings({ ads: { ...settings.ads, enabled: e.target.checked } as any })}
+                            className="w-5 h-5 text-secondary rounded focus:ring-secondary mr-3"
+                        />
+                        <label htmlFor="adsEnabled" className="text-gray-800 font-bold">Enable Advertisements</label>
+                    </div>
+                    <div className={!settings.ads?.enabled ? 'opacity-50 pointer-events-none' : ''}>
+                        <div className="mb-6">
+                            <label className={labelClass}>Header Banner Code (Horizontal 728x90)</label>
+                            <textarea 
+                                className={`${inputClass} font-mono text-xs`} 
+                                rows={4} 
+                                placeholder="<script>...</script>"
+                                value={settings.ads?.headerBanner || ''}
+                                onChange={(e) => updateSettings({ ads: { ...settings.ads, headerBanner: e.target.value } as any })}
+                            />
+                        </div>
+                        <div>
+                            <label className={labelClass}>Sidebar Banner Code (Square 300x250)</label>
+                            <textarea 
+                                className={`${inputClass} font-mono text-xs`} 
+                                rows={4} 
+                                placeholder="<script>...</script>"
+                                value={settings.ads?.sidebarBanner || ''}
+                                onChange={(e) => updateSettings({ ads: { ...settings.ads, sidebarBanner: e.target.value } as any })}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SECURITY TAB --- */}
+        {activeTab === 'security' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <Shield className="w-6 h-6 mr-2 text-primary" /> Security Settings
+                </h3>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Admin Email</label>
+                        <input 
+                            type="email" 
+                            className={`${inputClass}`} 
+                            value={settings.adminEmail || ''} 
+                            onChange={(e) => updateSettings({ adminEmail: e.target.value })} 
+                        />
+                    </div>
+                    <div>
+                        <label className={labelClass}>Admin Password</label>
+                        <input 
+                            type="text" 
+                            className={`${inputClass}`} 
+                            value={settings.adminPassword || ''} 
+                            onChange={(e) => updateSettings({ adminPassword: e.target.value })} 
+                        />
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SEO & SITEMAP TAB --- */}
+        {activeTab === 'seo' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-6 flex items-center">
+                        <SearchIcon className="w-6 h-6 mr-2 text-primary" /> SEO Configuration
+                    </h3>
+                    <div className="space-y-6">
+                        <div>
+                            <label className={labelClass}>Meta Title</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                value={settings.metaTitle || ''} 
+                                onChange={(e) => updateSettings({ metaTitle: e.target.value })} 
+                                placeholder="Site Name | Primary Keywords"
+                            />
+                            <p className={`text-[10px] mt-1 font-bold ${settings.metaTitle?.length && settings.metaTitle.length > 60 ? 'text-red-500' : 'text-gray-400'}`}>
+                                {settings.metaTitle?.length || 0} / 60 characters recommended
+                            </p>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Meta Description</label>
+                            <textarea 
+                                className={inputClass} 
+                                rows={3}
+                                value={settings.metaDescription || ''} 
+                                onChange={(e) => updateSettings({ metaDescription: e.target.value })} 
+                                placeholder="A brief summary of your site for search engine results..."
+                            />
+                            <p className={`text-[10px] mt-1 font-bold ${settings.metaDescription?.length && settings.metaDescription.length > 160 ? 'text-red-500' : 'text-gray-400'}`}>
+                                {settings.metaDescription?.length || 0} / 160 characters recommended
+                            </p>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Meta Keywords (Comma separated)</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                value={settings.metaKeywords || ''} 
+                                onChange={(e) => updateSettings({ metaKeywords: e.target.value })} 
+                                placeholder="travel, destinations, deals"
+                            />
+                        </div>
+                        <MediaInput 
+                            label="OpenGraph Social Image" 
+                            type="image" 
+                            recommendedDimensions="1200 x 630 px" 
+                            value={settings.ogImage} 
+                            onChange={(val) => updateSettings({ ogImage: val })} 
+                        />
+                        <div>
+                            <label className={labelClass}>Canonical URL</label>
+                            <input 
+                                type="url" 
+                                className={inputClass} 
+                                value={settings.canonicalUrl || ''} 
+                                onChange={(e) => updateSettings({ canonicalUrl: e.target.value })} 
+                                placeholder="https://www.alexaratravel.com"
+                            />
+                        </div>
+                        <div className="flex items-center p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <input 
+                                type="checkbox" 
+                                id="searchVisibility"
+                                checked={settings.searchVisibility} 
+                                onChange={(e) => updateSettings({ searchVisibility: e.target.checked })}
+                                className="w-5 h-5 text-secondary rounded focus:ring-secondary mr-3"
+                            />
+                            <label htmlFor="searchVisibility" className="text-sm font-bold text-gray-800 cursor-pointer">
+                                Allow search engines to index this site
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-8">
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-bold mb-6 flex items-center">
+                            <FileCode className="w-6 h-6 mr-2 text-indigo-500" /> Robots.txt Editor
+                        </h3>
+                        <textarea 
+                            className={`${inputClass} font-mono text-xs`} 
+                            rows={8}
+                            value={settings.robotsTxt || ''} 
+                            onChange={(e) => updateSettings({ robotsTxt: e.target.value })} 
+                            placeholder="User-agent: *&#10;Allow: /"
+                        />
+                        <p className="text-[10px] text-gray-400 mt-2 italic leading-tight">Advanced: Use this to block crawlers from private directories (e.g. /admin).</p>
+                    </div>
+
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-bold mb-6 flex items-center">
+                            <Activity className="w-6 h-6 mr-2 text-secondary" /> SEO Health
+                        </h3>
+                        <div className="space-y-4">
+                            {seoHealth.map((check, idx) => (
+                                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <p className="text-xs font-bold text-gray-700">{check.label}</p>
+                                        <p className="text-[10px] text-gray-500">{check.info}</p>
+                                    </div>
+                                    {check.status === 'good' ? (
+                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                    ) : check.status === 'warning' ? (
+                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                                    ) : (
+                                        <AlertCircle className="w-5 h-5 text-red-500" />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-slate-900 text-white p-8 rounded-xl shadow-xl">
+                        <h3 className="text-xl font-bold mb-4 flex items-center">
+                            <Globe className="w-6 h-6 mr-2 text-secondary" /> Sitemap Generator
+                        </h3>
+                        <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                            Generate a search-engine compatible XML sitemap containing all your destinations, deals, and articles.
+                        </p>
+                        <button 
+                            onClick={generateSitemap}
+                            className="w-full bg-secondary hover:bg-teal-600 text-white py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center"
+                        >
+                            <Download className="w-4 h-4 mr-2" /> Generate & Download Sitemap.xml
+                        </button>
+                    </div>
                 </div>
             </div>
         )}

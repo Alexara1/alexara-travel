@@ -104,7 +104,6 @@ export interface SiteSettings {
   customScripts?: string; // JSON-LD, Analytics, etc
   // Content Taxonomy
   blogCategories: string[];
-  dealCategories: string[];
   // Monetization
   ads: {
     enabled: boolean;
