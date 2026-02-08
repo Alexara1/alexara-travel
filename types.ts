@@ -65,6 +65,7 @@ export interface Destination {
   description: string;
   image: string;
   video?: string;
+  affiliateLink?: string;
 }
 
 export interface SocialLink {

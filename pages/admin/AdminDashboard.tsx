@@ -231,7 +231,8 @@ const AdminDashboard: React.FC = () => {
             continent: destForm.continent || 'Europe',
             description: destForm.description || '',
             image: destForm.image || `https://picsum.photos/seed/${Date.now()}/400/300`,
-            video: destForm.video
+            video: destForm.video,
+            affiliateLink: destForm.affiliateLink || '#'
         } as Destination);
     } else if (editingId) {
         updateDestination(editingId, { ...destForm, slug });
@@ -872,6 +873,16 @@ const AdminDashboard: React.FC = () => {
                             <label className={labelClass}>Description</label>
                             <textarea className={inputClass} rows={3} value={destForm.description || ''} onChange={e => setDestForm({...destForm, description: e.target.value})} />
                         </div>
+                        <div>
+                            <label className={labelClass}>Global Affiliate Link (e.g. Agoda Search)</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://agoda.com/search?city=..."
+                                value={destForm.affiliateLink || ''} 
+                                onChange={e => setDestForm({...destForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
                         <MediaInput label="Cover Image" type="image" recommendedDimensions="800 x 600 px" value={destForm.image} onChange={(val) => setDestForm({...destForm, image: val})} />
                         <MediaInput label="Promo Video" type="video" accept="video/*" value={destForm.video} onChange={(val) => setDestForm({...destForm, video: val})} />
                         <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
@@ -945,6 +956,16 @@ const AdminDashboard: React.FC = () => {
                              <div><label className={labelClass}>Price ($)</label><input type="number" className={inputClass} value={dealForm.price || ''} onChange={e => setDealForm({...dealForm, price: Number(e.target.value)})} /></div>
                              <div><label className={labelClass}>Original Price ($)</label><input type="number" className={inputClass} value={dealForm.originalPrice || ''} onChange={e => setDealForm({...dealForm, originalPrice: Number(e.target.value)})} /></div>
                         </div>
+                        <div>
+                            <label className={labelClass}>Affiliate Link</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://partner-site.com/tracking-url"
+                                value={dealForm.affiliateLink || ''} 
+                                onChange={e => setDealForm({...dealForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
                         <MediaInput label="Deal Image" type="image" recommendedDimensions="800 x 600 px" value={dealForm.image} onChange={(val) => setDealForm({...dealForm, image: val})} />
                         <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
                             {formMode === 'create' ? 'Add Deal' : 'Update Deal'}
@@ -1004,6 +1025,16 @@ const AdminDashboard: React.FC = () => {
                         </div>
                         <div><label className={labelClass}>Description</label><textarea className={inputClass} rows={2} value={gearForm.description || ''} onChange={e => setGearForm({...gearForm, description: e.target.value})} /></div>
                         <div><label className={labelClass}>Price ($)</label><input type="number" className={inputClass} value={gearForm.price || ''} onChange={e => setGearForm({...gearForm, price: Number(e.target.value)})} /></div>
+                        <div>
+                            <label className={labelClass}>Affiliate Link</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://amazon.com/product-affiliate-url"
+                                value={gearForm.affiliateLink || ''} 
+                                onChange={e => setGearForm({...gearForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
                         <MediaInput label="Product Image" type="image" recommendedDimensions="500 x 500 px" value={gearForm.image} onChange={(val) => setGearForm({...gearForm, image: val})} />
                         <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
                             {formMode === 'create' ? 'Add Item' : 'Update Item'}
