@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
 import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon, Pulse, AlertCircle, FileCode } from 'lucide-react';
@@ -97,6 +96,7 @@ const AdminDashboard: React.FC = () => {
   const [gearForm, setGearForm] = useState<Partial<GearProduct>>({});
   
   const [newBlogCategory, setNewBlogCategory] = useState('');
+  const [customDealCat, setCustomDealCat] = useState('');
 
   // Live Analytics State
   const [analyticsData, setAnalyticsData] = useState({
@@ -157,7 +157,7 @@ const AdminDashboard: React.FC = () => {
     return () => clearInterval(interval);
   }, [activeTab]);
 
-  const availableDealCategories = ['Hotel', 'Hostel', 'Restaurant', 'Nightclub', 'Beach', 'Resort', 'Activity', 'Ticket', 'Package'];
+  const availableDealCategories = ['Hotel', 'Hostel', 'Restaurant', 'Nightclub', 'Beach', 'Resort', 'Ticket', 'Package'];
 
   useEffect(() => {
     setEditingId(null);
@@ -167,6 +167,7 @@ const AdminDashboard: React.FC = () => {
     setDealForm({ categories: [] });
     setGearForm({});
     setSelectedMessage(null);
+    setCustomDealCat('');
   }, [activeTab]);
 
   if (!isAdminMode) return <div className="p-8 text-center text-red-500 font-bold">Access Denied</div>;
@@ -192,6 +193,7 @@ const AdminDashboard: React.FC = () => {
     setDestForm({});
     setDealForm({ categories: [] });
     setGearForm({});
+    setCustomDealCat('');
   };
 
   const savePost = (e: React.FormEvent) => {
@@ -292,10 +294,10 @@ const AdminDashboard: React.FC = () => {
 
   const toggleDealCategory = (cat: string) => {
       const current = dealForm.categories || [];
-      if (current.includes(cat as any)) {
+      if (current.includes(cat)) {
           setDealForm({ ...dealForm, categories: current.filter(c => c !== cat) });
       } else {
-          setDealForm({ ...dealForm, categories: [...current, cat as any] });
+          setDealForm({ ...dealForm, categories: [...current, cat] });
       }
   };
 
@@ -338,15 +340,16 @@ const AdminDashboard: React.FC = () => {
     updateSettings({ socialMedia: newLinks });
   };
 
-  const removeSocialLink = (index: number) => {
-    const newLinks = [...(settings.socialMedia || [])];
-    newLinks.splice(index, 1);
-    updateSettings({ socialMedia: newLinks });
-  };
-
+  // Fix: Added missing updateSocialLink function
   const updateSocialLink = (index: number, field: 'platform' | 'url', value: string) => {
     const newLinks = [...(settings.socialMedia || [])];
     newLinks[index] = { ...newLinks[index], [field]: value };
+    updateSettings({ socialMedia: newLinks });
+  };
+
+  const removeSocialLink = (index: number) => {
+    const newLinks = [...(settings.socialMedia || [])];
+    newLinks.splice(index, 1);
     updateSettings({ socialMedia: newLinks });
   };
 
@@ -952,6 +955,59 @@ const AdminDashboard: React.FC = () => {
                                 <input type="text" className={inputClass} value={dealForm.city || ''} onChange={e => setDealForm({...dealForm, city: e.target.value})} />
                             </div>
                         </div>
+
+                        {/* --- DEAL CATEGORIES --- */}
+                        <div>
+                            <label className={labelClass}>Categories</label>
+                            <div className="flex flex-wrap gap-2 mb-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                {availableDealCategories.map(cat => (
+                                    <button 
+                                        key={cat} 
+                                        type="button"
+                                        onClick={() => toggleDealCategory(cat)} 
+                                        className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all ${
+                                            (dealForm.categories || []).includes(cat) 
+                                            ? 'bg-secondary text-white border-secondary' 
+                                            : 'bg-white text-gray-400 border-gray-200 hover:border-secondary'
+                                        }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                                {(dealForm.categories || []).filter(c => !availableDealCategories.includes(c)).map(custom => (
+                                     <button 
+                                        key={custom} 
+                                        type="button"
+                                        onClick={() => toggleDealCategory(custom)} 
+                                        className="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-primary text-white border-primary border transition-all"
+                                    >
+                                        {custom}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="flex gap-2">
+                                <input 
+                                    type="text" 
+                                    className="flex-1 border border-gray-300 p-2 rounded text-sm text-gray-900 bg-white" 
+                                    placeholder="Add manual category..."
+                                    value={customDealCat}
+                                    onChange={(e) => setCustomDealCat(e.target.value)}
+                                />
+                                <button 
+                                    type="button"
+                                    onClick={() => {
+                                        if (customDealCat.trim()) {
+                                            toggleDealCategory(customDealCat.trim());
+                                            setCustomDealCat('');
+                                        }
+                                    }}
+                                    className="bg-gray-200 px-4 py-2 rounded text-xs font-bold text-gray-700 hover:bg-gray-300 transition-colors"
+                                >
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+
                         <div className="grid grid-cols-2 gap-4">
                              <div><label className={labelClass}>Price ($)</label><input type="number" className={inputClass} value={dealForm.price || ''} onChange={e => setDealForm({...dealForm, price: Number(e.target.value)})} /></div>
                              <div><label className={labelClass}>Original Price ($)</label><input type="number" className={inputClass} value={dealForm.originalPrice || ''} onChange={e => setDealForm({...dealForm, originalPrice: Number(e.target.value)})} /></div>

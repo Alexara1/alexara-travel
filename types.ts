@@ -35,7 +35,7 @@ export interface Deal {
   title: string;
   location: string; // This acts as Country
   city: string;
-  categories: ('Hotel' | 'Hostel' | 'Restaurant' | 'Nightclub' | 'Beach' | 'Resort' | 'Activity' | 'Ticket' | 'Package')[];
+  categories: string[];
   price: number;
   originalPrice: number;
   image: string;

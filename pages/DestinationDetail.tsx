@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
-import { MapPin, ArrowLeft, Globe, Tag, Sparkles, Navigation, ExternalLink, ArrowRight, Ticket } from 'lucide-react';
+import { MapPin, ArrowLeft, Globe, Tag, Sparkles, Navigation, ExternalLink, ArrowRight, Ticket, Zap } from 'lucide-react';
 
 const DestinationDetail: React.FC = () => {
   const { slug } = useParams();
@@ -54,20 +54,30 @@ const DestinationDetail: React.FC = () => {
                     <p>Whether you're exploring ancient ruins, dining in Michelin-starred restaurants, or finding peace in nature, {dest.name} offers a unique synthesis of culture and beauty. Our travel architects have explored every corner of this destination to ensure your journey is nothing short of extraordinary.</p>
                 </div>
 
-                {/* --- CONVERSION BRIDGE: MOVE USERS TO DEALS --- */}
+                {/* --- CONVERSION BRIDGE: AUTOMATIC COUNTRY LINK --- */}
                 <div className="bg-slate-950 rounded-[3rem] p-10 md:p-16 relative overflow-hidden group shadow-2xl">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-secondary/20 transition-colors"></div>
+                    {/* Animated background elements for "Neural" feel */}
+                    <div className="absolute top-0 right-0 w-80 h-80 bg-secondary/10 rounded-full blur-[100px] -mr-32 -mt-32 group-hover:bg-secondary/20 transition-all duration-1000"></div>
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -ml-20 -mb-20"></div>
+                    <div className="absolute inset-0 neural-mesh opacity-10 pointer-events-none"></div>
+                    
                     <div className="relative z-10">
-                        <div className="inline-flex items-center space-x-2 text-secondary font-black uppercase tracking-[0.3em] text-xs mb-6">
-                            <Tag className="w-4 h-4" />
-                            <span>Direct Linkage Found</span>
+                        <div className="inline-flex items-center space-x-2 text-secondary font-black uppercase tracking-[0.4em] text-[10px] mb-8 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                            <Zap className="w-3.5 h-3.5" />
+                            <span>Direct Deals Synchronized</span>
                         </div>
-                        <h3 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight">Ready to see the best <br/> deals for {dest.name}?</h3>
-                        <p className="text-blue-100/60 mb-10 max-w-lg text-lg">We've architected a specific collection of hotel discounts, resort packages, and activities unique to this region.</p>
+                        
+                        <h3 className="text-4xl md:text-6xl font-serif font-bold text-white mb-8 leading-[1.1] tracking-tight">
+                            The best {dest.name} <br/> <span className="text-secondary italic">savings found.</span>
+                        </h3>
+                        
+                        <p className="text-blue-100/60 mb-12 max-w-lg text-lg leading-relaxed">
+                            Our synthesis core has identified a collection of high-value hotel rates, flight packages, and local experiences specific to {dest.name}.
+                        </p>
                         
                         <Link 
                             to={`/deals?country=${encodeURIComponent(dest.name)}`} 
-                            className="inline-flex items-center bg-white text-primary hover:bg-secondary hover:text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-sm transition-all transform hover:scale-105 active:scale-95 shadow-xl group/btn"
+                            className="inline-flex items-center bg-white text-primary hover:bg-secondary hover:text-white px-12 py-6 rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs transition-all transform hover:scale-105 active:scale-95 shadow-[0_20px_40px_rgba(0,0,0,0.3)] group/btn"
                         >
                             Explore {dest.name} Deals <ArrowRight className="ml-3 w-5 h-5 group-hover/btn:translate-x-2 transition-transform" />
                         </Link>
@@ -78,23 +88,24 @@ const DestinationDetail: React.FC = () => {
             <div className="space-y-8">
                 {/* Global Search Affiliate CTA */}
                 {dest.affiliateLink && (
-                  <div className="bg-secondary p-8 rounded-[2.5rem] shadow-xl text-white">
-                      <h3 className="text-xl font-bold mb-4">Search All Stays</h3>
-                      <p className="text-blue-50 text-sm mb-8 opacity-90">Find thousands of verified hotels, hostels, and resorts in {dest.name} at the best market rates.</p>
+                  <div className="bg-secondary p-8 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden group">
+                      <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <h3 className="text-xl font-bold mb-4 relative z-10">Search All Stays</h3>
+                      <p className="text-blue-50 text-sm mb-8 opacity-90 relative z-10">Find thousands of verified hotels, hostels, and resorts in {dest.name} at the best market rates.</p>
                       <a 
                         href={dest.affiliateLink} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="w-full bg-white text-secondary py-4 rounded-2xl font-bold flex items-center justify-center hover:bg-slate-50 transition-all shadow-lg group"
+                        className="w-full bg-white text-secondary py-4 rounded-2xl font-bold flex items-center justify-center hover:bg-slate-50 transition-all shadow-lg group/link relative z-10"
                       >
-                        Explore {dest.name} Hotels <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                        Explore {dest.name} Hotels <ExternalLink className="ml-2 w-4 h-4 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
                       </a>
                   </div>
                 )}
 
                 <div className="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
                     <h3 className="text-xl font-bold text-primary mb-6 flex items-center">
-                        <Tag className="w-5 h-5 mr-2 text-secondary" /> Handpicked Deals
+                        <Tag className="w-5 h-5 mr-2 text-secondary" /> Handpicked for You
                     </h3>
                     {relatedDeals.length > 0 ? (
                         <div className="space-y-4">
