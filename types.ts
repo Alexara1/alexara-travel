@@ -123,14 +123,6 @@ export interface SiteSettings {
   adminPassword?: string;
 }
 
-export interface FullSiteState {
-  settings: SiteSettings;
-  posts: BlogPost[];
-  destinations: Destination[];
-  deals: Deal[];
-  gear: GearProduct[];
-}
-
 export interface SiteContextType {
   settings: SiteSettings;
   updateSettings: (newSettings: Partial<SiteSettings>) => void;
@@ -166,10 +158,11 @@ export interface SiteContextType {
   deleteMessage: (id: string) => void;
   markMessageRead: (id: string) => void;
 
-  // Bulk
-  importFullState: (state: FullSiteState) => void;
-
   isAdminMode: boolean;
   login: (email: string, pass: string) => boolean;
   logout: () => void;
+
+  // Persistence Tools
+  getSiteBackup: () => string;
+  restoreSiteBackup: (data: string) => boolean;
 }
