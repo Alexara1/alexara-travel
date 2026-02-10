@@ -161,8 +161,4 @@ export interface SiteContextType {
   isAdminMode: boolean;
   login: (email: string, pass: string) => boolean;
   logout: () => void;
-
-  // Persistence Tools
-  getSiteBackup: () => string;
-  restoreSiteBackup: (data: string) => boolean;
 }

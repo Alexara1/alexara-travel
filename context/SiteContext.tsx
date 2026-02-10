@@ -126,7 +126,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const scripts = container.querySelectorAll('script');
       scripts.forEach((oldScript) => {
         const newScript = document.createElement('script');
-        Array.from(oldScript.attributes).forEach((attr: any) => newScript.setAttribute(attr.name, attr.value));
+        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
         newScript.appendChild(document.createTextNode(oldScript.innerHTML));
         oldScript.parentNode?.replaceChild(newScript, oldScript);
       });
@@ -188,37 +188,6 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setMessages(prev => prev.map(m => m.id === id ? { ...m, status: 'read' as const } : m));
   };
 
-  // PERSISTENCE TOOLS
-  const getSiteBackup = () => {
-    const backup = {
-      settings,
-      posts,
-      destinations,
-      deals,
-      gear,
-      messages,
-      version: '1.0.0',
-      timestamp: Date.now()
-    };
-    return btoa(JSON.stringify(backup));
-  };
-
-  const restoreSiteBackup = (data: string) => {
-    try {
-      const decoded = JSON.parse(atob(data));
-      if (decoded.settings) setSettings(decoded.settings);
-      if (decoded.posts) setPosts(decoded.posts);
-      if (decoded.destinations) setDestinations(decoded.destinations);
-      if (decoded.deals) setDeals(decoded.deals);
-      if (decoded.gear) setGear(decoded.gear);
-      if (decoded.messages) setMessages(decoded.messages);
-      return true;
-    } catch (e) {
-      console.error("Restoration Failed:", e);
-      return false;
-    }
-  };
-
   return (
     <SiteContext.Provider value={{
       settings,
@@ -246,9 +215,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       markMessageRead,
       isAdminMode,
       login,
-      logout,
-      getSiteBackup,
-      restoreSiteBackup
+      logout
     }}>
       {children}
     </SiteContext.Provider>
