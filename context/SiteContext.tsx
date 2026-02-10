@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { SiteSettings, BlogPost, Deal, Destination, GearProduct, SiteContextType, ContactMessage } from '../types';
+import { SiteSettings, BlogPost, Deal, Destination, GearProduct, SiteContextType, ContactMessage, FullSiteState } from '../types';
 import { INITIAL_SETTINGS, MOCK_POSTS, MOCK_DEALS, MOCK_DESTINATIONS, MOCK_GEAR, TRANSLATIONS } from '../constants';
 
 const SiteContext = createContext<SiteContextType | undefined>(undefined);
@@ -60,19 +60,16 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     root.style.setProperty('--color-accent', settings.accentColor);
     root.style.setProperty('--font-primary', settings.fontFamily);
     
-    // Advanced SEO Injection
     if (settings.metaTitle) document.title = settings.metaTitle;
     
     const metaTags = [
       { name: 'description', content: settings.metaDescription },
       { name: 'keywords', content: settings.metaKeywords },
       { name: 'robots', content: settings.searchVisibility ? 'index, follow' : 'noindex, nofollow' },
-      // OpenGraph
       { property: 'og:title', content: settings.metaTitle || settings.siteName },
       { property: 'og:description', content: settings.metaDescription },
       { property: 'og:image', content: settings.ogImage || settings.logo },
       { property: 'og:url', content: settings.canonicalUrl },
-      // Twitter
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: settings.metaTitle },
       { name: 'twitter:description', content: settings.metaDescription },
@@ -94,7 +91,6 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       el.setAttribute('content', tag.content);
     });
 
-    // Canonical Link
     if (settings.canonicalUrl) {
       let canonical = document.querySelector('link[rel="canonical"]');
       if (!canonical) {
@@ -105,7 +101,6 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       canonical.setAttribute('href', settings.canonicalUrl);
     }
 
-    // Custom Scripts Injection (Google Analytics, etc)
     if (settings.customScripts) {
       let container = document.getElementById('custom-header-scripts');
       if (!container) {
@@ -113,16 +108,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         container.id = 'custom-header-scripts';
         document.head.appendChild(container);
       }
-      
-      // Use range to execute script tags within the HTML string
       const range = document.createRange();
       range.selectNode(document.head);
       const fragment = range.createContextualFragment(settings.customScripts);
-      
       container.innerHTML = '';
       container.appendChild(fragment);
-      
-      // Re-run any scripts manually to ensure global variables are set
       const scripts = container.querySelectorAll('script');
       scripts.forEach((oldScript) => {
         const newScript = document.createElement('script');
@@ -140,6 +130,15 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const t = (key: string): string => {
     const lang = settings.language || 'EN';
     return TRANSLATIONS[lang]?.[key] || TRANSLATIONS['EN'][key] || key;
+  };
+
+  const importFullState = (state: FullSiteState) => {
+    setSettings(state.settings);
+    setPosts(state.posts);
+    setDestinations(state.destinations);
+    setDeals(state.deals);
+    setGear(state.gear);
+    alert("Neural Link Successful: Site database updated across current browser session.");
   };
 
   const login = (email: string, pass: string): boolean => {
@@ -213,6 +212,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       addMessage,
       deleteMessage,
       markMessageRead,
+      importFullState,
       isAdminMode,
       login,
       logout
