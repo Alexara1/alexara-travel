@@ -1,10 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSite } from '../../context/SiteContext';
-// Fix: Removed 'Pulse' as it is not an exported member of 'lucide-react'.
 import { LayoutDashboard, FileText, Settings, Palette, Plus, Trash, Edit, ArrowLeft, Map, Tag, ShoppingBag, Save, X, Upload, Video, Image as ImageIcon, Users, Globe, TrendingUp, Calendar, BarChart3, DollarSign, Share2, Mail, Phone, MapPin, Lock, LogOut, Shield, Inbox, CheckCircle, ChevronRight, Search as SearchIcon, Eye, ExternalLink, Activity, Info, Facebook, Twitter, Linkedin, Code, Download, FileJson, Copy, Check, Link as LinkIcon, AlertCircle, FileCode, Cloud, Database } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlogPost, Deal, Destination, GearProduct, ContactMessage } from '../../types';
-// Fix: Import TRANSLATIONS directly to avoid using 'require' in a Vite/ESM environment.
 import { TRANSLATIONS } from '../../constants';
 
 const slugify = (text: string) => text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -395,44 +394,6 @@ const AdminDashboard: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  const generateProductionCode = () => {
-    const code = `
-import { BlogPost, Deal, Destination, GearProduct, SiteSettings, SupportedLanguage } from './types';
-
-export const INITIAL_SETTINGS: SiteSettings = ${JSON.stringify(settings, null, 2)};
-
-export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = ${JSON.stringify(TRANSLATIONS, null, 2)};
-
-export const MOCK_POSTS: BlogPost[] = ${JSON.stringify(posts, null, 2)};
-
-export const MOCK_DEALS: Deal[] = ${JSON.stringify(deals, null, 2)};
-
-export const MOCK_DESTINATIONS: Destination[] = ${JSON.stringify(destinations, null, 2)};
-
-export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
-`.trim();
-
-    navigator.clipboard.writeText(code);
-    alert("Production code for 'constants.ts' has been copied to your clipboard. Paste it into your project file to make changes global.");
-  };
-
-  const exportSyncData = () => {
-    const syncData = {
-        settings,
-        posts,
-        destinations,
-        deals,
-        gear
-    };
-    const blob = new Blob([JSON.stringify(syncData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `alexara_sync_data_${new Date().getTime()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
   const inputClass = "w-full border border-gray-300 p-2 rounded text-base text-gray-900 bg-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent focus:outline-none transition-shadow";
   const labelClass = "block text-sm font-bold text-gray-700 mb-1";
 
@@ -471,6 +432,38 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
 
   const seoHealth = getSEOHealth();
 
+  const handleExportSyncData = () => {
+    const syncData = {
+        settings,
+        posts,
+        destinations,
+        deals,
+        gear
+    };
+    navigator.clipboard.writeText(JSON.stringify(syncData, null, 2));
+    alert("Database snapshot copied to clipboard as JSON. You can paste this in another browser's sync importer (feature coming soon) or keep it as a backup.");
+  };
+
+  const handleGenerateProductionCode = () => {
+    const fileContent = `
+import { BlogPost, Deal, Destination, GearProduct, SiteSettings, SupportedLanguage } from './types';
+
+export const INITIAL_SETTINGS: SiteSettings = ${JSON.stringify(settings, null, 2)};
+
+export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = ${JSON.stringify(TRANSLATIONS, null, 2)};
+
+export const MOCK_POSTS: BlogPost[] = ${JSON.stringify(posts, null, 2)};
+
+export const MOCK_DEALS: Deal[] = ${JSON.stringify(deals, null, 2)};
+
+export const MOCK_DESTINATIONS: Destination[] = ${JSON.stringify(destinations, null, 2)};
+
+export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
+`;
+    navigator.clipboard.writeText(fileContent.trim());
+    alert("Production code for 'constants.ts' generated and copied to clipboard. Follow step 2 and 3 of the instructions to update your site globally.");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
@@ -482,7 +475,6 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
             <nav className="space-y-2">
                 {renderSidebarItem('stats', <LayoutDashboard className="w-5 h-5" />, 'Dashboard')}
                 {renderSidebarItem('inbox', <Inbox className="w-5 h-5" />, 'Inquiries', unreadCount)}
-                <div className="h-px bg-slate-800 my-4"></div>
                 {renderSidebarItem('sync', <Cloud className="w-5 h-5" />, 'Cloud Sync & Global')}
                 <div className="h-px bg-slate-800 my-4"></div>
                 {renderSidebarItem('posts', <FileText className="w-5 h-5" />, 'Blog Posts')}
@@ -523,7 +515,7 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
                         <span className="text-xs font-black uppercase tracking-widest text-gray-600">Live Traffic Nodes</span>
                     </div>
                 </div>
-                {/* ... existing stats widgets ... */}
+                
                 <h3 className="text-lg font-bold text-gray-600 mb-4 flex items-center">
                     <Activity className="w-5 h-5 mr-2" /> Real-Time Synthesis
                 </h3>
@@ -565,73 +557,131 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
                         </div>
                     </div>
                 </div>
-                {/* (rest of stats widgets hidden for brevity) */}
-            </div>
-        )}
 
-        {/* --- SYNC TAB (The focus of the update) --- */}
-        {activeTab === 'sync' && (
-            <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl overflow-hidden relative border border-slate-800">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[120px] -mr-48 -mt-48"></div>
-                    
-                    <div className="relative z-10">
-                        <div className="flex items-center space-x-4 mb-8">
-                            <div className="bg-secondary/20 p-4 rounded-3xl">
-                                <Cloud className="w-10 h-10 text-secondary" />
-                            </div>
-                            <h1 className="text-4xl font-serif font-bold">Global Persistence Core</h1>
+                <h3 className="text-lg font-bold text-gray-600 mb-4 flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2" /> Visitor Analytics (Live)
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                     <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 group hover:border-secondary transition-colors">
+                        <div className="flex justify-between items-start mb-2">
+                             <div className="bg-indigo-50 p-2 rounded-lg text-indigo-600">
+                                 <Users className="w-5 h-5" />
+                             </div>
+                             <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full flex items-center"><TrendingUp className="w-3 h-3 mr-1"/> +12%</span>
                         </div>
-                        
-                        <p className="text-slate-400 text-lg leading-relaxed mb-12 max-w-2xl">
-                            Because your site data is currently stored in your browser's LocalStorage, updates you make here only show up for you. To make them permanent for all visitors on <span className="text-secondary font-bold">www.alexaratravel.com</span>, follow the instructions below.
-                        </p>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {/* Browser Sync Card */}
-                            <div className="bg-slate-800/50 p-10 rounded-[2.5rem] border border-slate-700 flex flex-col items-center text-center group hover:bg-slate-800 transition-colors">
-                                <Database className="w-12 h-12 text-secondary mb-6 group-hover:scale-110 transition-transform" />
-                                <h3 className="text-2xl font-bold mb-4">Browser Sync</h3>
-                                <p className="text-slate-400 text-sm mb-8">Transfer your changes to another browser or computer instantly.</p>
-                                <button 
-                                    onClick={exportSyncData}
-                                    className="w-full bg-secondary hover:bg-teal-600 text-white font-black py-4 rounded-2xl transition-all shadow-xl uppercase tracking-widest text-xs"
-                                >
-                                    EXPORT SYNC DATA
-                                </button>
-                            </div>
-
-                            {/* Deploy Globally Card */}
-                            <div className="bg-white p-10 rounded-[2.5rem] border border-gray-200 flex flex-col items-center text-center group hover:shadow-2xl transition-all">
-                                <Code className="w-12 h-12 text-primary mb-6 group-hover:scale-110 transition-transform" />
-                                <h3 className="text-2xl font-bold mb-4 text-primary">Deploy Globally</h3>
-                                <p className="text-gray-500 text-sm mb-8">Generate the source code required to update the site permanently via GitHub.</p>
-                                <button 
-                                    onClick={generateProductionCode}
-                                    className="w-full bg-primary hover:bg-slate-800 text-white font-black py-4 rounded-2xl transition-all shadow-xl uppercase tracking-widest text-xs"
-                                >
-                                    GENERATE PRODUCTION CODE
-                                </button>
-                            </div>
+                        <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Visitors</h4>
+                        <p className="text-2xl font-bold text-gray-800 mt-1 tabular-nums">{analyticsData.visits.total.toLocaleString()}</p>
+                     </div>
+                     <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 group hover:border-secondary transition-colors">
+                         <div className="flex justify-between items-start mb-2">
+                             <div className="bg-pink-50 p-2 rounded-lg text-pink-500">
+                                 <Calendar className="w-5 h-5" />
+                             </div>
+                             <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full flex items-center"><TrendingUp className="w-3 h-3 mr-1"/> +5%</span>
                         </div>
-
-                        <div className="mt-16 p-8 bg-white/5 border border-white/10 rounded-3xl">
-                             <h4 className="text-secondary font-bold mb-4 flex items-center">
-                                 <Info className="w-4 h-4 mr-2" /> Deployment Steps
-                             </h4>
-                             <ol className="list-decimal list-inside space-y-4 text-sm text-slate-300">
-                                 <li>Click <span className="text-white font-bold">"Generate Production Code"</span> above to copy your current database.</li>
-                                 <li>Open your project's <span className="bg-slate-800 px-2 py-0.5 rounded font-mono text-xs">constants.ts</span> file in your code editor or GitHub.</li>
-                                 <li>Delete everything in that file, paste the new code, and <span className="text-white font-bold">Push/Commit</span> the changes.</li>
-                                 <li>Once Vercel finishes the build, your updates will be "baked into" the website globally.</li>
-                             </ol>
+                        <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Weekly Visits</h4>
+                        <p className="text-2xl font-bold text-gray-800 mt-1 tabular-nums">{analyticsData.visits.weekly.toLocaleString()}</p>
+                     </div>
+                     <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 group hover:border-secondary transition-colors">
+                         <div className="flex justify-between items-start mb-2">
+                             <div className="bg-purple-50 p-2 rounded-lg text-purple-500">
+                                 <BarChart3 className="w-5 h-5" />
+                             </div>
+                             <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full flex items-center"><TrendingUp className="w-3 h-3 mr-1"/> +8%</span>
                         </div>
-                    </div>
+                        <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Monthly Visits</h4>
+                        <p className="text-2xl font-bold text-gray-800 mt-1 tabular-nums">{analyticsData.visits.monthly.toLocaleString()}</p>
+                     </div>
+                     <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 group hover:border-secondary transition-colors">
+                         <div className="flex justify-between items-start mb-2">
+                             <div className="bg-teal-50 p-2 rounded-lg text-teal-500">
+                                 <Globe className="w-5 h-5" />
+                             </div>
+                             <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full flex items-center"><TrendingUp className="w-3 h-3 mr-1"/> +24%</span>
+                        </div>
+                        <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Yearly Visits</h4>
+                        <p className="text-2xl font-bold text-gray-800 mt-1 tabular-nums">{analyticsData.visits.yearly.toLocaleString()}</p>
+                     </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 lg:col-span-2">
+                         <div className="flex items-center justify-between mb-6">
+                            <h3 className="font-bold text-gray-800 text-lg flex items-center">
+                                <Globe className="w-5 h-5 mr-2 text-gray-500" /> Geographic Distribution
+                            </h3>
+                            <button className="text-[10px] text-secondary font-black uppercase tracking-widest hover:underline">Real-Time Heatmap</button>
+                         </div>
+                         <div className="space-y-4">
+                             {analyticsData.geo.map((item, index) => (
+                                 <div key={item.country} className="flex items-center">
+                                     <span className="w-32 text-xs font-bold text-gray-600 truncate">{item.country}</span>
+                                     <div className="flex-1 mx-4 bg-gray-100 rounded-full h-2 overflow-hidden">
+                                         <div 
+                                            className="bg-secondary h-full rounded-full transition-all duration-1000" 
+                                            style={{ width: `${item.percentage}%`, opacity: 1 - (index * 0.1) }}
+                                         ></div>
+                                     </div>
+                                     <span className="w-12 text-[10px] font-black text-gray-800 text-right tabular-nums">{item.percentage}%</span>
+                                     <span className="w-20 text-[10px] text-gray-400 text-right ml-2 tabular-nums">{(item.count + Math.floor(analyticsData.visits.total / 1000)).toLocaleString()}</span>
+                                 </div>
+                             ))}
+                         </div>
+                     </div>
+                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                         <h3 className="font-bold text-gray-800 text-lg mb-6 flex items-center">
+                            <Activity className="w-5 h-5 mr-2 text-gray-400" /> Device Usage
+                         </h3>
+                         <div className="flex flex-col justify-center h-64 space-y-6">
+                             <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                        <span className="text-xs font-bold text-gray-600">Mobile Synthesis</span>
+                                    </div>
+                                    <span className="text-sm font-black text-gray-800 tabular-nums">{analyticsData.devices.mobile.toFixed(1)}%</span>
+                                </div>
+                                <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-blue-500 h-full transition-all duration-1000" style={{ width: `${analyticsData.devices.mobile}%` }}></div>
+                                </div>
+                             </div>
+
+                             <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 rounded-full bg-indigo-500 mr-2"></div>
+                                        <span className="text-xs font-bold text-gray-600">Desktop Interface</span>
+                                    </div>
+                                    <span className="text-sm font-black text-gray-800 tabular-nums">{analyticsData.devices.desktop.toFixed(1)}%</span>
+                                </div>
+                                <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-indigo-50 h-full transition-all duration-1000" style={{ width: `${analyticsData.devices.desktop}%` }}></div>
+                                </div>
+                             </div>
+
+                             <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="w-3 h-3 rounded-full bg-teal-400 mr-2"></div>
+                                        <span className="text-xs font-bold text-gray-600">Tablet Terminal</span>
+                                    </div>
+                                    <span className="text-sm font-black text-gray-800 tabular-nums">{analyticsData.devices.tablet.toFixed(1)}%</span>
+                                </div>
+                                <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-teal-400 h-full transition-all duration-1000" style={{ width: `${analyticsData.devices.tablet}%` }}></div>
+                                </div>
+                             </div>
+
+                             <div className="pt-4 border-t border-gray-100 mt-4">
+                                 <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest text-center">Architecting Real-Time Data Flow</p>
+                             </div>
+                         </div>
+                     </div>
                 </div>
             </div>
         )}
 
-        {/* ... rest of the existing tab content ... */}
+        {/* --- INBOX TAB --- */}
         {activeTab === 'inbox' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[calc(100vh-160px)]">
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
@@ -640,7 +690,7 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
                     </h2>
                     <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">{messages.length} Total Messages</span>
                 </div>
-                {/* ... inbox logic ... */}
+                
                 <div className="flex-1 flex overflow-hidden">
                     <div className="w-1/3 border-r border-gray-100 overflow-y-auto">
                         {messages.length > 0 ? (
@@ -703,9 +753,11 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100 text-gray-800 leading-relaxed whitespace-pre-wrap min-h-[200px]">
                                     {selectedMessage.message}
                                 </div>
+                                
                                 <div className="mt-8 pt-8 border-t border-gray-100">
                                     <h4 className="text-sm font-bold text-gray-700 mb-4 uppercase tracking-wider">Actions</h4>
                                     <div className="flex gap-4">
@@ -738,8 +790,75 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
                 </div>
             </div>
         )}
-        
-        {/* (Rest of existing tab content posts, destinations, deals, gear, theme, contact, social, ads, security, seo) */}
+
+        {/* --- SYNC TAB --- */}
+        {activeTab === 'sync' && (
+            <div className="animate-in fade-in duration-500">
+                <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-3xl border border-white/5 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
+                    
+                    <div className="relative z-10">
+                        <div className="flex items-center space-x-4 mb-8">
+                            <Cloud className="w-10 h-10 text-secondary" />
+                            <h1 className="text-4xl font-serif font-bold">Global Persistence Core</h1>
+                        </div>
+                        
+                        <p className="text-blue-100/70 max-w-2xl mb-12 leading-relaxed text-lg">
+                            Because your site data is currently stored in your browser's LocalStorage, updates you make here only show up for you. To make them permanent for all visitors on <span className="text-secondary font-bold">www.alexaratravel.com</span>, follow the instructions below.
+                        </p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 text-center flex flex-col items-center group hover:bg-white/10 transition-all duration-300">
+                                <Database className="w-12 h-12 text-secondary mb-6 group-hover:scale-110 transition-transform" />
+                                <h3 className="text-2xl font-bold mb-4">Browser Sync</h3>
+                                <p className="text-blue-100/50 text-sm mb-10 flex-1">Transfer your changes to another browser or computer instantly.</p>
+                                <button 
+                                    onClick={handleExportSyncData}
+                                    className="bg-secondary hover:bg-teal-500 text-white font-black py-4 px-10 rounded-2xl transition-all shadow-xl uppercase tracking-widest text-xs"
+                                >
+                                    EXPORT SYNC DATA
+                                </button>
+                            </div>
+                            
+                            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 text-center flex flex-col items-center group hover:bg-white/10 transition-all duration-300">
+                                <Code className="w-12 h-12 text-secondary mb-6 group-hover:scale-110 transition-transform" />
+                                <h3 className="text-2xl font-bold mb-4">Deploy Globally</h3>
+                                <p className="text-blue-100/50 text-sm mb-10 flex-1">Generate the source code required to update the site permanently via GitHub.</p>
+                                <button 
+                                    onClick={handleGenerateProductionCode}
+                                    className="bg-white hover:bg-gray-100 text-slate-900 font-black py-4 px-10 rounded-2xl transition-all shadow-xl uppercase tracking-widest text-xs"
+                                >
+                                    GENERATE PRODUCTION CODE
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+                            <h4 className="text-xs font-black uppercase tracking-[0.3em] text-secondary mb-6 flex items-center">
+                                <Info className="w-4 h-4 mr-2" /> Deployment Instructions
+                            </h4>
+                            <div className="space-y-4 text-sm text-blue-100/60">
+                                <div className="flex items-start">
+                                    <span className="w-6 h-6 rounded-full bg-secondary/20 text-secondary flex items-center justify-center font-bold text-xs mr-4 shrink-0">1</span>
+                                    <p><span className="text-white font-bold">Generate Code:</span> Click the button above to copy your current database state to your clipboard.</p>
+                                </div>
+                                <div className="flex items-start">
+                                    <span className="w-6 h-6 rounded-full bg-secondary/20 text-secondary flex items-center justify-center font-bold text-xs mr-4 shrink-0">2</span>
+                                    <p><span className="text-white font-bold">Update Source:</span> Open your project's <code className="bg-white/10 px-1.5 py-0.5 rounded text-secondary">constants.ts</code> file in your code editor (or on GitHub).</p>
+                                </div>
+                                <div className="flex items-start">
+                                    <span className="w-6 h-6 rounded-full bg-secondary/20 text-secondary flex items-center justify-center font-bold text-xs mr-4 shrink-0">3</span>
+                                    <p><span className="text-white font-bold">Deploy:</span> Delete everything in that file, paste the new code, and Push/Commit the changes.</p>
+                                </div>
+                                <p className="mt-6 pt-6 border-t border-white/5 text-[11px] italic">Once Vercel finishes the build, your updates will be "baked into" the website and will appear for every visitor on every browser globally.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- POSTS TAB --- */}
         {activeTab === 'posts' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-8">
@@ -822,7 +941,656 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
                 </div>
             </div>
         )}
-        {/* (Additional tab components remain truncated for brevity) */}
+
+        {/* --- DESTINATIONS TAB --- */}
+        {activeTab === 'destinations' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Destination' : 'Edit Destination'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveDest} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Name (Country Name)</label>
+                                <input type="text" className={inputClass} value={destForm.name || ''} onChange={e => {
+                                    const name = e.target.value;
+                                    const updates: Partial<Destination> = { name };
+                                    if (formMode === 'create' || !destForm.slug) { updates.slug = slugify(name); }
+                                    setDestForm({...destForm, ...updates});
+                                }} />
+                            </div>
+                            <div>
+                                <label className={labelClass}>Continent</label>
+                                <input type="text" className={inputClass} value={destForm.continent || ''} onChange={e => setDestForm({...destForm, continent: e.target.value})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Slug (URL Key)</label>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-gray-50 border border-gray-300 p-2 rounded text-gray-400 text-sm select-none">/destinations/</div>
+                                <input type="text" className={inputClass} value={destForm.slug || ''} onChange={e => setDestForm({...destForm, slug: slugify(e.target.value)})} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Description</label>
+                            <textarea className={inputClass} rows={3} value={destForm.description || ''} onChange={e => setDestForm({...destForm, description: e.target.value})} />
+                        </div>
+                        <div>
+                            <label className={labelClass}>Global Affiliate Link (e.g. Agoda Search)</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://agoda.com/search?city=..."
+                                value={destForm.affiliateLink || ''} 
+                                onChange={e => setDestForm({...destForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
+                        <MediaInput label="Cover Image" type="image" recommendedDimensions="800 x 600 px" value={destForm.image} onChange={(val) => setDestForm({...destForm, image: val})} />
+                        <MediaInput label="Promo Video" type="video" accept="video/*" value={destForm.video} onChange={(val) => setDestForm({...destForm, video: val})} />
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Destination' : 'Update Destination'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Current Destinations</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {destinations.map(d => (
+                             <div key={d.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <div className="flex-1 truncate">
+                                     <span className="font-medium text-sm text-gray-800">{d.name}</span>
+                                     <p className="text-[10px] text-gray-400">/{d.slug}</p>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPublicLink('destinations', d.slug)} className="text-gray-400 hover:text-primary p-1">
+                                         {copiedId === d.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
+                                     </button>
+                                     <button onClick={() => handleEdit(d.id, 'dest')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteDestination(d.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- DEALS TAB --- */}
+        {activeTab === 'deals' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Deal' : 'Edit Deal'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveDeal} className="space-y-4">
+                        <div>
+                            <label className={labelClass}>Title</label>
+                            <input type="text" className={inputClass} value={dealForm.title || ''} onChange={e => {
+                                const title = e.target.value;
+                                const updates: Partial<Deal> = { title };
+                                if (formMode === 'create' || !dealForm.slug) { updates.slug = slugify(title); }
+                                setDealForm({...dealForm, ...updates});
+                            }} />
+                        </div>
+                        <div>
+                            <label className={labelClass}>Slug (URL Key)</label>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-gray-50 border border-gray-300 p-2 rounded text-gray-400 text-sm select-none">/deals/</div>
+                                <input type="text" className={inputClass} value={dealForm.slug || ''} onChange={e => setDealForm({...dealForm, slug: slugify(e.target.value)})} />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Location (Select Destination)</label>
+                                <select className={inputClass} value={dealForm.location || ''} onChange={e => setDealForm({...dealForm, location: e.target.value})} required>
+                                    <option value="" disabled>Choose a destination...</option>
+                                    {destinations.map(d => ( <option key={d.id} value={d.name}>{d.name}</option> ))}
+                                    <option value="Other">Other (Not in Destinations)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className={labelClass}>City</label>
+                                <input type="text" className={inputClass} value={dealForm.city || ''} onChange={e => setDealForm({...dealForm, city: e.target.value})} />
+                            </div>
+                        </div>
+
+                        {/* --- DEAL CATEGORIES --- */}
+                        <div>
+                            <label className={labelClass}>Categories</label>
+                            <div className="flex flex-wrap gap-2 mb-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                {availableDealCategories.map(cat => (
+                                    <button 
+                                        key={cat} 
+                                        type="button"
+                                        onClick={() => toggleDealCategory(cat)} 
+                                        className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all ${
+                                            (dealForm.categories || []).includes(cat) 
+                                            ? 'bg-secondary text-white border-secondary' 
+                                            : 'bg-white text-gray-400 border-gray-200 hover:border-secondary'
+                                        }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                                {(dealForm.categories || []).filter(c => !availableDealCategories.includes(c)).map(custom => (
+                                     <button 
+                                        key={custom} 
+                                        type="button"
+                                        onClick={() => toggleDealCategory(custom)} 
+                                        className="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-primary text-white border-primary border transition-all"
+                                    >
+                                        {custom}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="flex gap-2">
+                                <input 
+                                    type="text" 
+                                    className="flex-1 border border-gray-300 p-2 rounded text-sm text-gray-900 bg-white" 
+                                    placeholder="Add manual category..."
+                                    value={customDealCat}
+                                    onChange={(e) => setCustomDealCat(e.target.value)}
+                                />
+                                <button 
+                                    type="button"
+                                    onClick={() => {
+                                        if (customDealCat.trim()) {
+                                            toggleDealCategory(customDealCat.trim());
+                                            setCustomDealCat('');
+                                        }
+                                    }}
+                                    className="bg-gray-200 px-4 py-2 rounded text-xs font-bold text-gray-700 hover:bg-gray-300 transition-colors"
+                                >
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                             <div><label className={labelClass}>Price ($)</label><input type="number" className={inputClass} value={dealForm.price || ''} onChange={e => setDealForm({...dealForm, price: Number(e.target.value)})} /></div>
+                             <div><label className={labelClass}>Original Price ($)</label><input type="number" className={inputClass} value={dealForm.originalPrice || ''} onChange={e => setDealForm({...dealForm, originalPrice: Number(e.target.value)})} /></div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Affiliate Link</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://partner-site.com/tracking-url"
+                                value={dealForm.affiliateLink || ''} 
+                                onChange={e => setDealForm({...dealForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
+                        <MediaInput label="Deal Image" type="image" recommendedDimensions="800 x 600 px" value={dealForm.image} onChange={(val) => setDealForm({...dealForm, image: val})} />
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Deal' : 'Update Deal'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Active Deals</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {deals.map(d => (
+                             <div key={d.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <div>
+                                     <span className="font-bold text-sm text-gray-800 truncate">{d.title}</span>
+                                     <p className="text-[10px] text-gray-400">/{d.slug}</p>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPublicLink('deals', d.slug)} className="text-gray-400 hover:text-primary p-1">
+                                         {copiedId === d.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
+                                     </button>
+                                     <button onClick={() => handleEdit(d.id, 'deal')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteDeal(d.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- GEAR TAB --- */}
+        {activeTab === 'gear' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                         <span>{formMode === 'create' ? 'Add Gear' : 'Edit Gear'}</span>
+                         {formMode === 'edit' && <button onClick={handleCancel} className="text-sm text-red-500"><X className="w-4 h-4" /></button>}
+                    </h3>
+                    <form onSubmit={saveGear} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className={labelClass}>Name</label>
+                                <input type="text" className={inputClass} value={gearForm.name || ''} onChange={e => {
+                                    const name = e.target.value;
+                                    const updates: Partial<GearProduct> = { name };
+                                    if (formMode === 'create' || !gearForm.slug) { updates.slug = slugify(name); }
+                                    setGearForm({...gearForm, ...updates});
+                                }} />
+                            </div>
+                            <div><label className={labelClass}>Category</label><input type="text" className={inputClass} value={gearForm.category || ''} onChange={e => setGearForm({...gearForm, category: e.target.value})} /></div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Slug (URL Key)</label>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-gray-50 border border-gray-300 p-2 rounded text-gray-400 text-sm select-none">/gear/</div>
+                                <input type="text" className={inputClass} value={gearForm.slug || ''} onChange={e => setGearForm({...gearForm, slug: slugify(e.target.value)})} />
+                            </div>
+                        </div>
+                        <div><label className={labelClass}>Description</label><textarea className={inputClass} rows={2} value={gearForm.description || ''} onChange={e => setGearForm({...gearForm, description: e.target.value})} /></div>
+                        <div><label className={labelClass}>Price ($)</label><input type="number" className={inputClass} value={gearForm.price || ''} onChange={e => setGearForm({...gearForm, price: Number(e.target.value)})} /></div>
+                        <div>
+                            <label className={labelClass}>Affiliate Link</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                placeholder="https://amazon.com/product-affiliate-url"
+                                value={gearForm.affiliateLink || ''} 
+                                onChange={e => setGearForm({...gearForm, affiliateLink: e.target.value})} 
+                            />
+                        </div>
+                        <MediaInput label="Product Image" type="image" recommendedDimensions="500 x 500 px" value={gearForm.image} onChange={(val) => setGearForm({...gearForm, image: val})} />
+                        <button type="submit" className="w-full bg-primary text-white py-2 rounded font-bold hover:bg-slate-800 transition-colors">
+                            {formMode === 'create' ? 'Add Item' : 'Update Item'}
+                        </button>
+                    </form>
+                </div>
+                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold mb-4">Gear Inventory</h3>
+                     <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                         {gear.map(g => (
+                             <div key={g.id} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                                 <div className="flex-1 truncate">
+                                     <span className="font-medium text-sm text-gray-800">{g.name}</span>
+                                     <p className="text-[10px] text-gray-400">/{g.slug}</p>
+                                 </div>
+                                 <div className="flex space-x-2 ml-2">
+                                     <button onClick={() => copyPublicLink('gear', g.slug)} className="text-gray-400 hover:text-primary p-1">
+                                         {copiedId === g.slug ? <Check className="w-4 h-4 text-green-500" /> : <LinkIcon className="w-4 h-4" />}
+                                     </button>
+                                     <button onClick={() => handleEdit(g.id, 'gear')} className="text-blue-500 hover:text-blue-700 p-1"><Edit className="w-4 h-4" /></button>
+                                     <button onClick={() => deleteGear(g.id)} className="text-red-500 hover:text-red-700 p-1"><Trash className="w-4 h-4" /></button>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- THEME TAB --- */}
+        {activeTab === 'theme' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6">Customization</h3>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Site Name</label>
+                        <input type="text" className={inputClass} value={settings.siteName} onChange={(e) => updateSettings({ siteName: e.target.value })} />
+                    </div>
+                     <MediaInput 
+                        label="Site Logo" 
+                        type="image"
+                        recommendedDimensions="200 x 50 px (Transparent PNG recommended)"
+                        value={settings.logo} 
+                        onChange={(val) => updateSettings({ logo: val })} 
+                    />
+                     <div>
+                        <label className={labelClass}>Hero Title</label>
+                        <input type="text" className={inputClass} value={settings.heroTitle} onChange={(e) => updateSettings({ heroTitle: e.target.value })} />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className={labelClass}>Primary Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.primaryColor} onChange={(e) => updateSettings({ primaryColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.primaryColor}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Secondary Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.secondaryColor} onChange={(e) => updateSettings({ secondaryColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.secondaryColor}</span>
+                            </div>
+                        </div>
+                         <div>
+                            <label className={labelClass}>Accent Color</label>
+                            <div className="flex items-center space-x-2">
+                                <input type="color" className="h-10 w-10 border-none cursor-pointer" value={settings.accentColor} onChange={(e) => updateSettings({ accentColor: e.target.value })} />
+                                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-800">{settings.accentColor}</span>
+                            </div>
+                        </div>
+                    </div>
+                     <div>
+                        <label className={labelClass}>Font Family</label>
+                        <select className={inputClass} value={settings.fontFamily} onChange={(e) => updateSettings({ fontFamily: e.target.value as any })}>
+                            <option value="Open Sans">Open Sans (Clean)</option>
+                            <option value="Roboto">Roboto (Modern)</option>
+                            <option value="Helvetica">Helvetica (Classic)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- CONTACT INFO TAB --- */}
+        {activeTab === 'contact' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <Mail className="w-6 h-6 mr-2 text-primary" /> Contact Information
+                </h3>
+                <p className="text-gray-500 mb-6 text-sm">Update the contact details displayed in the footer and on the contact page.</p>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Phone Number</label>
+                        <div className="flex items-center relative">
+                             <Phone className="w-5 h-5 text-gray-400 absolute left-3" />
+                             <input 
+                                type="text" 
+                                className={`${inputClass} pl-10`} 
+                                value={settings.contact?.phone || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), phone: e.target.value } })} 
+                                placeholder="+1 (555) 123-4567"
+                             />
+                        </div>
+                    </div>
+                    <div>
+                        <label className={labelClass}>Email Address</label>
+                        <div className="flex items-center relative">
+                             <Mail className="w-5 h-5 text-gray-400 absolute left-3" />
+                             <input 
+                                type="email" 
+                                className={`${inputClass} pl-10`} 
+                                value={settings.contact?.email || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), email: e.target.value } })} 
+                                placeholder="hello@example.com"
+                             />
+                        </div>
+                    </div>
+                    <div>
+                        <label className={labelClass}>Physical Address</label>
+                        <div className="flex items-start relative">
+                             <MapPin className="w-5 h-5 text-gray-400 absolute left-3 top-3" />
+                             <textarea 
+                                className={`${inputClass} pl-10`} 
+                                rows={3}
+                                value={settings.contact?.address || ''} 
+                                onChange={(e) => updateSettings({ contact: { ...(settings.contact as any), address: e.target.value } })} 
+                                placeholder="123 Street Name&#10;City, State, Zip"
+                             />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 ml-10">Line breaks will be preserved.</p>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SOCIAL MEDIA TAB --- */}
+        {activeTab === 'social' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-bold flex items-center">
+                        <Share2 className="w-6 h-6 mr-2 text-indigo-600" /> Social Media Links
+                    </h3>
+                    <button 
+                        onClick={addSocialLink}
+                        className="bg-primary text-white text-sm px-4 py-2 rounded-lg flex items-center hover:bg-slate-800 transition-colors"
+                    >
+                        <Plus className="w-4 h-4 mr-2" /> Add Link
+                    </button>
+                </div>
+                <div className="space-y-4">
+                    {(settings.socialMedia || []).map((link, index) => (
+                        <div key={index} className="flex gap-4 items-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                             <div className="w-1/3">
+                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 block">Platform</label>
+                                <select 
+                                    className="w-full border border-gray-300 p-2 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                    value={link.platform}
+                                    onChange={(e) => updateSocialLink(index, 'platform', e.target.value)}
+                                >
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Twitter">Twitter (X)</option>
+                                    <option value="Instagram">Instagram</option>
+                                    <option value="LinkedIn">LinkedIn</option>
+                                    <option value="YouTube">YouTube</option>
+                                    <option value="TikTok">TikTok</option>
+                                    <option value="Pinterest">Pinterest</option>
+                                    <option value="Reddit">Reddit</option>
+                                    <option value="Rutube">Rutube</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                             </div>
+                             <div className="flex-1">
+                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 block">URL</label>
+                                <input 
+                                    type="text" 
+                                    className="w-full border border-gray-300 p-2 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                    placeholder="https://..."
+                                    value={link.url}
+                                    onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
+                                />
+                             </div>
+                             <div className="pt-5">
+                                 <button 
+                                    onClick={() => removeSocialLink(index)}
+                                    className="text-red-500 hover:text-red-700 p-2 rounded hover:bg-red-50"
+                                >
+                                     <Trash className="w-5 h-5" />
+                                 </button>
+                             </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        {/* --- MONETIZATION / ADS TAB --- */}
+        {activeTab === 'ads' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-3xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <DollarSign className="w-6 h-6 mr-2 text-green-600" /> Monetization Settings
+                </h3>
+                <div className="space-y-6">
+                    <div className="flex items-center mb-4">
+                        <input 
+                            type="checkbox" 
+                            id="adsEnabled"
+                            checked={settings.ads?.enabled} 
+                            onChange={(e) => updateSettings({ ads: { ...settings.ads, enabled: e.target.checked } as any })}
+                            className="w-5 h-5 text-secondary rounded focus:ring-secondary mr-3"
+                        />
+                        <label htmlFor="adsEnabled" className="text-gray-800 font-bold">Enable Advertisements</label>
+                    </div>
+                    <div className={!settings.ads?.enabled ? 'opacity-50 pointer-events-none' : ''}>
+                        <div className="mb-6">
+                            <label className={labelClass}>Header Banner Code (Horizontal 728x90)</label>
+                            <textarea 
+                                className={`${inputClass} font-mono text-xs`} 
+                                rows={4} 
+                                placeholder="<script>...</script>"
+                                value={settings.ads?.headerBanner || ''}
+                                onChange={(e) => updateSettings({ ads: { ...settings.ads, headerBanner: e.target.value } as any })}
+                            />
+                        </div>
+                        <div>
+                            <label className={labelClass}>Sidebar Banner Code (Square 300x250)</label>
+                            <textarea 
+                                className={`${inputClass} font-mono text-xs`} 
+                                rows={4} 
+                                placeholder="<script>...</script>"
+                                value={settings.ads?.sidebarBanner || ''}
+                                onChange={(e) => updateSettings({ ads: { ...settings.ads, sidebarBanner: e.target.value } as any })}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SECURITY TAB --- */}
+        {activeTab === 'security' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                    <Shield className="w-6 h-6 mr-2 text-primary" /> Security Settings
+                </h3>
+                <div className="space-y-6">
+                    <div>
+                        <label className={labelClass}>Admin Email</label>
+                        <input 
+                            type="email" 
+                            className={`${inputClass}`} 
+                            value={settings.adminEmail || ''} 
+                            onChange={(e) => updateSettings({ adminEmail: e.target.value })} 
+                        />
+                    </div>
+                    <div>
+                        <label className={labelClass}>Admin Password</label>
+                        <input 
+                            type="text" 
+                            className={`${inputClass}`} 
+                            value={settings.adminPassword || ''} 
+                            onChange={(e) => updateSettings({ adminPassword: e.target.value })} 
+                        />
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* --- SEO & SITEMAP TAB --- */}
+        {activeTab === 'seo' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold mb-6 flex items-center">
+                        <SearchIcon className="w-6 h-6 mr-2 text-primary" /> SEO Configuration
+                    </h3>
+                    <div className="space-y-6">
+                        <div>
+                            <label className={labelClass}>Meta Title</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                value={settings.metaTitle || ''} 
+                                onChange={(e) => updateSettings({ metaTitle: e.target.value })} 
+                                placeholder="Site Name | Primary Keywords"
+                            />
+                            <p className={`text-[10px] mt-1 font-bold ${settings.metaTitle?.length && settings.metaTitle.length > 60 ? 'text-red-500' : 'text-gray-400'}`}>
+                                {settings.metaTitle?.length || 0} / 60 characters recommended
+                            </p>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Meta Description</label>
+                            <textarea 
+                                className={inputClass} 
+                                rows={3}
+                                value={settings.metaDescription || ''} 
+                                onChange={(e) => updateSettings({ metaDescription: e.target.value })} 
+                                placeholder="A brief summary of your site for search engine results..."
+                            />
+                            <p className={`text-[10px] mt-1 font-bold ${settings.metaDescription?.length && settings.metaDescription.length > 160 ? 'text-red-500' : 'text-gray-400'}`}>
+                                {settings.metaDescription?.length || 0} / 160 characters recommended
+                            </p>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Meta Keywords (Comma separated)</label>
+                            <input 
+                                type="text" 
+                                className={inputClass} 
+                                value={settings.metaKeywords || ''} 
+                                onChange={(e) => updateSettings({ metaKeywords: e.target.value })} 
+                                placeholder="travel, destinations, deals"
+                            />
+                        </div>
+                        <MediaInput 
+                            label="OpenGraph Social Image" 
+                            type="image" 
+                            recommendedDimensions="1200 x 630 px" 
+                            value={settings.ogImage} 
+                            onChange={(val) => updateSettings({ ogImage: val })} 
+                        />
+                        <div>
+                            <label className={labelClass}>Canonical URL</label>
+                            <input 
+                                type="url" 
+                                className={inputClass} 
+                                value={settings.canonicalUrl || ''} 
+                                onChange={(e) => updateSettings({ canonicalUrl: e.target.value })} 
+                                placeholder="https://www.alexaratravel.com"
+                            />
+                        </div>
+                        <div className="flex items-center p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <input 
+                                type="checkbox" 
+                                id="searchVisibility"
+                                checked={settings.searchVisibility} 
+                                onChange={(e) => updateSettings({ searchVisibility: e.target.checked })}
+                                className="w-5 h-5 text-secondary rounded focus:ring-secondary mr-3"
+                            />
+                            <label htmlFor="searchVisibility" className="text-sm font-bold text-gray-800 cursor-pointer">
+                                Allow search engines to index this site
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-8">
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-bold mb-6 flex items-center">
+                            <FileCode className="w-6 h-6 mr-2 text-indigo-500" /> Robots.txt Editor
+                        </h3>
+                        <textarea 
+                            className={`${inputClass} font-mono text-xs`} 
+                            rows={8}
+                            value={settings.robotsTxt || ''} 
+                            onChange={(e) => updateSettings({ robotsTxt: e.target.value })} 
+                            placeholder="User-agent: *&#10;Allow: /"
+                        />
+                        <p className="text-[10px] text-gray-400 mt-2 italic leading-tight">Advanced: Use this to block crawlers from private directories (e.g. /admin).</p>
+                    </div>
+
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-bold mb-6 flex items-center">
+                            <Activity className="w-6 h-6 mr-2 text-secondary" /> SEO Health
+                        </h3>
+                        <div className="space-y-4">
+                            {seoHealth.map((check, idx) => (
+                                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <p className="text-xs font-bold text-gray-700">{check.label}</p>
+                                        <p className="text-[10px] text-gray-500">{check.info}</p>
+                                    </div>
+                                    {check.status === 'good' ? (
+                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                    ) : check.status === 'warning' ? (
+                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                                    ) : (
+                                        <AlertCircle className="w-5 h-5 text-red-500" />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-slate-900 text-white p-8 rounded-xl shadow-xl">
+                        <h3 className="text-xl font-bold mb-4 flex items-center">
+                            <Globe className="w-6 h-6 mr-2 text-secondary" /> Sitemap Generator
+                        </h3>
+                        <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                            Generate a search-engine compatible XML sitemap containing all your destinations, deals, and articles.
+                        </p>
+                        <button 
+                            onClick={generateSitemap}
+                            className="w-full bg-secondary hover:bg-teal-600 text-white py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center"
+                        >
+                            <Download className="w-4 h-4 mr-2" /> Generate & Download Sitemap.xml
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
       </main>
     </div>
   );
