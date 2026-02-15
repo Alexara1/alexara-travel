@@ -779,7 +779,8 @@ export const MOCK_DESTINATIONS: Destination[] = [
     "name": "Italy",
     "continent": "Europe",
     "description": "Experience the history, world-renowned cuisine, and breathtaking Amalfi Coast architecture.",
-    "image": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80"
+    "image": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80",
+    "affiliateLink": "https://www.alexaratravel.com/deals/hilton-molino-stucky-venice"
   },
   {
     "id": "dest2",
