@@ -688,20 +688,19 @@ export const MOCK_POSTS: BlogPost[] = [
 export const MOCK_DEALS: Deal[] = [
   {
     "id": "d1",
-    "slug": "luxury-escape-oia-heights-santorini",
-    "title": "Luxury Escape to Oia Heights",
+    "slug": "hilton-molino-stucky-venice",
+    "title": "Hilton Molino Stucky Venice",
     "location": "Greece",
-    "city": "Santorini",
+    "city": "Venice",
     "categories": [
-      "Resort",
       "Hotel"
     ],
-    "price": 1299,
-    "originalPrice": 1800,
-    "image": "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
+    "price": 225,
+    "originalPrice": 235,
+    "image": "https://images.trvl-media.com/lodging/2000000/1590000/1583200/1583191/157c548a.jpg?impolicy=resizecrop&rw=1200&ra=fit",
     "rating": 4.9,
     "duration": "5 Days / 4 Nights",
-    "affiliateLink": "https://www.agoda.com"
+    "affiliateLink": "https://expedia.com/affiliates/alexara_travel/hilton-molino-stucky-venice"
   },
   {
     "id": "d2",
