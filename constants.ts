@@ -769,24 +769,6 @@ export const MOCK_DEALS: Deal[] = [
     "rating": 4.9,
     "duration": "Full Day Pass",
     "affiliateLink": "https://www.raileurope.com"
-  },
-  {
-    "id": "d6",
-    "slug": "amalfi-coast-hidden-beach-tour",
-    "title": "Amalfi Coast Hidden Beach Tour",
-    "location": "Italy",
-    "city": "Positano",
-    "categories": [
-      "Beach",
-      "Activity",
-      "Ticket"
-    ],
-    "price": 320,
-    "originalPrice": 450,
-    "image": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80",
-    "rating": 4.8,
-    "duration": "8 Hours",
-    "affiliateLink": "https://www.viator.com"
   }
 ];
 
