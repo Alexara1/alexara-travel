@@ -48,7 +48,13 @@ const DealDetail: React.FC = () => {
                         <span className="flex items-center"><Clock className="w-3.5 h-3.5 mr-1.5 text-secondary" /> {deal.duration}</span>
                     </div>
                     
-                    <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-8 leading-tight">{deal.title}</h1>
+                    <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4 leading-tight">{deal.title}</h1>
+
+                    <div className="mb-8">
+                        <p className="text-gray-600 leading-relaxed text-lg font-light italic">
+                           {deal.description || "Synthesizing luxury experiences with market-leading value. This hand-picked deal offers unparalleled access to one of the world's most breathtaking locations."}
+                        </p>
+                    </div>
                     
                     <div className="flex items-center space-x-2 mb-10">
                         {[...Array(5)].map((_, i) => (

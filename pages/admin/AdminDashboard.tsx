@@ -94,7 +94,7 @@ const AdminDashboard: React.FC = () => {
 
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
   const [destForm, setDestForm] = useState<Partial<Destination>>({});
-  const [dealForm, setDealForm] = useState<Partial<Deal>>({ categories: [] });
+  const [dealForm, setDealForm] = useState<Partial<Deal>>({ categories: [], description: '' });
   const [gearForm, setGearForm] = useState<Partial<GearProduct>>({});
   
   const [newBlogCategory, setNewBlogCategory] = useState('');
@@ -166,7 +166,7 @@ const AdminDashboard: React.FC = () => {
     setFormMode('create');
     setPostForm({});
     setDestForm({});
-    setDealForm({ categories: [] });
+    setDealForm({ categories: [], description: '' });
     setGearForm({});
     setSelectedMessage(null);
     setCustomDealCat('');
@@ -184,7 +184,7 @@ const AdminDashboard: React.FC = () => {
     setFormMode('edit');
     if (type === 'post') setPostForm(posts.find(p => p.id === id) || {});
     if (type === 'dest') setDestForm(destinations.find(p => p.id === id) || {});
-    if (type === 'deal') setDealForm(deals.find(p => p.id === id) || { categories: [] });
+    if (type === 'deal') setDealForm(deals.find(p => p.id === id) || { categories: [], description: '' });
     if (type === 'gear') setGearForm(gear.find(p => p.id === id) || {});
   };
 
@@ -193,7 +193,7 @@ const AdminDashboard: React.FC = () => {
     setFormMode('create');
     setPostForm({});
     setDestForm({});
-    setDealForm({ categories: [] });
+    setDealForm({ categories: [], description: '' });
     setGearForm({});
     setCustomDealCat('');
   };
@@ -256,6 +256,7 @@ const AdminDashboard: React.FC = () => {
             title: title,
             location: dealForm.location || (destinations.length > 0 ? destinations[0].name : 'Unknown'),
             city: dealForm.city || 'Unknown',
+            description: dealForm.description || '',
             categories: dealForm.categories || [],
             price: Number(dealForm.price) || 0,
             originalPrice: Number(dealForm.originalPrice) || 0,
@@ -1055,6 +1056,16 @@ export const MOCK_GEAR: GearProduct[] = ${JSON.stringify(gear, null, 2)};
                                 <label className={labelClass}>City</label>
                                 <input type="text" className={inputClass} value={dealForm.city || ''} onChange={e => setDealForm({...dealForm, city: e.target.value})} />
                             </div>
+                        </div>
+                        <div>
+                            <label className={labelClass}>Description</label>
+                            <textarea 
+                                className={inputClass} 
+                                rows={4} 
+                                placeholder="Provide a detailed overview of the deal, including what's included and unique selling points..."
+                                value={dealForm.description || ''} 
+                                onChange={e => setDealForm({...dealForm, description: e.target.value})} 
+                            />
                         </div>
 
                         {/* --- DEAL CATEGORIES --- */}

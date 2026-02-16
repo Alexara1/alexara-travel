@@ -35,6 +35,7 @@ export interface Deal {
   title: string;
   location: string; // This acts as Country
   city: string;
+  description: string;
   categories: string[];
   price: number;
   originalPrice: number;

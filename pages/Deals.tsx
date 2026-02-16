@@ -65,12 +65,18 @@ const Deals: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const urlCountry = queryParams.get('country');
 
-  const [selectedCountry, setSelectedCountry] = useState<string>('All');
+  // Sync state directly from URL query on initialization to prevent filter flickering
+  const [selectedCountry, setSelectedCountry] = useState<string>(urlCountry || 'All');
   const [selectedCity, setSelectedCity] = useState<string>('All');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  useEffect(() => { if (urlCountry) setSelectedCountry(urlCountry); }, [urlCountry]);
+  // Update country if the URL changes (e.g., clicking a link in the header while on the page)
+  useEffect(() => { 
+    if (urlCountry) {
+        setSelectedCountry(urlCountry); 
+    }
+  }, [urlCountry]);
 
   // Reset city filter if the country changes to prevent invalid filters
   useEffect(() => {
