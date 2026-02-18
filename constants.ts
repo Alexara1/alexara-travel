@@ -26,7 +26,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   "ads": {
     "enabled": true,
     "headerBanner": "",
-    "sidebarBanner": ""
+    "sidebarBanner": "<ins class=\"klk-aff-widget\" data-wid=\"111573\" data-bgtype=\"Play\" data-adid=\"1220527\" data-lang=\"en-BS\" data-prod=\"banner\" data-width=\"300\" data-height=\"250\"><a href=\"//www.klook.com/?aid=\">Klook.com</a></ins> <script type=\"text/javascript\"> (function (d, sc, u) { var s = d.createElement(sc), p = d.getElementsByTagName(sc)[0]; s.type = \"text/javascript\"; s.async = true; s.src = u; p.parentNode.insertBefore(s, p); })( document, \"script\", \"https://affiliate.klook.com/widget/fetch-iframe-init.js\" ); </script>\n"
   },
   "socialMedia": [
     {
@@ -687,40 +687,62 @@ export const MOCK_POSTS: BlogPost[] = [
 
 export const MOCK_DEALS: Deal[] = [
   {
+    "id": "1771364476581",
+    "slug": "pure-montagne-resort-spa",
+    "title": "Pure Montagne Resort & Spa",
+    "location": "France",
+    "city": "Vesúbia Mountain Park",
+    "description": "Highlights for your 1-night trip\nTop rated breakfast\nExperience delightful mornings with the top rated breakfast.\nDiscover nearby landmarks\nWalk to Vesúbia Mountain Park\n\nAbout this property\n\nResort in Saint-Martin-Vesubie with spa services and a restaurant\nSki lift privileges\nContinental breakfast available\nSelf-parking included\nPets allowed (fee applies)\nFine-dining restaurant\nMassages in spa\nIts package for 2 Travelers ,1 room \n(note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel",
+      "Package",
+      "Resort"
+    ],
+    "price": 900,
+    "originalPrice": 1390,
+    "image": "https://images.trvl-media.com/lodging/77000000/76690000/76687800/76687754/d3da8dc6.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/alexara_travel/pure-montagne-resort-and-spa"
+  },
+  {
     "id": "d1",
     "slug": "luxury-escape-oia-heights-santorini",
-    "title": "Luxury Escape to Oia Heights",
-    "location": "Greece",
-    "city": "Santorini",
-    "description": "Experience the ultimate Greek island getaway at Oia Heights. This curated luxury package includes a boutique hotel stay with panoramic caldera views and private sunset dining.",
+    "title": "",
+    "location": "Australia",
+    "city": "Gold Coast",
+    "description": "Beachfront sanctuary with mineral pools\nStunning ocean views frame the elegant indoor magnesium pool, a serene alternative to the bustling outdoor area. Guests enjoy exceptional cuisine at Tang Court with impeccable service. The Chuan Spa offers rejuvenating treatments, with the relaxation massage earning special praise.\n\nHighlights for your 1-night trip\n\nTop rated beach location\nDiscover paradise at this top rated beach location.\nWhite sand beach\nStep onto rare, powdery white sand beach near you.\nGreat location\nGuests value the location for making travel plans effortless.\nDiscover nearby landmarks\nWalk to Surfers Paradise Beach\n\nAbout this property\n\nStylish beach retreat with outdoor pool\nDirect access to beach\nOutdoor pool\nBuffet breakfast available\nValet parking available\nBuffet restaurant\nFull-service spa",
     "categories": [
       "Resort",
-      "Hotel"
+      "Hotel",
+      "Package",
+      "Restaurant"
     ],
-    "price": 1299,
-    "originalPrice": 1800,
-    "image": "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
+    "price": 542,
+    "originalPrice": 600,
+    "image": "https://images.trvl-media.com/lodging/79000000/78100000/78099500/78099407/9e37ee15.jpg?impolicy=resizecrop&rw=1200&ra=fit",
     "rating": 4.9,
     "duration": "5 Days / 4 Nights",
-    "affiliateLink": "https://www.agoda.com"
+    "affiliateLink": "https://expedia.com/affiliates/alexara_travel/gold-coast-and-jewel-residences"
   },
   {
     "id": "d2",
-    "slug": "kyoto-bamboo-grove-ryokan-stay",
-    "title": "Kyoto Bamboo Grove Ryokan",
+    "slug": "hilton-tokyo-narita-airport",
+    "title": "Hilton Tokyo Narita Airport",
     "location": "Japan",
-    "city": "Kyoto",
-    "description": "Immerse yourself in traditional Japanese culture with a luxury Ryokan stay near the Arashiyama Bamboo Grove. Includes kaiseki dining and a guided morning forest walk.",
+    "city": "Tokyo ",
+    "description": "Highlights for your 1-night trip\n\nHassle-free airport shuttle\nEnjoy seamless travel with a top-rated airport shuttle for easy transfers.\nIndoor pool\nEnjoy year-round relaxation in the indoor pool - a rare find in the area.\nTravel with ease\nGuests love the location for easy access to top-rated transportation.\n\nAbout this property\n\nHotel with a full-service spa, near Sakura-no-Yama Hill\nIndoor pool\nHot tub on site\nBuffet breakfast available\nSelf-parking available\nAirport transportation included\nInternational cuisine restaurant.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n",
     "categories": [
       "Hotel",
-      "Activity"
+      "Activity",
+      "Airport"
     ],
-    "price": 1550,
-    "originalPrice": 2100,
-    "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
+    "price": 150,
+    "originalPrice": 250,
+    "image": "https://images.trvl-media.com/lodging/1000000/450000/443000/442954/f4bd0e4c.jpg?impolicy=resizecrop&rw=1200&ra=fit",
     "rating": 4.8,
     "duration": "7 Days / 6 Nights",
-    "affiliateLink": "https://www.travelpayouts.com"
+    "affiliateLink": "https://expedia.com/affiliates/alexara_travel/hilton-tokyo-narita-airport"
   },
   {
     "id": "d3",
@@ -782,7 +804,7 @@ export const MOCK_DEALS: Deal[] = [
     "title": "Hilton Molino Stucky Venice",
     "location": "Italy",
     "city": "Venice",
-    "description": "A rooftop pool offers breathtaking panoramic views of Venice's skyline. The hotel's complimentary shuttle boat whisks you to San Marco in just ten minutes. After exploring, unwind at the spa before enjoying Italian cuisine at one of three elegant restaurants.\nIts package for 2 Travelers ,1 room\n(note: Prices can vary depend on date of availability)",
+    "description": "A rooftop pool offers breathtaking panoramic views of Venice's skyline. The hotel's complimentary shuttle boat whisks you to San Marco in just ten minutes. After exploring, unwind at the spa before enjoying Italian cuisine at one of three elegant restaurants.\n\nHighlights for your 1-night trip\n\nTop rated breakfast\nExperience delightful mornings with the top rated breakfast.\nRooftop terrace\nA rare find - enjoy stunning views from the rooftop terrace.\nGreat location\nGuests value the location for making travel plans effortless.\nDiscover nearby landmarks\nClose to Teatro La Fenice\n\nAbout this property\n\nLuxury hotel with 3 restaurants connected to the convention center in Venice\nOutdoor pool\nHot tub on site\nBuffet breakfast available\nArea shuttle available\nPets allowed (fee applies)\nInternational cuisine restaurant\n\nIts package for 2 Travelers ,1 room\n(note: Prices can vary depend on date of availability)",
     "categories": [
       "Activity",
       "Hotel"
@@ -797,6 +819,15 @@ export const MOCK_DEALS: Deal[] = [
 ];
 
 export const MOCK_DESTINATIONS: Destination[] = [
+  {
+    "id": "1771362402324",
+    "slug": "france",
+    "name": "France",
+    "continent": "Europe",
+    "description": "France, a country in Western Europe, has medieval towns, Alpine villages, and Mediterranean coastlines. Paris, its capital, is known for its fashion brands, art museums such as the Louvre, and iconic landmarks such as the Eiffel Tower.",
+    "image": "https://www.ilxtravel.com/wp-content/uploads/2024/09/Eiffel-Tower-France.webp",
+    "affiliateLink": "#"
+  },
   {
     "id": "dest1",
     "slug": "italy",
