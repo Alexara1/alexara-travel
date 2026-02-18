@@ -707,11 +707,11 @@ export const MOCK_DEALS: Deal[] = [
   },
   {
     "id": "d1",
-    "slug": "luxury-escape-oia-heights-santorini",
-    "title": "",
+    "slug": "the-langham-gold-coast-and-jewel-residences",
+    "title": "The Langham, Gold Coast and Jewel Residences",
     "location": "Australia",
     "city": "Gold Coast",
-    "description": "Beachfront sanctuary with mineral pools\nStunning ocean views frame the elegant indoor magnesium pool, a serene alternative to the bustling outdoor area. Guests enjoy exceptional cuisine at Tang Court with impeccable service. The Chuan Spa offers rejuvenating treatments, with the relaxation massage earning special praise.\n\nHighlights for your 1-night trip\n\nTop rated beach location\nDiscover paradise at this top rated beach location.\nWhite sand beach\nStep onto rare, powdery white sand beach near you.\nGreat location\nGuests value the location for making travel plans effortless.\nDiscover nearby landmarks\nWalk to Surfers Paradise Beach\n\nAbout this property\n\nStylish beach retreat with outdoor pool\nDirect access to beach\nOutdoor pool\nBuffet breakfast available\nValet parking available\nBuffet restaurant\nFull-service spa",
+    "description": "Beachfront sanctuary with mineral pools\nStunning ocean views frame the elegant indoor magnesium pool, a serene alternative to the bustling outdoor area. Guests enjoy exceptional cuisine at Tang Court with impeccable service. The Chuan Spa offers rejuvenating treatments, with the relaxation massage earning special praise.\n\nHighlights for your 1-night trip\n\nTop rated beach location\nDiscover paradise at this top rated beach location.\nWhite sand beach\nStep onto rare, powdery white sand beach near you.\nGreat location\nGuests value the location for making travel plans effortless.\nDiscover nearby landmarks\nWalk to Surfers Paradise Beach\n\nAbout this property\n\nStylish beach retreat with outdoor pool\nDirect access to beach\nOutdoor pool\nBuffet breakfast available\nValet parking available\nBuffet restaurant\nFull-service spa.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
     "categories": [
       "Resort",
       "Hotel",
