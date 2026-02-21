@@ -26,7 +26,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   "ads": {
     "enabled": true,
     "headerBanner": "",
-    "sidebarBanner": "<ins class=\"klk-aff-widget\" data-wid=\"111573\" data-bgtype=\"Play\" data-adid=\"1220527\" data-lang=\"en-BS\" data-prod=\"banner\" data-width=\"300\" data-height=\"250\"><a href=\"//www.klook.com/?aid=\">Klook.com</a></ins> <script type=\"text/javascript\"> (function (d, sc, u) { var s = d.createElement(sc), p = d.getElementsByTagName(sc)[0]; s.type = \"text/javascript\"; s.async = true; s.src = u; p.parentNode.insertBefore(s, p); })( document, \"script\", \"https://affiliate.klook.com/widget/fetch-iframe-init.js\" ); </script>\n"
+    "sidebarBanner": "<div class=\"safetywing-price-widget\" data-safetywingaffiliateid=\"26472270\" data-scale=\"1.0\"></div>\n<script type=\"text/javascript\" src=\"https://storage.googleapis.com/safetywing-static/widget/safetywing-price-widget.js\"></script>"
   },
   "socialMedia": [
     {
@@ -639,48 +639,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
-    "id": "1",
-    "slug": "top-10-hidden-beaches-in-thailand",
-    "title": "Top 10 Hidden Beaches in Thailand: A Complete Guide",
-    "excerpt": "Discover the untouched paradises that tourists often miss. From Krabi to Koh Lipe, here are our top picks.",
-    "content": "Thailand is famous for its beaches, but some of the best ones are hidden away. In this guide, we dive deep into the crystal waters of the Andaman sea. \nKoh Kood is a peaceful island in the eastern Gulf of Thailand, near the Cambodian border. It's often overlooked by travelers heading to the more famous Koh Chang, but those who make the journey are rewarded with crystal-clear waters and white sands. \nAnother gem is Railay Beach in Krabi, accessible only by boat due to the high limestone cliffs cutting off mainland access. We recommend staying at least 3 nights to truly experience the magic of the limestone formations at sunset.",
-    "image": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1439&q=80",
-    "author": "Sarah Jenkins",
-    "date": "Oct 12, 2023",
+    "id": "1771707864165",
+    "slug": "inside-the-langham-gold-coast-a-5-star-beachfront-escape-in-australia",
+    "title": "Inside The Langham Gold Coast: A 5-Star Beachfront Escape in Australia",
+    "excerpt": "Experience five-star beachfront luxury at The Langham, Gold Coast & Jewel Residences. Discover ocean-view suites, world-class dining, indulgent spa experiences, and premium serviced apartments in the heart of Surfers Paradise.",
+    "content": "The Langham, Gold Coast, a five-star hotel located between Surfers Paradise and Broadbeach, is part of The Langham’s luxury hotels and resorts collection. With stunning views of the Pacific Ocean and direct access to the beach, this luxurious hotel features classic elegance paired with modern coastal design.\n\nAt The Langham, Gold Coast you will find superior service along with an elegance that is a hallmark of The Langham's luxury hotels and resorts. Accommodation options range from well-appointed guestroom and suite accommodations that include private terrace, marble bathroom, and other distinctive features of The Langham to Jewel Residences, which offers one to three bedroom serviced apartments with full kitchens and open plan living room areas. Families or those on extended stays will find Jewel Residences to be a fantastic way to take advantage of the privacy afforded by a serviced apartment while also enjoying all of the premium hotel amenities offered by The Langham.\n\nDining is a memorable experience at The Langham, Gold Coast with a number of fine-dining restaurants, relaxing afternoon teas, and fresh seafood experiences. Guests wishing to relax can do so with a visit to Chuan Spa, by the ocean-side pools, or in the modern fitness facility.\n\nWhether you are looking to have a romantic getaway, family holiday, or luxurious escape, The Langham, Gold Coast and Jewel Residences provides a high level of comfort and sophistication, along with breathtaking views of the Pacific Ocean; thus making it one of the most desirable places to stay on the Gold Coast.\n\nLearn more about luxury escapes at Alexara Travel. 🌊✨",
+    "image": "data:image/jpeg;base64,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",
+    "author": "Admin",
+    "date": "2/22/2026",
     "tags": [
-      "Travel Guides",
-      "Thailand",
-      "Beaches"
-    ]
-  },
-  {
-    "id": "3",
-    "slug": "how-to-find-cheap-flights-pro-tips-2024",
-    "title": "How to Find Cheap Flights: Pro Tips for 2024",
-    "excerpt": "Don't overpay for your next trip. Learn the secrets of flight hacking and when to book for maximum savings.",
-    "content": "Airfare is often the biggest expense in travel. We've spent years analyzing pricing trends to bring you this comprehensive guide. \nStart by using comparison tools like Google Flights and Skyscanner, but don't forget to check the airline's direct site for hidden deals. Booking on a Tuesday is no longer the magic bullet; instead, focus on the 'shoulder' days like Wednesday or Saturday for international routes. \nUsing a VPN can sometimes help, but the biggest factor is flexibility with your destination. Our 'Explore' feature on Alexara is designed to help you find the cheapest routes from your home airport.",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1470&q=80",
-    "author": "Alex Chen",
-    "date": "Nov 05, 2023",
-    "tags": [
-      "Travel Tips",
-      "Flight Deals",
-      "Budget Travel"
-    ]
-  },
-  {
-    "id": "4",
-    "slug": "7-things-to-do-in-dubai-for-adventure-seekers",
-    "title": "7 Things to Do in Dubai for Adventure Seekers",
-    "excerpt": "From desert safaris to skydiving over the Palm, Dubai is more than just luxury shopping.",
-    "content": "Dubai is a playground for those who love adrenaline. While the city is known for its skyscrapers, the true heart of adventure lies in the dunes. \nWe recently took a sunrise desert safari and it was life-changing. Beyond the dunes, you can skydive at the famous Dropzone at the Palm Jumeirah or try indoor skiing at the Mall of the Emirates. \nFor a more cultural adventure, take an abra ride across the Dubai Creek for just 1 AED. This post covers our favorite high-octane activities and practical tips for the best experience.",
-    "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
-    "author": "Alexara Team",
-    "date": "Dec 01, 2023",
-    "tags": [
-      "Destinations",
-      "Things to Do",
-      "Dubai"
+      "Hotel Reviews"
     ]
   }
 ];
@@ -746,57 +714,23 @@ export const MOCK_DEALS: Deal[] = [
   },
   {
     "id": "d3",
-    "slug": "berlin-central-backpackers-hostel",
-    "title": "Berlin Central Backpackers",
-    "location": "Germany",
-    "city": "Berlin",
-    "description": "The perfect base for the modern urban explorer. A clean, safe, and highly-rated hostel right in the heart of Berlin's cultural Mitte district.",
-    "categories": [
-      "Hostel",
-      "Activity"
-    ],
-    "price": 45,
-    "originalPrice": 60,
-    "image": "https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1200&q=80",
-    "rating": 4.5,
-    "duration": "Per Night",
-    "affiliateLink": "https://www.hostelworld.com"
-  },
-  {
-    "id": "d4",
-    "slug": "tulum-beachfront-dining-experience",
-    "title": "Tulum Beachfront Dining Experience",
-    "location": "Mexico",
-    "city": "Tulum",
-    "description": "A magical evening under the stars. Enjoy a 5-course gourmet tasting menu right on the soft white sands of Tulum's world-famous beaches.",
-    "categories": [
-      "Restaurant",
-      "Beach"
-    ],
-    "price": 145,
-    "originalPrice": 200,
-    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-    "rating": 4.6,
-    "duration": "Full Evening",
-    "affiliateLink": "https://www.opentable.com"
-  },
-  {
-    "id": "d5",
-    "slug": "swiss-alps-scenic-rail-journey",
-    "title": "Swiss Alps Scenic Rail Journey",
-    "location": "Switzerland",
-    "city": "Zermatt",
-    "description": "Traverse the majestic Swiss Alps on one of the world's most scenic rail routes. A full-day pass including premium class seating and lunch with a view.",
+    "slug": "rabat-marriott-hotel",
+    "title": "Rabat Marriott Hotel",
+    "location": "Morocco",
+    "city": "Rabat",
+    "description": "Soothing Hammam treatments at the professional spa transform guests into their most relaxed selves. The pleasant pool area hosts entertaining DJ performances. Spacious balconies offer pool views while the Asian restaurant serves delicious cuisine for on-property dining.\nIts package for 2 Travelers ,1 room\n (note: Prices can vary depend on date of availability)",
     "categories": [
       "Activity",
-      "Ticket"
+      "Hotel",
+      "Restaurant",
+      "Package"
     ],
-    "price": 185,
-    "originalPrice": 250,
-    "image": "https://images.unsplash.com/photo-1531310197839-ccf54634509e?auto=format&fit=crop&w=1200&q=80",
-    "rating": 4.9,
-    "duration": "Full Day Pass",
-    "affiliateLink": "https://www.raileurope.com"
+    "price": 340,
+    "originalPrice": 360,
+    "image": "https://images.trvl-media.com/lodging/77000000/76670000/76665200/76665185/0f9b14fe.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 4.5,
+    "duration": "Per Night",
+    "affiliateLink": "https://expedia.com/affiliates/alexara_travel/rabat-marriott-hotel"
   },
   {
     "id": "d6",
