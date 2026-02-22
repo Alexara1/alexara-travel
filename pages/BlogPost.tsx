@@ -141,9 +141,11 @@ const BlogPost: React.FC = () => {
                         {post.excerpt}
                     </p>
                     <div className="text-gray-800 leading-relaxed space-y-6">
-                        {post.content.split('\n').map((paragraph, idx) => (
-                            <p key={idx}>{paragraph || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}</p>
-                        ))}
+                     {post.content.split('\n').map((paragraph, idx) =>
+  paragraph.trim() ? (
+    <p key={idx}>{paragraph}</p>
+  ) : null
+)}
                     </div>
                 </div>
             </div>
