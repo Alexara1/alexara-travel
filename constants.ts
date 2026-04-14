@@ -715,6 +715,26 @@ export const MOCK_POSTS: BlogPost[] = [
 
 export const MOCK_DEALS: Deal[] = [
   {
+    "id": "1776108912905",
+    "slug": "outrigger-waikiki-beach-resort",
+    "title": "OUTRIGGER Waikiki Beach Resort ",
+    "location": "United State",
+    "city": "Miami",
+    "description": "With a stay at OUTRIGGER Waikiki Beach Resort in Honolulu (Waikiki), you'll be steps from International Market Place and 5 minutes by foot from Royal Hawaiian Center. This beach resort is 0.7 mi (1.2 km) from Honolulu Zoo and 1.1 mi (1.7 km) from Waikiki Beach Walk.\n\nMandatory fees :\n\nYou'll be asked to pay the following charges at the property. Fees may include applicable taxes:\n\nResort fee: USD 59.36 per accommodation, per night\n\nThe resort fee includes:\n\nAdditional inclusions\n\nBeach towels\n\nFitness center access\n\nIn-room coffee\n\nPhone calls\n\nPool access\n\nWe have included all charges provided to us by the property.\n\nOther fees\nFee for buffet breakfast: approximately USD 29 for adults and USD 17 for children\n\nFee for in-room wireless internet: USD 0 per stay (rates may vary)\n\nFee for wireless internet in public areas: USD 0 per stay (rates may vary)\n\nCovered valet parking fee: USD 62.83 per day (in/out privileges)\n\nPet fee: USD 125 per accommodation (varies based on length of stay)\n\nService animals are exempt from fees\n\nLate check-out is available for a fee (subject to availability)\n\nRollaway bed fee: USD 115 per night\n\nThe above list may not be comprehensive. Fees and deposits may not include tax and are subject to change.\n\nFood & drinks\n\nEnjoy local cuisine at Duke's Waikiki Restaurant, one of the resort's 5 restaurants, or stay in and take advantage of the room service (during limited hours). Snacks are also available at the coffee shop/cafe. Wind down with a drink at one of the 3 bars/lounges or 2 beach bars. Buffet breakfasts are available daily from 7 AM to 11:00 AM for a fee.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n\n\n",
+    "categories": [
+      "Beach",
+      "Resort",
+      "Hotel",
+      "Restaurant"
+    ],
+    "price": 317.54,
+    "originalPrice": 350,
+    "image": "https://i.travelapi.com/lodging/1000000/20000/13800/13791/94936ab5_z.jpg?impolicy=resizecrop&rw=1920&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://affiliate.klook.com/redirect?aid=111573&ad_type=hotel_deal_link&aff_label1=406173-2026-04-18%7C2026-04-19%7C10396424%7C62348348%7CV0_10396424_62348348_2767_0_2%7C310.77%7C1%7C2%7C0&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Fhotels%2Fdetail%2F406173%2F%3Faid%3D111573%26_currency%3DUSD%26supplier_id%3D10396424%26rate_plan_id%3D2026-04-18%257C2026-04-19%257C10396424%257C62348348%257CV0_10396424_62348348_2767_0_2%257C310.77%257C1%257C2%257C0%26check_in%3D2026-04-18%26check_out%3D2026-04-19"
+  },
+  {
     "id": "1771364476581",
     "slug": "pure-montagne-resort-spa",
     "title": "Pure Montagne Resort & Spa",
@@ -813,6 +833,15 @@ export const MOCK_DEALS: Deal[] = [
 ];
 
 export const MOCK_DESTINATIONS: Destination[] = [
+  {
+    "id": "1776027768571",
+    "slug": "united-state",
+    "name": "United State",
+    "continent": "North America",
+    "description": "The United States of America (USA), also known as the United States (U.S.) or America, is a country primarily located in North America. It is a federal republic of 50 states and a federal capital district, Washington, D.C. ",
+    "image": "https://www.historyhit.com/app/uploads/2020/11/Statue-of-Liberty-e1632495792514.jpg",
+    "affiliateLink": "#"
+  },
   {
     "id": "1771362402324",
     "slug": "france",
