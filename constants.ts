@@ -639,6 +639,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1776190947412",
+    "slug": "outrigger-waikiki-beach-resort",
+    "title": "OUTRIGGER Waikiki Beach Resort ",
+    "excerpt": "Experience beachfront luxury at OUTRIGGER Waikiki Beach Resort, where stunning ocean views, authentic Hawaiian culture, and world-class dining create the perfect tropical escape in the heart of Waikiki.\n",
+    "content": "**OUTRIGGER Waikiki Beach Resort: Your Hawaiian Paradise**\n\nEnjoying the tropical beauty, luxury facilities, and the unique culture of Hawaii has never been easier than at OUTRIGGER Waikiki Beach Resort. Right next to the legendary beach of Waikiki, it gives its visitors a chance to indulge in nature, leisure, and fun.\n\nOUTRIGGER Waikiki Beach Resort presents its guests with beautifully furnished and decorated accommodations, including many rooms with balconies where they can admire the breathtaking view over the ocean. The visitors will be able to enjoy exceptional culinary services, including exotic dishes and fresh fish prepared in a unique Hawaiian style.\n\nBut the most amazing thing about this hotel is its rich cultural atmosphere. Guests will have a chance to listen to beautiful Hawaiian music, see dances performed by skilled dancers, and buy some unique local art from artists. Adventure-lovers are guaranteed to find various entertaining activities, such as surfing and snorkeling, as well as visit such places as Diamond Head.\n\nIn conclusion, this is the best possible place for your romantic vacation, holiday with friends, or family trip to Hawaii.",
+    "image": "https://johnnyjet.com/wp-content/uploads/2014/01/Outrigger-Waikiki-Hawaii-Hotel-Jan-2014-011.jpg",
+    "author": "Admin",
+    "date": "4/14/2026",
+    "tags": [
+      "Hotel Reviews",
+      "Travel Tips",
+      "Destinations"
+    ]
+  },
+  {
     "id": "1771764586102",
     "slug": "hilton-molino-stucky-venice-a-luxury-waterfront-escape-in-venice",
     "title": "Hilton Molino Stucky Venice – A Luxury Waterfront Escape in Venice",
