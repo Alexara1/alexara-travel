@@ -11,7 +11,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   "heroTitle": "Experience the World Like Never Before",
   "heroSubtitle": "Curated journeys, exclusive deals, and the gear you need for your next adventure.",
   "metaTitle": "Alexara | Discover the World Through Curated Experiences",
-  "metaDescription": "Discover hidden destinations, exclusive flight deals, and essential travel gear curated for the modern explorer. Experience the best of global travel with Alexara.",
+  "metaDescription": "Discover hidden destinations, exclusive flight deals, and essential travel gear curated for modern explorer. Experience the best of global travel with Alexara.",
   "metaKeywords": "travel, luxury travel, budget travel, destinations, flight deals",
   "searchVisibility": true,
   "robotsTxt": "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /login\n\nSitemap: https://www.alexaratravel.com/sitemap.xml",
@@ -25,7 +25,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   ],
   "ads": {
     "enabled": true,
-    "headerBanner": "",
+    "headerBanner": "<ins class=\"klk-aff-widget\" data-wid=\"111573\" data-bgtype=\"Play\" data-adid=\"1220527\" data-lang=\"en-BS\" data-prod=\"banner\" data-width=\"728\" data-height=\"90\"><a href=\"//www.klook.com/?aid=\">Klook.com</a></ins>\n<script type=\"text/javascript\">\n  (function (d, sc, u) {\n    var s = d.createElement(sc),\n      p = d.getElementsByTagName(sc)[0];\n    s.type = \"text/javascript\";\n    s.async = true;\n    s.src = u;\n    p.parentNode.insertBefore(s, p);\n  })(\n    document,\n    \"script\",\n    \"https://affiliate.klook.com/widget/fetch-iframe-init.js\"\n  );\n</script>\n",
     "sidebarBanner": "<div class=\"safetywing-price-widget\" data-safetywingaffiliateid=\"26472270\" data-scale=\"1.0\"></div>\n<script type=\"text/javascript\" src=\"https://storage.googleapis.com/safetywing-static/widget/safetywing-price-widget.js\"></script>"
   },
   "socialMedia": [
@@ -639,6 +639,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1776595518669",
+    "slug": "grand-sierra-resort-and-casino-the-ultimate-all-in-one-luxury-escape-in-reno",
+    "title": "Grand Sierra Resort and Casino: The Ultimate All-in-One Luxury Escape in Reno",
+    "excerpt": "Discover luxury and excitement at Grand Sierra Resort and Casino in Reno, featuring stylish accommodations, thrilling casino action, diverse dining, and top-tier entertainment—all in one unforgettable destination.\n",
+    "content": "**The Best Place to Find All the Luxury You Need in Reno - Grand Sierra Resort & Casino !**\n\nLooking for the ultimate luxury getaway? Grand Sierra Resort and Casino, located in Reno, is a great blend of fun and relaxation! At this epic destination, you'll create memories that will last a lifetime with every detail carefully designed and brought together for an incredible experience.\n\nThe rooms and suites are all beautifully designed, provide luxury accommodations, and have all the modern conveniences you would expect from your hotel. No matter if you are taking a long trip or just staying a couple of nights, the resort has something for everyone!\n\nBeyond the fun of gaming, guests will enjoy a wonderful selection of restaurants to choose from. The choices range from gourmet to casual; there is something for every taste! You can take some time out at the spa, try out the fitness center, or enjoy the large outdoor swimming pool area; everything that you could possibly want to do is available at the resort.\n\nIf you enjoy entertainment, you have options, as well. From live entertainment to bowling, indoor ice skating, and so on, there is always something to entertain you while you are at the resort.\n\nThe resort is conveniently located near the Reno-Tahoe International Airport, making it easy to reach! Whether you are traveling alone, with someone special, or with the family, Grand Sierra Resort & Casino gives you the convenience of having it all!",
+    "image": "https://res.klook.com/klook-hotel/image/upload/w_1680,c_fill,q_85/travelapi/1000000/20000/16500/16487/a7561749_z.webp",
+    "author": "Alexara",
+    "date": "4/19/2026",
+    "tags": [
+      "Destinations",
+      "Hotel Reviews",
+      "Travel Tips"
+    ]
+  },
+  {
     "id": "1776190947412",
     "slug": "outrigger-waikiki-beach-resort",
     "title": "OUTRIGGER Waikiki Beach Resort ",
@@ -729,6 +744,27 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1776594965437",
+    "slug": "grand-sierra-resort-and-casino",
+    "title": "Grand Sierra Resort and Casino",
+    "location": "United State",
+    "city": "Miami",
+    "description": "When you stay at Grand Sierra Resort and Casino in Reno, you'll be on a river, a 1-minute drive from Grand Sierra Resort Casino and 5 minutes from Atlantis Casino. This casino resort is 3.7 mi (5.9 km) from Peppermill and 3.9 mi (6.3 km) from Reno-Sparks Convention Center.\n\nMandatory fees\n\nYou'll be asked to pay the following charges at the property. Fees may include applicable taxes:\n\nDeposit: USD 50 per night.\n\nResort fee: USD 48.53 per accommodation, per night\n\nThe resort fee includes:\n\nConcierge service\n\nFitness center access\n\nIn-room bottled water\n\nIn-room coffee\n\nIn-room safe\n\nPhone calls\n\nPool access\n\nShuttle service\n\nWe have included all charges provided to us by the property.\nts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n\n",
+    "categories": [
+      "Package",
+      "Hotel",
+      "Restaurant",
+      "Nightclub",
+      "casino"
+    ],
+    "price": 90,
+    "originalPrice": 100,
+    "image": "https://res.klook.com/klook-hotel/image/upload/w_1680,c_fill,q_85/travelapi/1000000/20000/16500/16487/fd69b855_z.webp",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://affiliate.klook.com/redirect?aid=111573&ad_type=hotel_deal_link&aff_label1=429419-210629361&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Fhotels%2Fdetail%2F429419%2F%3Faid%3D111573%26_currency%3DUSD%26supplier_id%3D16487%26rate_plan_id%3D210629361%26check_in%3D2026-04-26%26check_out%3D2026-04-27"
+  },
   {
     "id": "1776108912905",
     "slug": "outrigger-waikiki-beach-resort",
