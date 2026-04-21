@@ -765,7 +765,7 @@ export const MOCK_DEALS: Deal[] = [
     "title": "Inara Alas Harum – A Hidden Luxury Escape in Bali",
     "location": "Indonesia ",
     "city": "Bali",
-    "description": "Inara Alas Harum is a 5 Star Hotel that located Near Bali Pulina[With a stay at Inara Alas Harum, you'll be 4.6 mi (7.3 km) from Tegallalang Rice Terrace and 7.6 mi (12.3 km) from Campuhan Ridge Walk. This 5 Star Resort is 8.1 mi (13 km) from Saraswati Temple and 8.1 mi (13.1 km) from Ubud Traditional Art Market.",
+    "description": "Inara Alas Harum is a 5 Star Hotel that located Near Bali Pulina[With a stay at Inara Alas Harum, you'll be 4.6 mi (7.3 km) from Tegallalang Rice Terrace and 7.6 mi (12.3 km) from Campuhan Ridge Walk. This 5 Star Resort is 8.1 mi (13 km) from Saraswati Temple and 8.1 mi (13.1 km) from Ubud Traditional Art Market.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
     "categories": [
       "Resort",
       "Restaurant",
@@ -785,7 +785,7 @@ export const MOCK_DEALS: Deal[] = [
     "title": "Grand Sierra Resort and Casino",
     "location": "United State",
     "city": "Miami",
-    "description": "When you stay at Grand Sierra Resort and Casino in Reno, you'll be on a river, a 1-minute drive from Grand Sierra Resort Casino and 5 minutes from Atlantis Casino. This casino resort is 3.7 mi (5.9 km) from Peppermill and 3.9 mi (6.3 km) from Reno-Sparks Convention Center.\n\nMandatory fees\n\nYou'll be asked to pay the following charges at the property. Fees may include applicable taxes:\n\nDeposit: USD 50 per night.\n\nResort fee: USD 48.53 per accommodation, per night\n\nThe resort fee includes:\n\nConcierge service\n\nFitness center access\n\nIn-room bottled water\n\nIn-room coffee\n\nIn-room safe\n\nPhone calls\n\nPool access\n\nShuttle service\n\nWe have included all charges provided to us by the property.\nts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n\n",
+    "description": "When you stay at Grand Sierra Resort and Casino in Reno, you'll be on a river, a 1-minute drive from Grand Sierra Resort Casino and 5 minutes from Atlantis Casino. This casino resort is 3.7 mi (5.9 km) from Peppermill and 3.9 mi (6.3 km) from Reno-Sparks Convention Center.\n\nMandatory fees\n\nYou'll be asked to pay the following charges at the property. Fees may include applicable taxes:\n\nDeposit: USD 50 per night.\n\nResort fee: USD 48.53 per accommodation, per night\n\nThe resort fee includes:\n\nConcierge service\n\nFitness center access\n\nIn-room bottled water\n\nIn-room coffee\n\nIn-room safe\n\nPhone calls\n\nPool access\n\nShuttle service\n\nWe have included all charges provided to us by the property.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n\n",
     "categories": [
       "Package",
       "Hotel",
