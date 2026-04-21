@@ -639,6 +639,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1776799300436",
+    "slug": "inara-alas-harum-a-hidden-luxury-escape-in-bali",
+    "title": "Inara Alas Harum – A Hidden Luxury Escape in Bali",
+    "excerpt": "Discover the beauty of Inara Alas Harum, a luxury jungle retreat in Bali offering private villas, stunning views, and unforgettable experiences.",
+    "content": "Perched in the middle of green trees that surround the area, this beautiful retreat combines nature, luxurious accommodation, and elegant features to provide guests with an unparalleled experience. Situated at the middle of Bali, Indonesia, Inara Alas Harum provides travelers with the perfect place where they can relax, view beautiful scenery, and have luxury accommodations.\n\nIt boasts wonderful and breathtaking rice terraces and jungle views, providing guests with relaxation and rejuvenation while staying there. All rooms offer traditional Balinese features combined with modern amenities such as private pools, large rooms, and magnificent views for their guests. This place offers a perfect place for a romantic couple or an individual who wants to get away from the busy life.\n\nA wide range of activities await visitors such as visiting cultural attractions nearby, enjoying spa services, tasting local food, and enjoying their time at infinity pools. Furthermore, this retreat will provide you with great places for pictures for your social media account.\n\nIn case you are interested in visiting off-beaten places in Bali, this resort is one place that should be considered. You can book your stay on this resort from my website and save money from it.",
+    "image": "https://lh3.googleusercontent.com/p/AF1QipNnOdFheYYrF4Zilqbtm-5I1xnYOLxcfVFzfT4l=s1360-w1360-h1020-rw",
+    "author": "Alexara",
+    "date": "4/22/2026",
+    "tags": [
+      "Travel Guides",
+      "Hotel Reviews",
+      "Destinations"
+    ]
+  },
+  {
     "id": "1776595518669",
     "slug": "grand-sierra-resort-and-casino-the-ultimate-all-in-one-luxury-escape-in-reno",
     "title": "Grand Sierra Resort and Casino: The Ultimate All-in-One Luxury Escape in Reno",
@@ -744,6 +759,26 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1776800786083",
+    "slug": "inara-alas-harum-a-hidden-luxury-escape-in-bali",
+    "title": "Inara Alas Harum – A Hidden Luxury Escape in Bali",
+    "location": "Indonesia ",
+    "city": "Bali",
+    "description": "Inara Alas Harum is a 5 Star Hotel that located Near Bali Pulina[With a stay at Inara Alas Harum, you'll be 4.6 mi (7.3 km) from Tegallalang Rice Terrace and 7.6 mi (12.3 km) from Campuhan Ridge Walk. This 5 Star Resort is 8.1 mi (13 km) from Saraswati Temple and 8.1 mi (13.1 km) from Ubud Traditional Art Market.",
+    "categories": [
+      "Resort",
+      "Restaurant",
+      "Package",
+      "Hotel"
+    ],
+    "price": 115.99,
+    "originalPrice": 120,
+    "image": "https://res.klook.com/image/upload/w_1680,c_fill,q_85/v1756785363/hotel/sawmue1gnmmyvdk0xj8e.webp",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://affiliate.klook.com/redirect?aid=111573&ad_type=hotel_deal_link&aff_label1=1266750-1414050%23!%23!%23!66089%2C66090%2C83898&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Fhotels%2Fdetail%2F1266750%2F%3Faid%3D111573%26_currency%3DUSD%26supplier_id%3D19796%26rate_plan_id%3D1414050%2523%2521%2523%2521%2523%252166089%252C66090%252C83898%26check_in%3D2026-04-25%26check_out%3D2026-04-26"
+  },
   {
     "id": "1776594965437",
     "slug": "grand-sierra-resort-and-casino",
@@ -884,6 +919,15 @@ export const MOCK_DEALS: Deal[] = [
 ];
 
 export const MOCK_DESTINATIONS: Destination[] = [
+  {
+    "id": "1776800075739",
+    "slug": "indonesia",
+    "name": "Indonesia ",
+    "continent": "Southeast Asia",
+    "description": "Indonesia,[b] officially the Republic of Indonesia,[c] is a country in Southeast Asia and Oceania, between the Indian and Pacific oceans. Comprising over 17,000 islands, including Sumatra, Java, Sulawesi, and parts of Borneo and New Guinea, Indonesia is the world's largest archipelagic state and the 14th-largest country by area, at 1,904,569 square kilometres (735,358 square miles).",
+    "image": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE2j6GlcJmMiJBR4NplVT-SmdWqeX-SkHEvDBFZ2dxq-FjJor0osIna45zbmZDJ8Y2lEahKyqF2AU9qJCBKjBs2pLKs9P54F-Ws6nF6XvNVnGX9EcpzJA2Ed480kM-_0NdckDm0=w810-h468-n-k-no",
+    "affiliateLink": "#"
+  },
   {
     "id": "1776027768571",
     "slug": "united-state",
