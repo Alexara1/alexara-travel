@@ -1,27 +1,7 @@
-import { GoogleGenAI } from "@google/genai";
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Sparkles, User, Bot, Search, Compass, RefreshCw, AlertCircle } from 'lucide-react';
+import { X, Send, Sparkles, User, Bot, Search, Compass, RefreshCw } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { ChatMessage } from '../types';
-
-// Advanced retry with jitter to handle high-traffic Vercel deployments
-const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 4000) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      return await fn();
-    } catch (error: any) {
-      const isRateLimit = error?.status === 429 || error?.message?.includes('429');
-      if (isRateLimit && i < retries - 1) {
-        // Exponential backoff + jitter
-        const jitter = Math.random() * 1000;
-        const waitTime = (delay * Math.pow(2, i)) + jitter;
-        await new Promise(resolve => setTimeout(resolve, waitTime));
-        continue;
-      }
-      throw error;
-    }
-  }
-};
 
 const AIConcierge: React.FC = () => {
   const { settings } = useSite();
@@ -44,7 +24,7 @@ const AIConcierge: React.FC = () => {
 
   useEffect(() => {
     setMessages([
-        { role: 'model', text: welcomeMessages[settings.language] || welcomeMessages['EN'] }
+      { role: 'model', text: welcomeMessages[settings.language] || welcomeMessages['EN'] }
     ]);
   }, [settings.language, settings.siteName]);
 
@@ -63,40 +43,64 @@ const AIConcierge: React.FC = () => {
       setInput('');
       setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     }
-    
+
     setLastUserMessage(userMessage);
     setIsTyping(true);
 
     try {
       const apiKey = process.env.API_KEY;
-      if (!apiKey) throw new Error("API_KEY_MISSING");
+      if (!apiKey || apiKey.length < 10) throw new Error("API_KEY_MISSING");
 
-      const response = await callWithRetry(async () => {
-        const ai = new GoogleGenAI({ apiKey });
-        // gemini-3-flash-preview is prioritized for higher quota
-        return await ai.models.generateContent({
-          model: 'gemini-3-flash-preview',
-          contents: { role: 'user', parts: [{ text: userMessage }] },
-          config: {
-            tools: [{ googleSearch: {} }],
-            thinkingConfig: { thinkingBudget: 0 }, // Faster, lower token usage
-            systemInstruction: `You are the ${settings.siteName} AI Concierge. Respond in ${settings.language}. Be high-end, helpful, and concise.`,
-          }
-        });
+      const response = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: "grok-3",
+          messages: [
+            {
+              role: "system",
+              content: `You are the ${settings.siteName} AI Concierge, a luxury travel expert. 
+              Respond in ${settings.language}. 
+              Your tone is sophisticated, helpful, and inspiring.
+              Always provide up-to-date travel advice, weather tips, and local events.
+              If a user asks about a destination, give unique insider tips and suggest they check the "Deals" page for bookings.
+              Keep responses concise and elegant.`
+            },
+            ...messages
+              .filter(m => m.role === 'user' || m.role === 'model')
+              .map(m => ({
+                role: m.role === 'model' ? 'assistant' : 'user',
+                content: m.text
+              })),
+            { role: 'user', content: userMessage }
+          ],
+          max_tokens: 800
+        })
       });
 
-      const text = response.text || "I'm having trouble connecting to the synthesis core. Please try again.";
-      const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
-        ?.map((chunk: any) => chunk.web ? { uri: chunk.web.uri, title: chunk.web.title } : null)
-        .filter(Boolean) as { uri: string; title: string }[];
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData?.error?.message || `HTTP ${response.status}`);
+      }
 
-      setMessages(prev => [...prev, { role: 'model', text, sources }]);
+      const data = await response.json();
+      const text = data.choices?.[0]?.message?.content || "I'm having trouble connecting. Please try again.";
+
+      setMessages(prev => [...prev, { role: 'model', text, sources: [] }]);
+
     } catch (error: any) {
       console.error("AI Concierge Error:", error);
+
       let errorText = "The neural connection was lost. Please attempt to re-sync.";
-      
-      if (error?.status === 429 || error?.message?.includes('429')) {
-        errorText = "We are currently experiencing high demand. Please wait about 30 seconds to re-send your inquiry.";
+      if (error?.message?.includes('401')) {
+        errorText = "API key is invalid or missing. Please check your Grok API configuration.";
+      } else if (error?.message?.includes('429')) {
+        errorText = "We are experiencing high demand. Please wait a moment and try again.";
+      } else if (error?.message?.includes('API_KEY_MISSING')) {
+        errorText = "API key is not configured. Please set your VITE_GROK_API_KEY in environment settings.";
       }
 
       setMessages(prev => [...prev, { role: 'model', text: errorText }]);
@@ -121,17 +125,17 @@ const AIConcierge: React.FC = () => {
       </button>
 
       <div className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-[-20px_0_60px_rgba(0,0,0,0.15)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col border-l border-gray-100 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-950 text-white">
           <div className="flex items-center space-x-4">
-             <div className="p-3 bg-white/10 rounded-2xl border border-white/10">
-                <Compass className="w-5 h-5 text-secondary animate-pulse" />
-             </div>
-             <div>
-                <h3 className="font-serif font-bold text-lg">AI Concierge</h3>
-                <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Neural Core Active</p>
-             </div>
+            <div className="p-3 bg-white/10 rounded-2xl border border-white/10">
+              <Compass className="w-5 h-5 text-secondary animate-pulse" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-lg">AI Concierge</h3>
+              <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Grok Neural Core Active</p>
+            </div>
           </div>
           <button onClick={() => setIsOpen(false)} className="p-2.5 hover:bg-white/10 rounded-xl transition-colors">
             <X className="w-5 h-5" />
@@ -143,45 +147,47 @@ const AIConcierge: React.FC = () => {
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-4 duration-500`}>
               <div className={`max-w-[85%] flex space-x-3 ${msg.role === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'}`}>
                 <div className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${
-                    msg.role === 'user' ? 'bg-secondary text-white' : 'bg-primary text-white'
+                  msg.role === 'user' ? 'bg-secondary text-white' : 'bg-primary text-white'
                 }`}>
                   {msg.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                 </div>
                 <div>
-                    <div className={`p-5 rounded-[2rem] text-[13px] leading-relaxed shadow-sm ${
-                      msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'
-                    }`}>
-                        <p>{msg.text}</p>
-                        {msg.text.includes("demand") && lastUserMessage && (
-                          <button 
-                            onClick={() => handleSend(undefined, lastUserMessage)}
-                            className="mt-4 flex items-center text-[10px] font-black uppercase tracking-widest text-secondary hover:underline group/retry"
-                          >
-                            <RefreshCw className="w-3 h-3 mr-2 group-hover/retry:rotate-180 transition-transform" /> Attempt Re-Sync
-                          </button>
-                        )}
-                        {msg.sources && msg.sources.length > 0 && (
-                            <div className="mt-5 pt-4 border-t border-gray-100">
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center">
-                                    <Search className="w-3 h-3 mr-2 text-secondary" /> Sources
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {msg.sources.slice(0, 3).map((source, sIdx) => (
-                                    <a key={sIdx} href={source.uri} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-full transition-all border border-transparent hover:border-slate-300 truncate max-w-[180px] font-bold">
-                                        {source.title || 'Knowledge base'}
-                                    </a>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                  <div className={`p-5 rounded-[2rem] text-[13px] leading-relaxed shadow-sm ${
+                    msg.role === 'user'
+                      ? 'bg-primary text-white rounded-tr-none'
+                      : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'
+                  }`}>
+                    <p>{msg.text}</p>
+                    {msg.text.includes("demand") && lastUserMessage && (
+                      <button
+                        onClick={() => handleSend(undefined, lastUserMessage)}
+                        className="mt-4 flex items-center text-[10px] font-black uppercase tracking-widest text-secondary hover:underline group/retry"
+                      >
+                        <RefreshCw className="w-3 h-3 mr-2 group-hover/retry:rotate-180 transition-transform" /> Attempt Re-Sync
+                      </button>
+                    )}
+                    {msg.sources && msg.sources.length > 0 && (
+                      <div className="mt-5 pt-4 border-t border-gray-100">
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center">
+                          <Search className="w-3 h-3 mr-2 text-secondary" /> Sources
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {msg.sources.slice(0, 3).map((source, sIdx) => (
+                            <a key={sIdx} href={source.uri} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-full transition-all border border-transparent hover:border-slate-300 truncate max-w-[180px] font-bold">
+                              {source.title || 'Knowledge base'}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
           {isTyping && (
             <div className="flex justify-start">
-               <div className="w-9 h-9 rounded-2xl flex items-center justify-center bg-primary text-white mr-3 shadow-lg">
+              <div className="w-9 h-9 rounded-2xl flex items-center justify-center bg-primary text-white mr-3 shadow-lg">
                 <Bot className="w-4 h-4" />
               </div>
               <div className="bg-white p-5 rounded-[2rem] rounded-tl-none border border-gray-100 shadow-sm flex space-x-2">
@@ -195,7 +201,7 @@ const AIConcierge: React.FC = () => {
 
         <form onSubmit={handleSend} className="p-6 border-t border-gray-100 bg-white">
           <div className="relative">
-            <input 
+            <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -206,9 +212,16 @@ const AIConcierge: React.FC = () => {
               <Send className="w-4 h-4" />
             </button>
           </div>
+          <p className="text-[9px] text-gray-300 text-center mt-3 uppercase tracking-widest font-medium">Grok AI Intelligence</p>
         </form>
       </div>
-      {isOpen && <div onClick={() => setIsOpen(false)} className="fixed inset-0 bg-slate-950/20 backdrop-blur-md z-[55] animate-in fade-in duration-500"></div>}
+
+      {isOpen && (
+        <div
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-slate-950/20 backdrop-blur-md z-[55] animate-in fade-in duration-500"
+        ></div>
+      )}
     </>
   );
 };
