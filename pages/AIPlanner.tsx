@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Sparkles, Send, Loader2, Info, ExternalLink, RefreshCw, Save, Trash, PlaneTakeoff, History, Calendar, MapPin, Clock, Copy, Check } from 'lucide-react';
+import { Sparkles, Loader2, Info, RefreshCw, Save, Trash, PlaneTakeoff, History, Calendar, MapPin, Clock, Copy, Check } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { Itinerary } from '../types';
 
@@ -14,7 +14,7 @@ const AIPlanner: React.FC = () => {
     const saved = localStorage.getItem('alexara_itineraries');
     return saved ? JSON.parse(saved) : [];
   });
-  
+
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const generateItinerary = async (customPrompt?: string) => {
@@ -26,24 +26,18 @@ const AIPlanner: React.FC = () => {
     setSources([]);
 
     try {
+      const apiKey = process.env.API_KEY;
+      if (!apiKey || apiKey.length < 10) {
+        setGeneratedItinerary("API key is missing. Please check your environment configuration.");
+        setIsLoading(false);
+        return;
+      }
+
       const response = await fetch("https://api.x.ai/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${try {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey || apiKey.length < 10) {
-    setGeneratedItinerary("API key is missing. Please check environment configuration.");
-    return;
-  }
-
-  const response = await fetch("https://api.x.ai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`
-    },
-    // ... rest of your fetch}`
+          "Authorization": `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           model: "grok-3",
@@ -68,6 +62,11 @@ const AIPlanner: React.FC = () => {
           max_tokens: 3000
         })
       });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData?.error?.message || `HTTP ${response.status}`);
+      }
 
       const data = await response.json();
       const text = data.choices?.[0]?.message?.content || "Failed to generate itinerary.";
@@ -157,31 +156,31 @@ const AIPlanner: React.FC = () => {
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
-        
+
         <div className="max-w-4xl mx-auto relative z-10 text-center">
           <div className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-xl text-secondary px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.4em] mb-10 border border-white/10 shadow-2xl">
             <div className="w-2 h-2 bg-secondary rounded-full animate-ping mr-1"></div>
             <span>Grok AI Travel Intelligence v4.0</span>
           </div>
-          
+
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-10 leading-[1.1] tracking-tight">
-            Architect your <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-teal-400 italic">perfect escape.</span>
+            Architect your <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-teal-400 italic">perfect escape.</span>
           </h1>
-          
+
           <form onSubmit={(e) => { e.preventDefault(); generateItinerary(); }} className="relative max-w-3xl mx-auto group mb-12">
             <div className="absolute -inset-1 bg-gradient-to-r from-secondary/50 via-primary/50 to-accent/50 rounded-[2.5rem] blur-xl opacity-20 group-focus-within:opacity-100 transition duration-700"></div>
             <div className="relative flex items-center bg-white rounded-[2rem] shadow-3xl overflow-hidden p-2.5 border border-white/20">
               <div className="hidden sm:flex items-center justify-center w-14 h-14 bg-slate-50 rounded-full ml-2">
                 <PlaneTakeoff className="w-6 h-6 text-primary" />
               </div>
-              <input 
+              <input
                 type="text"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Describe your dream trip (e.g., Luxury Kyoto in Autumn)"
                 className="flex-1 bg-transparent px-6 py-4 text-lg text-gray-800 placeholder-gray-400 outline-none font-medium"
               />
-              <button 
+              <button
                 type="submit"
                 disabled={isLoading || !prompt.trim()}
                 className="bg-primary hover:bg-slate-900 text-white font-bold px-10 py-5 rounded-[1.6rem] transition-all flex items-center space-x-3 shadow-xl disabled:opacity-30 disabled:cursor-not-allowed group active:scale-95"
@@ -190,7 +189,7 @@ const AIPlanner: React.FC = () => {
               </button>
             </div>
           </form>
-          
+
           <div className="mt-8">
             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mb-4">Start with a Blueprint</p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -200,7 +199,7 @@ const AIPlanner: React.FC = () => {
                 { text: "Eco-Bali Retreat", icon: <MapPin className="w-3.5 h-3.5" /> },
                 { text: "Paris Art Tour", icon: <MapPin className="w-3.5 h-3.5" /> }
               ].map(suggestion => (
-                <button 
+                <button
                   key={suggestion.text}
                   onClick={() => handleSuggestionClick(suggestion.text)}
                   className="group relative px-6 py-3.5 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 active:scale-95 overflow-hidden"
