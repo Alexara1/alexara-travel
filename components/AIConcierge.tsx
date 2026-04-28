@@ -70,8 +70,8 @@ const AIConcierge: React.FC = () => {
               Keep responses concise and elegant.`
             },
             ...messages
-              .filter(m => m.role === 'user' || m.role === 'model')
-              .map(m => ({
+.filter(m => m.text && m.text.trim() !== '' && (m.role === 'user' || m.role === 'model'))
+            .map(m => ({
                 role: m.role === 'model' ? 'assistant' : 'user',
                 content: m.text
               })),
