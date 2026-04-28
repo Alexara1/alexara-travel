@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
-import { MessageSquare, X, Send, Sparkles, User, Bot, Loader2, ExternalLink } from 'lucide-react';
+import { X, Send, Sparkles, User, Bot, Search, Compass, RefreshCw } from 'lucide-react';
 import { useSite } from '../context/SiteContext';
 import { ChatMessage } from '../types';
 
@@ -8,11 +7,26 @@ const AIConcierge: React.FC = () => {
   const { settings } = useSite();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: `Welcome to ${settings.siteName}. I'm your AI Travel Specialist. Where shall we explore next?` }
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [lastUserMessage, setLastUserMessage] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const welcomeMessages: Record<string, string> = {
+    EN: `Welcome to ${settings.siteName}. I'm your Neural Travel Specialist. How may I assist you today?`,
+    ES: `Bienvenido a ${settings.siteName}. Soy su especialista en viajes neuronales. ¿Cómo puedo ayudarle hoy?`,
+    FR: `Bienvenue chez ${settings.siteName}. Je suis votre spécialiste neural du voyage. Comment puis-je vous aider aujourd'hui ?`,
+    DE: `Willkommen bei ${settings.siteName}. Ich bin Ihr neuronaler Reise-Spezialist. Wie kann ich Ihnen heute helfen?`,
+    JP: `${settings.siteName}へようこそ。私はあなたのニューラル・トラベル・スペシャリストです。本日はどのようなお手伝いが必要ですか？`,
+    RU: `Добро пожаловать в ${settings.siteName}. Я ваш персональный ИИ-гид. Чем я могу быть полезен сегодня?`,
+    ZH: `欢迎来到 ${settings.siteName}。我是您的旅行 AI 助手。请问今天有什么可以帮您的？`
+  };
+
+  useEffect(() => {
+    setMessages([
+      { role: 'model', text: welcomeMessages[settings.language] || welcomeMessages['EN'] }
+    ]);
+  }, [settings.language, settings.siteName]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -20,48 +34,76 @@ const AIConcierge: React.FC = () => {
     }
   }, [messages, isTyping]);
 
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isTyping) return;
+  const handleSend = async (e?: React.FormEvent, retryText?: string) => {
+    if (e) e.preventDefault();
+    const userMessage = retryText || input.trim();
+    if (!userMessage || isTyping) return;
 
-    const userMessage = input.trim();
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    if (!retryText) {
+      setInput('');
+      setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    }
+
+    setLastUserMessage(userMessage);
     setIsTyping(true);
 
     try {
       const apiKey = process.env.API_KEY;
-      if (!apiKey || apiKey === 'undefined' || apiKey.length < 10) {
-        throw new Error("API Key is missing or invalid. Please set GEMINI_API_KEY in your environment.");
-      }
+      if (!apiKey || apiKey.length < 10) throw new Error("API_KEY_MISSING");
 
-      const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: [
-            ...messages.map(m => ({ role: m.role, parts: [{ text: m.text }] })),
-            { role: 'user', parts: [{ text: userMessage }] }
-        ],
-        config: {
-          tools: [{ googleSearch: {} }],
-          systemInstruction: `You are the ${settings.siteName} AI Concierge, a luxury travel expert. 
-          Your tone is sophisticated, helpful, and inspiring. 
-          The agency is called "${settings.siteName}".
-          Always use Google Search to provide up-to-date travel advice, weather, and local events.
-          If a user asks about a destination, give them unique tips and suggest they check the "Deals" page for bookings.
-          Keep responses concise and elegant.`,
-        }
+      const response = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: "grok-3",
+          messages: [
+            {
+              role: "system",
+              content: `You are the ${settings.siteName} AI Concierge, a luxury travel expert. 
+              Respond in ${settings.language}. 
+              Your tone is sophisticated, helpful, and inspiring.
+              Always provide up-to-date travel advice, weather tips, and local events.
+              If a user asks about a destination, give unique insider tips and suggest they check the "Deals" page for bookings.
+              Keep responses concise and elegant.`
+            },
+            ...messages
+              .filter(m => m.role === 'user' || m.role === 'model')
+              .map(m => ({
+                role: m.role === 'model' ? 'assistant' : 'user',
+                content: m.text
+              })),
+            { role: 'user', content: userMessage }
+          ],
+          max_tokens: 800
+        })
       });
 
-      const text = response.text || "I'm sorry, I couldn't process that request.";
-      const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
-        ?.map((chunk: any) => chunk.web ? { uri: chunk.web.uri, title: chunk.web.title } : null)
-        .filter(Boolean) as { uri: string; title: string }[];
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData?.error?.message || `HTTP ${response.status}`);
+      }
 
-      setMessages(prev => [...prev, { role: 'model', text, sources }]);
-    } catch (error) {
+      const data = await response.json();
+      const text = data.choices?.[0]?.message?.content || "I'm having trouble connecting. Please try again.";
+
+      setMessages(prev => [...prev, { role: 'model', text, sources: [] }]);
+
+    } catch (error: any) {
       console.error("AI Concierge Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "I apologize, my concierge services are currently limited. Please ensure your API connection is configured correctly in the environment settings." }]);
+
+      let errorText = "The neural connection was lost. Please attempt to re-sync.";
+      if (error?.message?.includes('401')) {
+        errorText = "API key is invalid or missing. Please check your Grok API configuration.";
+      } else if (error?.message?.includes('429')) {
+        errorText = "We are experiencing high demand. Please wait a moment and try again.";
+      } else if (error?.message?.includes('API_KEY_MISSING')) {
+        errorText = "API key is not configured. Please set your VITE_GROK_API_KEY in environment settings.";
+      }
+
+      setMessages(prev => [...prev, { role: 'model', text: errorText }]);
     } finally {
       setIsTyping(false);
     }
@@ -69,127 +111,115 @@ const AIConcierge: React.FC = () => {
 
   return (
     <>
-      {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-2xl transition-all duration-500 transform hover:scale-110 flex items-center justify-center group ${
-          isOpen ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'
+        className={`fixed bottom-8 right-8 z-50 p-5 rounded-full shadow-3xl transition-all duration-500 transform hover:scale-110 flex items-center justify-center group ${
+          isOpen ? 'translate-y-24 opacity-0' : 'translate-y-0 opacity-100'
         }`}
         style={{ background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.secondaryColor})` }}
       >
-        <Sparkles className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 group-hover:ml-2 text-white text-xs font-bold uppercase tracking-widest whitespace-nowrap">
-          Ask Concierge
+        <Sparkles className="w-7 h-7 text-white group-hover:rotate-12 transition-transform" />
+        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 group-hover:ml-3 text-white text-[11px] font-bold uppercase tracking-[0.3em] whitespace-nowrap">
+          Neural Concierge
         </span>
       </button>
 
-      {/* Side Panel */}
-      <div 
-        className={`fixed top-0 right-0 h-full w-full sm:w-[340px] bg-white shadow-[-10px_0_30px_rgba(0,0,0,0.1)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        {/* Header */}
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-primary text-white">
-          <div className="flex items-center space-x-3">
-             <div className="p-2 bg-white/10 rounded-lg relative">
-                <Bot className="w-5 h-5 text-secondary" />
-                <div className="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full border-2 border-primary animate-pulse"></div>
-             </div>
-             <div>
-                <h3 className="font-serif font-bold text-base leading-none">AI Concierge</h3>
-                <p className="text-[9px] text-blue-200 uppercase tracking-widest mt-1 flex items-center">
-                    Live Intelligence
-                </p>
-             </div>
+      <div className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-[-20px_0_60px_rgba(0,0,0,0.15)] z-[60] transition-transform duration-500 ease-in-out transform flex flex-col border-l border-gray-100 ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
+        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-950 text-white">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-white/10 rounded-2xl border border-white/10">
+              <Compass className="w-5 h-5 text-secondary animate-pulse" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-lg">AI Concierge</h3>
+              <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Grok Neural Core Active</p>
+            </div>
           </div>
-          <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-            <X className="w-4 h-4" />
+          <button onClick={() => setIsOpen(false)} className="p-2.5 hover:bg-white/10 rounded-xl transition-colors">
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Messages area */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/30 custom-scrollbar">
           {messages.map((msg, idx) => (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
-              <div className={`max-w-[90%] flex space-x-2 ${msg.role === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm ${
-                    msg.role === 'user' ? 'bg-secondary text-white' : 'bg-primary text-white'
+            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-4 duration-500`}>
+              <div className={`max-w-[85%] flex space-x-3 ${msg.role === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'}`}>
+                <div className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${
+                  msg.role === 'user' ? 'bg-secondary text-white' : 'bg-primary text-white'
                 }`}>
-                  {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
+                  {msg.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                 </div>
-                <div className={`p-3 rounded-2xl text-[13px] leading-relaxed ${
-                  msg.role === 'user' 
-                    ? 'bg-primary text-white rounded-tr-none shadow-md' 
-                    : 'bg-white text-gray-800 rounded-tl-none border border-gray-100 shadow-sm'
-                }`}>
-                  <p>{msg.text}</p>
-                  
-                  {msg.sources && msg.sources.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Sources</p>
-                      <div className="flex flex-wrap gap-2">
-                        {msg.sources.slice(0, 2).map((source, sIdx) => (
-                          <a 
-                            key={sIdx} 
-                            href={source.uri} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-[9px] flex items-center bg-gray-50 hover:bg-gray-100 text-gray-600 px-2 py-1 rounded transition-colors truncate max-w-[120px]"
-                          >
-                            <ExternalLink className="w-2.5 h-2.5 mr-1" /> {source.title || 'Source'}
-                          </a>
-                        ))}
+                <div>
+                  <div className={`p-5 rounded-[2rem] text-[13px] leading-relaxed shadow-sm ${
+                    msg.role === 'user'
+                      ? 'bg-primary text-white rounded-tr-none'
+                      : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'
+                  }`}>
+                    <p>{msg.text}</p>
+                    {msg.text.includes("demand") && lastUserMessage && (
+                      <button
+                        onClick={() => handleSend(undefined, lastUserMessage)}
+                        className="mt-4 flex items-center text-[10px] font-black uppercase tracking-widest text-secondary hover:underline group/retry"
+                      >
+                        <RefreshCw className="w-3 h-3 mr-2 group-hover/retry:rotate-180 transition-transform" /> Attempt Re-Sync
+                      </button>
+                    )}
+                    {msg.sources && msg.sources.length > 0 && (
+                      <div className="mt-5 pt-4 border-t border-gray-100">
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center">
+                          <Search className="w-3 h-3 mr-2 text-secondary" /> Sources
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {msg.sources.slice(0, 3).map((source, sIdx) => (
+                            <a key={sIdx} href={source.uri} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-full transition-all border border-transparent hover:border-slate-300 truncate max-w-[180px] font-bold">
+                              {source.title || 'Knowledge base'}
+                            </a>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
           {isTyping && (
             <div className="flex justify-start">
-               <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm bg-primary text-white mr-2`}>
-                <Bot className="w-3.5 h-3.5" />
+              <div className="w-9 h-9 rounded-2xl flex items-center justify-center bg-primary text-white mr-3 shadow-lg">
+                <Bot className="w-4 h-4" />
               </div>
-              <div className="bg-white p-3 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm">
-                <div className="flex space-x-1">
-                  <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce"></div>
-                  <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                  <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]"></div>
-                </div>
+              <div className="bg-white p-5 rounded-[2rem] rounded-tl-none border border-gray-100 shadow-sm flex space-x-2">
+                <div className="w-2 h-2 bg-secondary rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-secondary rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                <div className="w-2 h-2 bg-secondary rounded-full animate-bounce [animation-delay:0.4s]"></div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Input area */}
-        <form onSubmit={handleSend} className="p-4 border-t border-gray-100 bg-white">
+        <form onSubmit={handleSend} className="p-6 border-t border-gray-100 bg-white">
           <div className="relative">
-            <input 
+            <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask anything..."
-              className="w-full pl-4 pr-10 py-3 bg-gray-50 border border-gray-100 rounded-xl text-[13px] focus:ring-2 focus:ring-secondary focus:bg-white outline-none transition-all placeholder-gray-400"
+              placeholder="Inquire with our travel intelligence..."
+              className="w-full pl-6 pr-14 py-5 bg-gray-50 border border-gray-200 rounded-[2rem] text-[13px] focus:ring-2 focus:ring-secondary focus:bg-white outline-none transition-all"
             />
-            <button 
-                type="submit"
-                disabled={!input.trim() || isTyping}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors disabled:opacity-30"
-            >
-              <Send className="w-3.5 h-3.5" />
+            <button type="submit" disabled={!input.trim() || isTyping} className="absolute right-2 top-1/2 -translate-y-1/2 p-3.5 bg-primary text-white rounded-[1.5rem] hover:bg-secondary transition-all disabled:opacity-30 shadow-lg active:scale-90">
+              <Send className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-[9px] text-gray-300 text-center mt-3 uppercase tracking-widest font-medium">Gemini AI Intelligence</p>
+          <p className="text-[9px] text-gray-300 text-center mt-3 uppercase tracking-widest font-medium">Grok AI Intelligence</p>
         </form>
       </div>
 
-      {/* Overlay */}
       {isOpen && (
-        <div 
+        <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/10 backdrop-blur-[2px] z-[55] animate-in fade-in duration-300"
+          className="fixed inset-0 bg-slate-950/20 backdrop-blur-md z-[55] animate-in fade-in duration-500"
         ></div>
       )}
     </>
