@@ -30,7 +30,20 @@ const AIPlanner: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.API_KEY}`
+          "Authorization": `Bearer ${try {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey || apiKey.length < 10) {
+    setGeneratedItinerary("API key is missing. Please check environment configuration.");
+    return;
+  }
+
+  const response = await fetch("https://api.x.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`
+    },
+    // ... rest of your fetch}`
         },
         body: JSON.stringify({
           model: "grok-3",
