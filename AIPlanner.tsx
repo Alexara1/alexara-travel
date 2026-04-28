@@ -34,34 +34,32 @@ const AIPlanner: React.FC = () => {
       }
 
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${apiKey}`
-  },
-  body: JSON.stringify({
-    model: "llama-3.3-70b-versatile",
-    messages: [
-      {
-        role: "system",
-        content: `Act as a world-class travel architect for ${settings.siteName} Travel Agency.`
-      },
-      {
-        role: "user",
-        content: `Analyze this user request and generate a complete, professional itinerary: "${finalPrompt}"
-        
-        Mandatory Format Rules:
-        - Use "### Day X: [Title]" for each day's header.
-        - Use specific times where possible (e.g., 09:00 AM).
-        - Include a section called "### Expert Secrets" at the end.
-        - Suggest specific hotel names or flight types based on the request.
-        
-        Format beautifully with Markdown headers (###) and clear bullet points.`
-      }
-    ],
-    max_tokens: 3000
-  })
-});
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: `Act as a world-class travel architect for ${settings.siteName} Travel Agency.`
+            },
+            {
+              role: "user",
+              content: `Analyze this user request and generate a complete, professional itinerary: "${finalPrompt}"
+              
+              Mandatory Format Rules:
+              - Use "### Day X: [Title]" for each day's header.
+              - Use specific times where possible (e.g., 09:00 AM).
+              - Include a section called "### Expert Secrets" at the end.
+              - Suggest specific hotel names or flight types based on the request.
+              
+              Format beautifully with Markdown headers (###) and clear bullet points.`
+            }
+          ],
+          max_tokens: 3000
         })
       });
 
@@ -162,7 +160,7 @@ const AIPlanner: React.FC = () => {
         <div className="max-w-4xl mx-auto relative z-10 text-center">
           <div className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-xl text-secondary px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.4em] mb-10 border border-white/10 shadow-2xl">
             <div className="w-2 h-2 bg-secondary rounded-full animate-ping mr-1"></div>
-            <span>Grok AI Travel Intelligence v4.0</span>
+            <span>AI Travel Intelligence v4.0</span>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-10 leading-[1.1] tracking-tight">
@@ -230,7 +228,7 @@ const AIPlanner: React.FC = () => {
             </div>
             <div className="max-w-md px-6">
               <h3 className="text-3xl font-serif font-bold text-primary mb-4">Synthesizing Travel Data</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Grok AI is analyzing thousands of flight routes, hotel ratings, and local weather patterns to build your bespoke journey.</p>
+              <p className="text-gray-500 text-sm leading-relaxed">AI is analyzing thousands of flight routes, hotel ratings, and local weather patterns to build your bespoke journey.</p>
             </div>
           </div>
         ) : generatedItinerary ? (
@@ -238,7 +236,7 @@ const AIPlanner: React.FC = () => {
             <div className="p-10 md:p-14 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center bg-slate-50/80 backdrop-blur-md sticky top-20 z-30">
               <div className="mb-6 md:mb-0 text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                  <span className="bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">Grok Certified</span>
+                  <span className="bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">AI Certified</span>
                   <span className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em]">AI Generated Itinerary</span>
                 </div>
                 <h2 className="text-4xl font-serif font-bold text-primary">Your Masterpiece Itinerary</h2>
@@ -265,7 +263,7 @@ const AIPlanner: React.FC = () => {
                 <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" alt="Adventure awaiting" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent flex flex-col justify-end p-12">
                   <h4 className="text-white text-3xl font-serif font-bold mb-4">Unlimited Possibilities</h4>
-                  <p className="text-blue-100 max-w-md text-lg leading-relaxed">Enter a destination and let Grok AI curate a journey built on real-time global knowledge and local secrets.</p>
+                  <p className="text-blue-100 max-w-md text-lg leading-relaxed">Enter a destination and let AI curate a journey built on real-time global knowledge and local secrets.</p>
                 </div>
               </div>
             </div>
