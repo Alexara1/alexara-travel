@@ -51,35 +51,35 @@ const AIConcierge: React.FC = () => {
       const apiKey = process.env.API_KEY;
       if (!apiKey || apiKey.length < 10) throw new Error("API_KEY_MISSING");
 
-      const response = await fetch("https://api.x.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "grok-3",
-          messages: [
-            {
-              role: "system",
-              content: `You are the ${settings.siteName} AI Concierge, a luxury travel expert. 
-              Respond in ${settings.language}. 
-              Your tone is sophisticated, helpful, and inspiring.
-              Always provide up-to-date travel advice, weather tips, and local events.
-              If a user asks about a destination, give unique insider tips and suggest they check the "Deals" page for bookings.
-              Keep responses concise and elegant.`
-            },
-            ...messages
-.filter(m => m.text && m.text.trim() !== '' && (m.role === 'user' || m.role === 'model'))
-            .map(m => ({
-                role: m.role === 'model' ? 'assistant' : 'user',
-                content: m.text
-              })),
-            { role: 'user', content: userMessage }
-          ],
-          max_tokens: 800
-        })
-      });
+     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${apiKey}`
+  },
+  body: JSON.stringify({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content: `You are the ${settings.siteName} AI Concierge, a luxury travel expert. 
+        Respond in ${settings.language}. 
+        Your tone is sophisticated, helpful, and inspiring.
+        Always provide up-to-date travel advice, weather tips, and local events.
+        If a user asks about a destination, give unique insider tips and suggest they check the "Deals" page for bookings.
+        Keep responses concise and elegant.`
+      },
+      ...messages
+        .filter(m => m.text && m.text.trim() !== '' && (m.role === 'user' || m.role === 'model'))
+        .map(m => ({
+          role: m.role === 'model' ? 'assistant' : 'user',
+          content: m.text
+        })),
+      { role: 'user', content: userMessage }
+    ],
+    max_tokens: 800
+  })
+});
 
       if (!response.ok) {
         const errData = await response.json();
