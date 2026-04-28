@@ -33,33 +33,35 @@ const AIPlanner: React.FC = () => {
         return;
       }
 
-      const response = await fetch("https://api.x.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "grok-3",
-          messages: [
-            {
-              role: "system",
-              content: `Act as a world-class travel architect for ${settings.siteName} Travel Agency.`
-            },
-            {
-              role: "user",
-              content: `Analyze this user request and generate a complete, professional itinerary: "${finalPrompt}"
-              
-              Mandatory Format Rules:
-              - Use "### Day X: [Title]" for each day's header.
-              - Use specific times where possible (e.g., 09:00 AM).
-              - Include a section called "### Expert Secrets" at the end.
-              - Suggest specific hotel names or flight types based on the request.
-              
-              Format beautifully with Markdown headers (###) and clear bullet points.`
-            }
-          ],
-          max_tokens: 3000
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${apiKey}`
+  },
+  body: JSON.stringify({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content: `Act as a world-class travel architect for ${settings.siteName} Travel Agency.`
+      },
+      {
+        role: "user",
+        content: `Analyze this user request and generate a complete, professional itinerary: "${finalPrompt}"
+        
+        Mandatory Format Rules:
+        - Use "### Day X: [Title]" for each day's header.
+        - Use specific times where possible (e.g., 09:00 AM).
+        - Include a section called "### Expert Secrets" at the end.
+        - Suggest specific hotel names or flight types based on the request.
+        
+        Format beautifully with Markdown headers (###) and clear bullet points.`
+      }
+    ],
+    max_tokens: 3000
+  })
+});
         })
       });
 
