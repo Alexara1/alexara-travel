@@ -26,7 +26,7 @@ const AIPlanner: React.FC = () => {
     setSources([]);
 
     try {
-      const apiKey = process.env.API_KEY;
+      const apiKey = import.meta.env.VITE_GROK_API_KEY; // ✅ Fixed: was process.env.API_KEY
       if (!apiKey || apiKey.length < 10) {
         setGeneratedItinerary("API key is missing. Please check your environment configuration.");
         setIsLoading(false);
