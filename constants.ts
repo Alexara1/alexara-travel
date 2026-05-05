@@ -639,6 +639,33 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1778009344742",
+    "slug": "the-venetian-resort-las-vegas-a-taste-of-italy-in-the-heart-of-the-strip",
+    "title": "The Venetian Resort Las Vegas: A Taste of Italy in the Heart of the Strip",
+    "excerpt": "Experience luxury and elegance at The Venetian Resort Las Vegas in Las Vegas. Inspired by Venice, this iconic resort offers spacious suites, romantic gondola rides, world-class dining, luxury shopping, and exciting entertainment on the famous Las Vegas Strip. A perfect destination for an unforgettable getaway in the United States.",
+    "content": "## The Venetian Resort Las Vegas – Italy's Charm in America's Gambling Capital\n\nOne of the world's best resorts located in Las Vegas, The Venetian Resort Las Vegas recreates the atmosphere of Venice, Italy, in Las Vegas, which is one of the most famous locations in America, offering an amazing experience of gambling and luxury. If you are interested in visiting Las Vegas, then you definitely have to spend some time at The Venetian Resort Las Vegas.\n\nThe resort has many attractions to offer tourists and one of them is the architecture inspired by the Italian city. There are replicas of canals, gondolas, and other landmarks of Venice located on the premises of the resort and visitors can go on relaxing gondola rides accompanied by a singing gondolier. The resort offers huge and comfortable suites equipped with all amenities you need during your visit to Las Vegas.\n\nApart from the accommodation, The Venetian offers amazing entertainment options such as fine dining venues run by renowned chefs, shops offering exclusive brands and, of course, gambling opportunities. There are also spectacular entertainment performances held at The Venetian.",
+    "image": "https://images.trvl-media.com/lodging/1000000/10000/1500/1443/d73823db.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "video": "",
+    "author": "Alexara",
+    "date": "5/6/2026",
+    "tags": [
+      "Hotel Reviews"
+    ]
+  },
+  {
+    "id": "1777831151117",
+    "slug": "hotel-nikko-san-francisco-a-stylish-urban-retreat-in-the-heart-of-the-city",
+    "title": "Hotel Nikko San Francisco – A Stylish Urban Retreat in the Heart of the City",
+    "excerpt": "Here’s a short excerpt you can use:\n\n**“Experience modern luxury and Japanese-inspired elegance at Hotel Nikko San Francisco, perfectly located near Union Square. With stylish rooms, premium amenities, and vibrant dining, it’s the ideal choice for both business travelers and city explorers.”**\n",
+    "content": "Hotel Nikko San Francisco, situated within walking distance from the famous Union Square, is an excellent example of a luxury hotel that combines stylish modern architecture with elegant Japanese design elements. This prestigious hotel occupies a prominent position in downtown San Francisco and provides convenient proximity to such places of interest as the Moscone Center, shopping areas, and historic cable cars.\n\nThis hotel comprises more than 500 well-appointed guest rooms, which feature an outstanding combination of luxurious interiors with sophisticated touches of Asian culture. Its guests will be able to use various amenities, such as a state-of-the-art fitness center, a spacious glass-covered indoor pool, and the soothing spa services. Furthermore, the hotel boasts an excellent choice of restaurants, among which the highly-rated Anzu restaurant offering the fusion of Californian and Asian cuisine deserves particular mention. The hotel also provides a lounge area and entertainment zones.\n\nIt should be noted that Hotel Nikko San Francisco offers both the perfect conditions for a pleasant business trip and a memorable vacation. Indeed, this hotel is equipped with a variety of business premises and other facilities needed for successful meetings.",
+    "image": "https://res.klook.com/klook-hotel/image/upload/w_1680,c_fill,q_85/travelapi/1000000/30000/23500/23406/6c2cdc12_z.webp",
+    "author": "Admin",
+    "date": "5/3/2026",
+    "tags": [
+      "Hotel Reviews"
+    ]
+  },
+  {
     "id": "1776799300436",
     "slug": "inara-alas-harum-a-hidden-luxury-escape-in-bali",
     "title": "Inara Alas Harum – A Hidden Luxury Escape in Bali",
@@ -760,12 +787,50 @@ export const MOCK_POSTS: BlogPost[] = [
 
 export const MOCK_DEALS: Deal[] = [
   {
+    "id": "1778011521814",
+    "slug": "the-venetian-resort-las-vegas-a-taste-of-italy-in-the-heart-of-the-strip",
+    "title": "The Venetian Resort Las Vegas: A Taste of Italy in the Heart of the Strip",
+    "location": "United State",
+    "city": "Las Vegas",
+    "description": "Gondola rides glide through the Grand Canal Shoppes as music sets the mood for indulgence. Explore diverse restaurants spanning Italian trattorias to global cuisine, then retreat to outdoor pools where private cabanas create secluded sanctuaries among magnificent Renaissance sculptures.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Nightclub",
+      "Restaurant",
+      "Hotel",
+      "Resort",
+      "Package"
+    ],
+    "price": 150,
+    "originalPrice": 200,
+    "image": "https://images.trvl-media.com/lodging/1000000/10000/1500/1443/a86168ed.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/las-vegas-hotels-the-venetian-resort-las-vegas.tqEkDVj"
+  },
+  {
+    "id": "1777833352601",
+    "slug": "hotel-nikko-san-francisco-a-stylish-urban-retreat-in-the-heart-of-the-city",
+    "title": "Hotel Nikko San Francisco – A Stylish Urban Retreat in the Heart of the City",
+    "location": "United State",
+    "city": "San Francisco",
+    "description": "With a stay at Hotel Nikko San Francisco, you'll be centrally located in San Francisco, just a 3-minute walk from Union Square and 11 minutes by foot from Moscone Convention Center. This luxury hotel is 0.5 mi (0.9 km) from San Francisco Museum of Modern Art and 1.4 mi (2.2 km) from Oracle Park.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel"
+    ],
+    "price": 265,
+    "originalPrice": 285,
+    "image": "https://images.trvl-media.com/lodging/1000000/30000/23500/23406/b53af55a.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/san-francisco-hotels-hotel-nikko-san-francisco.leO8jFC"
+  },
+  {
     "id": "1776800786083",
     "slug": "inara-alas-harum-a-hidden-luxury-escape-in-bali",
     "title": "Inara Alas Harum – A Hidden Luxury Escape in Bali",
     "location": "Indonesia ",
     "city": "Bali",
-    "description": "Inara Alas Harum is a 5 Star Hotel that located Near Bali Pulina[With a stay at Inara Alas Harum, you'll be 4.6 mi (7.3 km) from Tegallalang Rice Terrace and 7.6 mi (12.3 km) from Campuhan Ridge Walk. This 5 Star Resort is 8.1 mi (13 km) from Saraswati Temple and 8.1 mi (13.1 km) from Ubud Traditional Art Market.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "description": "Inara Alas Harum is a 5 Star Hotel that located Near Bali Pulina[With a stay at Inara Alas Harum, you'll be 4.6 mi (7.3 km) from Tegallalang Rice Terrace and 7.6 mi (12.3 km) from Campuhan Ridge Walk. This 5 Star Resort is 8.1 mi (13 km) from Saraswati Temple and 8.1 mi (13.1 km) from Ubud Traditional Art Market.",
     "categories": [
       "Resort",
       "Restaurant",
@@ -785,7 +850,7 @@ export const MOCK_DEALS: Deal[] = [
     "title": "Grand Sierra Resort and Casino",
     "location": "United State",
     "city": "Miami",
-    "description": "When you stay at Grand Sierra Resort and Casino in Reno, you'll be on a river, a 1-minute drive from Grand Sierra Resort Casino and 5 minutes from Atlantis Casino. This casino resort is 3.7 mi (5.9 km) from Peppermill and 3.9 mi (6.3 km) from Reno-Sparks Convention Center.\n\nMandatory fees\n\nYou'll be asked to pay the following charges at the property. Fees may include applicable taxes:\n\nDeposit: USD 50 per night.\n\nResort fee: USD 48.53 per accommodation, per night\n\nThe resort fee includes:\n\nConcierge service\n\nFitness center access\n\nIn-room bottled water\n\nIn-room coffee\n\nIn-room safe\n\nPhone calls\n\nPool access\n\nShuttle service\n\nWe have included all charges provided to us by the property.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n\n",
+    "description": "When you stay at Grand Sierra Resort and Casino in Reno, you'll be on a river, a 1-minute drive from Grand Sierra Resort Casino and 5 minutes from Atlantis Casino. This casino resort is 3.7 mi (5.9 km) from Peppermill and 3.9 mi (6.3 km) from Reno-Sparks Convention Center.\n\nMandatory fees\n\nYou'll be asked to pay the following charges at the property. Fees may include applicable taxes:\n\nDeposit: USD 50 per night.\n\nResort fee: USD 48.53 per accommodation, per night\n\nThe resort fee includes:\n\nConcierge service\n\nFitness center access\n\nIn-room bottled water\n\nIn-room coffee\n\nIn-room safe\n\nPhone calls\n\nPool access\n\nShuttle service\n\nWe have included all charges provided to us by the property.\nts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n\n",
     "categories": [
       "Package",
       "Hotel",
@@ -924,7 +989,7 @@ export const MOCK_DESTINATIONS: Destination[] = [
     "slug": "indonesia",
     "name": "Indonesia ",
     "continent": "Southeast Asia",
-    "description": "Indonesia,[b] officially the Republic of Indonesia,[c] is a country in Southeast Asia and Oceania, between the Indian and Pacific oceans. Comprising over 17,000 islands, including Sumatra, Java, Sulawesi, and parts of Borneo and New Guinea, Indonesia is the world's largest archipelagic state and the 14th-largest country by area, at 1,904,569 square kilometres (735,358 square miles).",
+    "description": "Indonesia officially the Republic of Indonesia is a country in Southeast Asia and Oceania, between the Indian and Pacific oceans. Comprising over 17,000 islands, including Sumatra, Java, Sulawesi, and parts of Borneo and New Guinea, Indonesia is the world's largest archipelagic state and the 14th-largest country by area, at 1,904,569 square kilometres (735,358 square miles).",
     "image": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE2j6GlcJmMiJBR4NplVT-SmdWqeX-SkHEvDBFZ2dxq-FjJor0osIna45zbmZDJ8Y2lEahKyqF2AU9qJCBKjBs2pLKs9P54F-Ws6nF6XvNVnGX9EcpzJA2Ed480kM-_0NdckDm0=w810-h468-n-k-no",
     "affiliateLink": "#"
   },
