@@ -639,6 +639,19 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1778357754628",
+    "slug": "lotte-hotel-seattle-luxury-elegance-in-the-heart-of-seattle",
+    "title": "Lotte Hotel Seattle – Luxury Elegance in the Heart of Seattle",
+    "excerpt": "Experience luxury and modern elegance at Lotte Hotel Seattle in downtown Seattle. Discover stylish rooms, premium dining, relaxing spa facilities, and easy access to the city’s top attractions.",
+    "content": "Situated in the lively downtown area of Seattle, the Lotte Hotel Seattle is a luxurious, comfortable, and first-class hotel, making it ideal for tourists who are searching for the perfect accommodation to spend their vacations within close proximity to all of Seattle's attractions and business districts.\n\nEach room and suite at Lotte Hotel Seattle is elegantly decorated with floor-to-ceiling windows providing beautiful views of the city skyline and comfortable interiors equipped with premium amenities ensuring guests are provided with ultimate relaxation and comfort.\n\nDining facilities in the hotel are also remarkable, consisting of exquisite lounges and restaurants where you will be able to taste various dishes from different countries. Additionally, the hotel has a wellness club with an elegant spa and a modern fitness center.\n\nIts prime location allows visitors to visit such places as Pike Place Market, the Space Needle, and Seattle waterfront. In other words, this is one of the best five-star hotels in the whole city offering guests luxurious and comfortable accommodation.",
+    "image": "https://i.travelapi.com/lodging/49000000/48220000/48217800/48217742/84140f83_z.jpg?impolicy=resizecrop&rw=1920&ra=fit",
+    "author": "Alexara",
+    "date": "5/10/2026",
+    "tags": [
+      "Hotel Reviews"
+    ]
+  },
+  {
     "id": "1778009344742",
     "slug": "the-venetian-resort-las-vegas-a-taste-of-italy-in-the-heart-of-the-strip",
     "title": "The Venetian Resort Las Vegas: A Taste of Italy in the Heart of the Strip",
@@ -786,6 +799,25 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1778357265574",
+    "slug": "lotte-hotel-seattle-luxury-elegance-in-the-heart-of-seattle",
+    "title": "Lotte Hotel Seattle – Luxury Elegance in the Heart of Seattle",
+    "location": "United State",
+    "city": "Washington",
+    "description": "With a stay at Lotte Hotel Seattle, you'll be centrally located in Seattle, steps from Sky View Observatory and within a 10-minute walk of Seattle Waterfront. This luxury hotel is 0.7 mi (1.2 km) from Pike Place Market and 0.8 mi (1.2 km) from Seattle Convention Center Arch Building.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n",
+    "categories": [
+      "Hotel",
+      "Resort",
+      "Package"
+    ],
+    "price": 386,
+    "originalPrice": 395,
+    "image": "https://i.travelapi.com/lodging/49000000/48220000/48217800/48217742/84140f83_z.jpg?impolicy=resizecrop&rw=1920&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://affiliate.klook.com/redirect?aid=111573&ad_type=hotel_deal_link&aff_label1=717028-386317109&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Fhotels%2Fdetail%2F717028%2F%3Faid%3D111573%26_currency%3DUSD%26supplier_id%3D48217742%26rate_plan_id%3D386317109%26check_in%3D2026-05-16%26check_out%3D2026-05-17"
+  },
   {
     "id": "1778011521814",
     "slug": "the-venetian-resort-las-vegas-a-taste-of-italy-in-the-heart-of-the-strip",
