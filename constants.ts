@@ -31,15 +31,15 @@ export const INITIAL_SETTINGS: SiteSettings = {
   "socialMedia": [
     {
       "platform": "Facebook",
-      "url": "https://facebook.com"
+      "url": ""
     },
     {
       "platform": "Instagram",
-      "url": "https://instagram.com"
+      "url": "https://www.instagram.com/alexaratravel/"
     },
     {
-      "platform": "YouTube",
-      "url": "https://youtube.com"
+      "platform": "TikTok",
+      "url": "https://www.tiktok.com/@alexaratravel"
     }
   ],
   "contact": {
@@ -639,6 +639,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1778787217368",
+    "slug": "kimpton-epic-hotel-by-ihg-luxury-waterfront-stay-in-miami",
+    "title": "Kimpton EPIC Hotel by IHG – Luxury Waterfront Stay in Miami",
+    "excerpt": "Experience luxury at Kimpton EPIC Hotel by IHG in downtown Miami, featuring stunning waterfront views, rooftop pools, elegant rooms, and world-class dining. Discover why this stylish Miami escape is perfect for luxury travelers and city explorers alike.\n",
+    "content": "# Kimpton EPIC Hotel by IHG – Luxury Waterfront Accommodation in Miami\n\nSituated in downtown Miami, Kimpton EPIC Hotel by IHG provides guests with a perfect combination of luxury, waterfront location, and urban excitement. Featuring amazing views of Biscayne Bay, the upscale establishment is ideal for tourists looking to enjoy a high-end Miami accommodation close to Brickell, Bayfront Park, and nightlife venues.\n\nThe hotel boasts contemporary rooms and suites with private balconies where guests can take in magnificent views of the skyline and waterfront area. The property includes fabulous rooftop pools, chic cabanas, spa services, and a gym. Moreover, the famous Area 31 restaurant serves delicious seafood and innovative dishes complemented by beautiful views of Miami. ([IHG Hotels & Resorts][1])\n\nOne of the unique things about Kimpton EPIC is its opulent setting and individualized treatment. Tourists often compliment spacious rooms, superb location, and upscale amenities available at the establishment. ([tripadvisor.com][2])\n\nRegardless of your intentions to visit Miami, whether for leisure, romantic purposes, or work-related reasons, Kimpton EPIC Hotel by IHG ensures that you get a first-class experience. In case you are searching for upscale accommodations in Florida, Kimpton EPIC should definitely be included in your list of hotels to check out.",
+    "image": "https://images.trvl-media.com/lodging/3000000/2240000/2237200/2237168/bd3b03e4.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "5/15/2026",
+    "tags": [
+      "Hotel Reviews",
+      "Travel Guides",
+      "Destinations"
+    ]
+  },
+  {
     "id": "1778357754628",
     "slug": "lotte-hotel-seattle-luxury-elegance-in-the-heart-of-seattle",
     "title": "Lotte Hotel Seattle – Luxury Elegance in the Heart of Seattle",
@@ -799,6 +814,26 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1778784220655",
+    "slug": "kimpton-epic-hotel",
+    "title": "Kimpton EPIC Hotel ",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Highlights for your 1-night trip\nLoved by couples.\nThis property received multiple 10/10 ratings from couples.\nExceptional service & staff.\nThe top-rated staff and service will ensure you feel welcome and pampered.\nPoolside bar.\nA rare find - enjoy refreshing drinks by the pool.\nGreat location\nGuests value the location for making travel plans effortless.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel",
+      "Nightclub",
+      "Package",
+      "Restaurant"
+    ],
+    "price": 340,
+    "originalPrice": 380,
+    "image": "https://images.trvl-media.com/lodging/3000000/2240000/2237200/2237168/cc95957f.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-kimpton-epic-hotel.36i2gbr"
+  },
   {
     "id": "1778357265574",
     "slug": "lotte-hotel-seattle-luxury-elegance-in-the-heart-of-seattle",
