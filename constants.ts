@@ -639,6 +639,17 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1779136525922",
+    "slug": "miami-exclusive-private-boat-guided-tour",
+    "title": "Miami: Exclusive Private Boat Guided Tour",
+    "excerpt": "Discover Miami in luxury with an Exclusive Private Boat Guided Tour featuring stunning skyline views, celebrity mansions, Biscayne Bay cruising, and personalized sightseeing experiences. Enjoy a private waterfront adventure perfect for couples, families, and luxury travelers.\n",
+    "content": "Enjoy Miami from a unique perspective by taking part in the Exclusive Private Boat Guided Tour. This is one of the best activities in Miami that will make your experience more luxurious and memorable. You will be able to admire Miami's skyline, celebrity mansions, and hidden islands from the waters of Biscayne Bay, feeling the excitement of exploring Miami's waterfront lifestyle.\n\nSuitable both for couples, families, and small groups, the tour is an excellent combination of relaxation and sightseeing. During the cruise, you will have the opportunity to feel the comfort of having a private boat while being guided around Miami's top spots by an experienced local guide who will tell you some amazing stories related to the city's famous sights, luxury homes, and culture.\n\nCustomization is another advantage of this exciting activity. You will be able to choose among many options, such as a romantic sunset cruise, daytime sightseeing cruise, or even a special party cruise. With the fresh ocean breeze blowing into your face, crystal clear waters, and the beautiful skyline in front of you, it would be impossible not to take some amazing pictures.\n\nIn conclusion, this is one of the best activities in Miami for those",
+    "image": "https://images.trvl-media.com/localexpert/48222415/1bc1c588-95b0-4890-aaba-aad175420d7d.jpg?impolicy=resizecrop&rw=1005&rh=565",
+    "author": "Admin",
+    "date": "5/19/2026",
+    "tags": []
+  },
+  {
     "id": "1778787217368",
     "slug": "kimpton-epic-hotel-by-ihg-luxury-waterfront-stay-in-miami",
     "title": "Kimpton EPIC Hotel by IHG – Luxury Waterfront Stay in Miami",
@@ -814,6 +825,24 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1779137935944",
+    "slug": "miami-exclusive-private-boat-guided-tour",
+    "title": "Miami: Exclusive Private Boat Guided Tour",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Sightseeing of the most expensive homes in Miami, located in Star Island.\nBreathtaking views of the Miami skyline from the bay.\nPrivately for you and up to 12 guests, experience your own boat and captain\n\nIts package for 1 Traveler",
+    "categories": [
+      "Ticket",
+      "Package"
+    ],
+    "price": 255,
+    "originalPrice": 270,
+    "image": "https://images.trvl-media.com/localexpert/48222415/1bc1c588-95b0-4890-aaba-aad175420d7d.jpg?impolicy=resizecrop&rw=1005&rh=565",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://www.expedia.com/things-to-do/miami-private-boat-tour-with-a-captain.a48222415.activity-details?&rid=178286&location=Miami+%28and+vicinity%29%2C+Florida%2C+United+States+of+America&startDate=2026-06-17&endDate=2026-06-19&filter.categories=CruisesBoatTours&sort=RECOMMENDED&filter.price=4&swp=on"
+  },
   {
     "id": "1778784220655",
     "slug": "kimpton-epic-hotel",
