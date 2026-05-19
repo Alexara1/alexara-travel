@@ -94,15 +94,18 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       el.setAttribute('content', tag.content);
     });
 
-    // Canonical Link
+    // Canonical Link — ensure full URL with protocol
     if (settings.canonicalUrl) {
+      const canonicalHref = settings.canonicalUrl.startsWith('http')
+        ? settings.canonicalUrl
+        : `https://${settings.canonicalUrl}`;
       let canonical = document.querySelector('link[rel="canonical"]');
       if (!canonical) {
         canonical = document.createElement('link');
         canonical.setAttribute('rel', 'canonical');
         document.head.appendChild(canonical);
       }
-      canonical.setAttribute('href', settings.canonicalUrl);
+      canonical.setAttribute('href', canonicalHref);
     }
 
     // Custom Scripts Injection (Google Analytics, etc)

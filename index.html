@@ -1,12 +1,84 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alexara | Discover the World Through Curated Experiences</title>
-    <meta name="description" content="Alexara is your premier global travel partner. Discover hidden destinations, exclusive flight deals, and essential travel gear curated for the modern explorer." />
-    
+
+    <!-- Primary SEO -->
+    <title>Alexara Travel | Curated Destinations, Deals & Travel Guides</title>
+    <meta name="description" content="Alexara Travel offers expert travel guides, exclusive flight deals, and curated destinations for the modern explorer. Plan your perfect trip with AI-powered travel intelligence." />
+    <meta name="keywords" content="travel guides, flight deals, curated destinations, travel tips, luxury travel, budget travel, travel gear" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Alexara Travel" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://www.alexaratravel.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Alexara Travel" />
+    <meta property="og:title" content="Alexara Travel | Curated Destinations, Deals & Travel Guides" />
+    <meta property="og:description" content="Expert travel guides, exclusive deals, and curated destinations. Plan your perfect trip with AI-powered travel intelligence." />
+    <meta property="og:url" content="https://www.alexaratravel.com/" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@alexaratravel" />
+    <meta name="twitter:title" content="Alexara Travel | Curated Destinations & Deals" />
+    <meta name="twitter:description" content="Expert travel guides, exclusive deals, and curated destinations for the modern explorer." />
+
+    <!-- Organization Schema (static, always present) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      "name": "Alexara Travel",
+      "url": "https://www.alexaratravel.com",
+      "description": "Alexara Travel offers curated travel experiences, expert destination guides, and exclusive deals for modern explorers.",
+      "sameAs": [
+        "https://www.instagram.com/alexaratravel/",
+        "https://www.tiktok.com/@alexaratravel"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Adventure Ave, Suite 400",
+        "addressLocality": "New York",
+        "addressRegion": "NY",
+        "postalCode": "10001",
+        "addressCountry": "US"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "hello@alexara.com"
+      }
+    }
+    </script>
+
+    <!-- WebSite Schema with Sitelinks Searchbox -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://www.alexaratravel.com",
+      "name": "Alexara Travel",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.alexaratravel.com/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Performance: Preconnect to critical origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <script>

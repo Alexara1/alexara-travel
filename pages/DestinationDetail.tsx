@@ -3,11 +3,40 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
 import { MapPin, ArrowLeft, Globe, Tag, Sparkles, Navigation, ExternalLink, ArrowRight, Ticket, Zap } from 'lucide-react';
+import { useSEO } from '../hooks/useSEO';
+
+const BASE_URL = 'https://www.alexaratravel.com';
 
 const DestinationDetail: React.FC = () => {
   const { slug } = useParams();
-  const { destinations, deals, t } = useSite();
+  const { destinations, deals, t, settings } = useSite();
   const dest = destinations.find(d => d.slug === slug);
+
+  // ── SEO: TouristDestination schema + per-destination meta ────────────────
+  const destSchema = dest ? {
+    "@context": "https://schema.org",
+    "@type": "TouristDestination",
+    "name": dest.name,
+    "description": dest.description,
+    "image": dest.image,
+    "url": `${BASE_URL}/destinations/${dest.slug}`,
+    "touristType": { "@type": "Audience", "audienceType": "Travellers" },
+    "geo": { "@type": "GeoCoordinates" },
+    "containedInPlace": { "@type": "Place", "name": dest.continent }
+  } : undefined;
+
+  useSEO({
+    title: dest
+      ? `${dest.name} Travel Guide ${new Date().getFullYear()} | ${settings.siteName || 'Alexara Travel'}`
+      : 'Destinations | Alexara Travel',
+    description: dest
+      ? `Plan your trip to ${dest.name}. ${dest.description} Explore curated deals, travel tips, and expert itineraries.`
+      : 'Explore curated travel destinations worldwide with Alexara.',
+    canonical: dest ? `/destinations/${dest.slug}` : '/destinations',
+    ogImage: dest?.image,
+    schema: destSchema,
+  });
+  // ─────────────────────────────────────────────────────────────────────────
 
   if (!dest) {
     return (
@@ -50,7 +79,7 @@ const DestinationDetail: React.FC = () => {
                 <h2 className="text-3xl font-serif font-bold text-primary mb-8">About {dest.name}</h2>
                 <div className="prose prose-lg text-gray-600 max-w-none leading-relaxed mb-16">
                     <p className="text-xl mb-6 font-light italic text-slate-500">{dest.description}</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p>{dest.description} {dest.name} is a world-class destination that draws millions of visitors each year for its unique blend of culture, history, and natural beauty. Our expert travel architects have curated the very best experiences this destination has to offer.</p>
                     <p>Whether you're exploring ancient ruins, dining in Michelin-starred restaurants, or finding peace in nature, {dest.name} offers a unique synthesis of culture and beauty. Our travel architects have explored every corner of this destination to ensure your journey is nothing short of extraordinary.</p>
                 </div>
 
