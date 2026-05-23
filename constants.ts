@@ -639,6 +639,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1779568057754",
+    "slug": "discover-timeless-luxury-at-biltmore-hotel-miami-coral-gables",
+    "title": "Discover Timeless Luxury at Biltmore Hotel - Miami - Coral Gables",
+    "excerpt": "Experience timeless luxury at the Biltmore Hotel - Miami - Coral Gables, a historic Miami landmark known for its Mediterranean-inspired architecture, world-class golf course, luxurious spa, and iconic swimming pool. Discover elegant accommodations, fine dining, and a relaxing atmosphere in the heart of Coral Gables with Alexara Travel.\n",
+    "content": "Situated at the center of Coral Gables, Biltmore Hotel - Miami - Coral Gables is a renowned luxury establishment in South Florida. Built originally in 1926, the luxury hotel boasts unique architectural features based on Mediterranean-style design combined with a stylish and sophisticated modern look.\n\nThe hotel is known for a magnificent 315-feet tower, an outstanding golf course, and an enormous pool which is considered the largest hotel swimming pool in the country. It also provides luxurious accommodation options with all amenities necessary for a comfortable stay in Miami, including elegant dining restaurants, spa facilities, tennis courts, and beautifully arranged surroundings reminding of the old-world Miami charm.\n\nThe luxury establishment has always been hosting VIPs, movie stars, and prominent politicians since its construction. It is not only a place for staying but also a historic landmark full of elegance and charm which makes it unique. The Biltmore hotel will be the best choice to spend a romantic weekend, organize a business trip or golfing vacation, or simply have some rest.\n\nIt should be noted that the hotel is situated in Coral Gables where people can easily reach Miami's beaches, nightclubs, and shops while enjoying a calm and cozy surrounding area.",
+    "image": "https://images.trvl-media.com/lodging/1000000/30000/22000/21937/d3ed4148.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "5/24/2026",
+    "tags": [
+      "Hotel Reviews",
+      "Travel Guides",
+      "Destinations"
+    ]
+  },
+  {
     "id": "1779136525922",
     "slug": "miami-exclusive-private-boat-guided-tour",
     "title": "Miami: Exclusive Private Boat Guided Tour",
@@ -710,7 +725,7 @@ export const MOCK_POSTS: BlogPost[] = [
     "title": "Inara Alas Harum – A Hidden Luxury Escape in Bali",
     "excerpt": "Discover the beauty of Inara Alas Harum, a luxury jungle retreat in Bali offering private villas, stunning views, and unforgettable experiences.",
     "content": "Perched in the middle of green trees that surround the area, this beautiful retreat combines nature, luxurious accommodation, and elegant features to provide guests with an unparalleled experience. Situated at the middle of Bali, Indonesia, Inara Alas Harum provides travelers with the perfect place where they can relax, view beautiful scenery, and have luxury accommodations.\n\nIt boasts wonderful and breathtaking rice terraces and jungle views, providing guests with relaxation and rejuvenation while staying there. All rooms offer traditional Balinese features combined with modern amenities such as private pools, large rooms, and magnificent views for their guests. This place offers a perfect place for a romantic couple or an individual who wants to get away from the busy life.\n\nA wide range of activities await visitors such as visiting cultural attractions nearby, enjoying spa services, tasting local food, and enjoying their time at infinity pools. Furthermore, this retreat will provide you with great places for pictures for your social media account.\n\nIn case you are interested in visiting off-beaten places in Bali, this resort is one place that should be considered. You can book your stay on this resort from my website and save money from it.",
-    "image": "https://lh3.googleusercontent.com/p/AF1QipNnOdFheYYrF4Zilqbtm-5I1xnYOLxcfVFzfT4l=s1360-w1360-h1020-rw",
+    "image": "https://res.klook.com/image/upload/w_1680,c_fill,q_85/v1756785363/hotel/sawmue1gnmmyvdk0xj8e.webp",
     "author": "Alexara",
     "date": "4/22/2026",
     "tags": [
@@ -825,6 +840,25 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1779568915458",
+    "slug": "discover-timeless-luxury-at-biltmore-hotel-miami-coral-gables",
+    "title": "Discover Timeless Luxury at Biltmore Hotel - Miami - Coral Gables",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Nestled in the heart of Coral Gables, the iconic Biltmore Hotel - Miami - Coral Gables is one of South Florida’s most legendary luxury destinations. Originally opened in 1926, this historic hotel blends Mediterranean-inspired architecture with modern elegance, creating an unforgettable experience for travelers seeking sophistication and comfort.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel",
+      "Restaurant",
+      "Package"
+    ],
+    "price": 360,
+    "originalPrice": 400,
+    "image": "https://images.trvl-media.com/lodging/1000000/30000/22000/21937/d3ed4148.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-biltmore-hotel-miami-coral-gables.mwmLsTC"
+  },
   {
     "id": "1779137935944",
     "slug": "miami-exclusive-private-boat-guided-tour",
@@ -1086,7 +1120,7 @@ export const MOCK_DESTINATIONS: Destination[] = [
     "name": "Indonesia ",
     "continent": "Southeast Asia",
     "description": "Indonesia officially the Republic of Indonesia is a country in Southeast Asia and Oceania, between the Indian and Pacific oceans. Comprising over 17,000 islands, including Sumatra, Java, Sulawesi, and parts of Borneo and New Guinea, Indonesia is the world's largest archipelagic state and the 14th-largest country by area, at 1,904,569 square kilometres (735,358 square miles).",
-    "image": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE2j6GlcJmMiJBR4NplVT-SmdWqeX-SkHEvDBFZ2dxq-FjJor0osIna45zbmZDJ8Y2lEahKyqF2AU9qJCBKjBs2pLKs9P54F-Ws6nF6XvNVnGX9EcpzJA2Ed480kM-_0NdckDm0=w810-h468-n-k-no",
+    "image": "https://res.klook.com/image/upload/w_1680,c_fill,q_85/v1756785363/hotel/sawmue1gnmmyvdk0xj8e.webp",
     "affiliateLink": "#"
   },
   {
