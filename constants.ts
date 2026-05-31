@@ -639,6 +639,20 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1780239328748",
+    "slug": "intercontinental-miami-by-ihg-luxury-on-biscayne-bay",
+    "title": "InterContinental Miami by IHG: Luxury on Biscayne Bay",
+    "excerpt": "Discover the elegance of InterContinental Miami by IHG, a luxury waterfront hotel overlooking Biscayne Bay. With stylish accommodations, exceptional dining, a relaxing spa, and a prime Downtown Miami location, it offers the perfect blend of comfort and sophistication for business and leisure travelers alike.",
+    "content": "Emerged in the sparkling waves of Biscayne Bay, the InterContinental Miami by IHG is one of the best luxury hotels in the city. \n\nBeing situated in the downtown Miami area, the waterfront resort boasts modern facilities, excellent customer service, and proximity to all major Miami tourist sites. The InterContinental Miami is minutes from Bayfront Park, Brickell area, and even the Port of Miami making the hotel convenient for both business and leisure trips.\n\nAccommodations include spacious and luxurious rooms and suites offering stunning cityscape, bay, and ocean views. Guests will have plenty to do whether they want to unwind at the rooftop pool or the spa, work out in the gym, or indulge in some gourmet dining at the hotel's excellent restaurants and lounges.\n\nWith its stunning architecture and lively atmosphere, the InterContinental Miami Hotel is definitely worth your consideration. If you are seeking a luxury resort in the heart of Miami, this hotel may be exactly what you need. Enjoy a memorable stay at one of the best Miami beach resorts.",
+    "image": "https://images.trvl-media.com/lodging/1000000/10000/2300/2222/5d0bc6f4.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "5/31/2026",
+    "tags": [
+      "Travel Tips",
+      "Hotel Reviews"
+    ]
+  },
+  {
     "id": "1779568057754",
     "slug": "discover-timeless-luxury-at-biltmore-hotel-miami-coral-gables",
     "title": "Discover Timeless Luxury at Biltmore Hotel - Miami - Coral Gables",
@@ -840,6 +854,25 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1780239863597",
+    "slug": "intercontinental-miami-by-ihg-luxury-on-biscayne-bay",
+    "title": "InterContinental Miami by IHG: Luxury on Biscayne Bay",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Bayfront sanctuary with stunning views\nSoaring above Biscayne Bay, the rooftop pool deck offers spectacular sunset views and a refreshing poolside bar. The full-service spa provides luxurious treatments. Just steps away, Toro Toro restaurant serves exceptional Latin American cuisine in the hotel's sophisticated atmosphere.",
+    "categories": [
+      "Hotel",
+      "Resort",
+      "Package"
+    ],
+    "price": 377,
+    "originalPrice": 400,
+    "image": "https://images.trvl-media.com/lodging/1000000/10000/2300/2222/42887f8d.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-intercontinental-miami.5uqbnyH"
+  },
   {
     "id": "1779568915458",
     "slug": "discover-timeless-luxury-at-biltmore-hotel-miami-coral-gables",
