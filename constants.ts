@@ -639,6 +639,20 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1780864452306",
+    "slug": "w-south-beach-where-luxury-meets-miami-s-vibrant-energy",
+    "title": "W South Beach: Where Luxury Meets Miami's Vibrant Energy",
+    "excerpt": "Experience the ultimate Miami getaway at W South Beach, a luxury oceanfront resort featuring stunning ocean-view accommodations, world-class dining, vibrant nightlife, and exceptional beachfront amenities. Discover why this iconic Miami Beach destination is perfect for travelers seeking style, comfort, and unforgettable experiences.",
+    "content": "Nestled on the beautiful shores of Miami Beach, **W South Beach** is a luxury beach resort which reflects the glitz, glamor and elegance that is synonymous with the sunny climate of South Florida. With expansive accommodation options including private balconies with beautiful views of the Atlantic Ocean, W South Beach promises you the best possible beach front experience.\n\nThe luxury accommodation includes many high-end facilities such as a pool deck, beach access, health center, full service spa and state-of-the-art fitness center. Dine out in some of the best known establishments such as Mr. Chow and The Grove, not forgetting the famous Living Room Bar complete with a menu of unique cocktails.\n\nThe hotel is also strategically located with easy access to many of the popular landmarks in Miami, ranging from art galleries to museums, shopping areas as well as the exciting nightlife in Miami. With much to see, do and explore, it is guaranteed to be an entertaining stay.\n\nA good choice for couples, families as well as luxury seekers, W South Beach provides the best of luxury combined with great entertainment. Looking to vacation in Miami? Why not try out this famous Miami Beach resort.",
+    "image": "https://images.trvl-media.com/lodging/1000000/20000/11900/11881/539fead9.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "6/8/2026",
+    "tags": [
+      "Hotel Reviews",
+      "Travel Tips"
+    ]
+  },
+  {
     "id": "1780239328748",
     "slug": "intercontinental-miami-by-ihg-luxury-on-biscayne-bay",
     "title": "InterContinental Miami by IHG: Luxury on Biscayne Bay",
@@ -854,6 +868,23 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1780864676442",
+    "slug": "w-south-beach-where-luxury-meets-miami-s-vibrant-energy",
+    "title": "W South Beach: Where Luxury Meets Miami's Vibrant Energy",
+    "location": "United State",
+    "city": "Miami",
+    "description": "The hotel offers direct beach access with organized loungers and umbrellas. Guests enjoy complimentary towels while taking in spectacular ocean views. From private balconies, visitors can admire the serene beachfront setting before heading down for swimming or sunbathing. Nearby activities include snorkeling and parasailing.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel"
+    ],
+    "price": 795,
+    "originalPrice": 870,
+    "image": "https://images.trvl-media.com/lodging/1000000/20000/11900/11881/539fead9.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-w-south-beach.cgO5CVX"
+  },
   {
     "id": "1780239863597",
     "slug": "intercontinental-miami-by-ihg-luxury-on-biscayne-bay",
