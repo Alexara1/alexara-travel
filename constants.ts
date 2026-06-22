@@ -639,6 +639,34 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1782158581322",
+    "slug": "four-seasons-hotel-miami-luxury-in-the-heart-of-brickell",
+    "title": "Four Seasons Hotel Miami: Luxury in the Heart of Brickell",
+    "excerpt": "Experience luxury at Four Seasons Hotel Miami, a sophisticated retreat in the heart of Brickell. Enjoy elegant accommodations, rooftop pools, exceptional dining, and easy access to Miami’s top attractions, making it the perfect destination for business and leisure travelers alike.",
+    "content": "Overlooking the dynamic Brickell Avenue is the famous Four Seasons Hotel Miami. Offering an ideal combination of both urban refinement and tropical relaxation, the hotel stands majestically overlooking Biscayne Bay in Miami’s financial district.\n\nGuests have the opportunity to relax in the hotel’s unique rooftop oasis, which includes a two-acre area with palm trees, swimming pools, cabanas, and water hammocks. This will help you enjoy some downtime even after a busy day of either work or pleasure in Miami.\n\nAll guestrooms in this luxury hotel are large and come equipped with comfortable amenities, beautiful bathrooms, and spectacular city and Biscayne Bay views. In addition to comfortable lodging, Four Seasons Hotel Miami also offers fantastic dining options in the form of great restaurants.\nIts strategic position makes it convenient for guests to explore all the shopping, dining, entertainment and other activities available in Miami. From the famous Brickell City Centre to various waterfront locations nearby.\n\nIf you want a luxury hotel that offers ultimate comfort and is situated in Miami, Four Seasons Hotel Miami is the best choice for you.",
+    "image": "https://images.trvl-media.com/lodging/1000000/970000/966200/966115/484f6d48.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "6/23/2026",
+    "tags": [
+      "Travel Guides",
+      "Hotel Reviews",
+      "Travel Tips"
+    ]
+  },
+  {
+    "id": "1781380022657",
+    "slug": "1-hotel-south-beach-where-luxury-meets-sustainability-in-miami",
+    "title": "1 Hotel South Beach: Where Luxury Meets Sustainability in Miami",
+    "excerpt": "Discover the perfect balance of luxury and sustainability at 1 Hotel South Beach. This iconic Miami beachfront resort offers stunning ocean views, eco-friendly design, exceptional dining, wellness experiences, and world-class amenities, making it an ideal destination for travelers seeking a stylish and unforgettable escape.\n",
+    "content": "One of the best hotels that are available in Miami and situated on the amazing part of Miami Beach is **1 Hotel South Beach**, which stands out because of its luxuriousness and eco-conciousness. This beachfront resort on Collins Avenue is known for combining its luxury atmosphere with eco-friendliness. Some of the main amenities that the hotel offers to guests are a private beach, several swimming pools, roof terrace, spa treatments, and stylishly decorated guestrooms.\n\nIt should be noted that in every room guests may see various green features that are typical for the hotel, including energy-efficient technologies, recycled furniture, and local materials. Besides, people who stay there have the opportunity to take advantage of such features as spacious rooms overlooking the ocean, farm-to-table meals, and Bamford Wellness Spa.\n\nAs a matter of fact, people who stay at 1 Hotel South Beach have the option of having their drinks on the roof terrace with a swimming pool and enjoying amazing views of the ocean and Miami skyline. Besides, guests may benefit from various physical activities that are offered there, including yoga and workouts in the fitness center.",
+    "image": "https://images.trvl-media.com/lodging/2000000/1800000/1790100/1790087/5c0d327a.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "6/14/2026",
+    "tags": [
+      "Hotel Reviews"
+    ]
+  },
+  {
     "id": "1780864452306",
     "slug": "w-south-beach-where-luxury-meets-miami-s-vibrant-energy",
     "title": "W South Beach: Where Luxury Meets Miami's Vibrant Energy",
@@ -868,6 +896,40 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1782159089060",
+    "slug": "four-seasons-hotel-miami-luxury-in-the-heart-of-brickell",
+    "title": "Four Seasons Hotel Miami: Luxury in the Heart of Brickell",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Stunning artwork adorns the elegant lobby of this Brickell Avenue luxury retreat. The expansive pool area offers an amazing swimming experience with comfortable loungers. Guests can enjoy fine dining at EDGE Brasserie before unwinding with cocktails at the poolside bar.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel"
+    ],
+    "price": 565,
+    "originalPrice": 600,
+    "image": "https://images.trvl-media.com/lodging/1000000/970000/966200/966115/139c30bb.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-four-seasons-hotel-miami.38X2kHg"
+  },
+  {
+    "id": "1781380302007",
+    "slug": "1-hotel-south-beach-where-luxury-meets-sustainability-in-miami",
+    "title": "1 Hotel South Beach: Where Luxury Meets Sustainability in Miami",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Soaring above Miami Beach, the rooftop pool offers breathtaking ocean views in an exclusive atmosphere. Guests can enjoy three restaurants before retreating to the Bamford Spa. The central location provides easy access to shopping and oceanfront paths with attentive staff ensuring luxury.\nts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n",
+    "categories": [
+      "Hotel"
+    ],
+    "price": 918,
+    "originalPrice": 950,
+    "image": "https://images.trvl-media.com/lodging/2000000/1800000/1790100/1790087/5c0d327a.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-1-hotel-south-beach.CmqFiBn"
+  },
   {
     "id": "1780864676442",
     "slug": "w-south-beach-where-luxury-meets-miami-s-vibrant-energy",
