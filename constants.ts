@@ -639,6 +639,20 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1782647809607",
+    "slug": "san-clemente-palace-venice-a-private-island-escape-of-timeless-luxury",
+    "title": "San Clemente Palace, Venice – A Private Island Escape of Timeless Luxury",
+    "excerpt": "Escape to the elegance of San Clemente Palace, Venice, a luxurious private island resort featuring stunning lagoon views, historic charm, exceptional dining, and world-class amenities. Discover exclusive hotel deals and book your unforgettable Venice getaway with AlexaraTravel.com",
+    "content": "Located on its own island in the Venetian Lagoon, **San Clemente Palace, Venice** features a wonderful combination of history, elegance, and outstanding services. A few minutes by boat from the famous St. Mark's Square is a five-star venue that combines the excitement of the city with the peace of a resort. \n\nSan Clemente Palace features a beautifully restored historical property which includes a church that is hundreds of years old, Mediterranean gardens, luxurious suites and rooms, and amazing lagoon views.\nThe visitors have a chance to rest in the beautiful Italian-style rooms and suites, relax by an outdoor heated swimming pool, rejuvenate at the luxurious spa, and enjoy excellent Italian cuisine at the hotel's elegant restaurants. \n\nVisitors also have access to tennis courts, walking trails, and beautiful gardens, providing an environment that is not often available in Venice and making the resort very appealing to couples, families, and honeymooners.\n\nIf you are planning a romantic vacation or just need a break away from the bustling city life, San Clemente Palace is the right place for you. To book a room in one of the best Venetian islands, go to **[www.alexaratravel.com](http://www.alexaratravel.com)**.",
+    "image": "https://images.trvl-media.com/lodging/1000000/910000/908200/908171/14f9f482.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "6/28/2026",
+    "tags": [
+      "Hotel Reviews",
+      "Travel Guides"
+    ]
+  },
+  {
     "id": "1782158581322",
     "slug": "four-seasons-hotel-miami-luxury-in-the-heart-of-brickell",
     "title": "Four Seasons Hotel Miami: Luxury in the Heart of Brickell",
@@ -896,6 +910,28 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1782649657770",
+    "slug": "san-clemente-palace-venice-a-private-island-escape-of-timeless-luxury",
+    "title": "San Clemente Palace, Venice – A Private Island Escape of Timeless Luxury",
+    "location": "Italy",
+    "city": "Venice",
+    "description": "Private island sanctuary in Venice\nOn a private Venetian island, magnificent grounds feature gardens with artwork and a lagoon-view pool. A complimentary boat shuttle reaches San Marco dock in 15 minutes. Three distinctive restaurants offer excellent wines and delicious meals in tranquil settings.\nts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel",
+      "Restaurant",
+      "Package",
+      "Nightclub",
+      "Resort",
+      "Beach"
+    ],
+    "price": 985,
+    "originalPrice": 1000,
+    "image": "https://images.trvl-media.com/lodging/1000000/910000/908200/908171/14f9f482.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/venice-hotels-san-clemente-palace.zuz8jkn"
+  },
   {
     "id": "1782159089060",
     "slug": "four-seasons-hotel-miami-luxury-in-the-heart-of-brickell",
