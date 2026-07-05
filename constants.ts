@@ -639,6 +639,20 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1783256124432",
+    "slug": "faena-miami-beach-where-luxury-art-and-oceanfront-elegance-meet",
+    "title": "Faena Miami Beach: Where Luxury, Art, and Oceanfront Elegance Meet",
+    "excerpt": "Experience the elegance of Faena Miami Beach, where luxury accommodations, award-winning dining, oceanfront views, and world-class wellness create the perfect Miami getaway. Find exclusive travel deals on www.alexaratravel.com",
+    "content": "Looking for an exciting holiday on the coast of Miami? The luxurious destination to consider is called **Faena Miami Beach** – it offers the highest level of hospitality, outstanding interior design and an exciting cultural atmosphere.\n\nEvery room in this beach hotel boasts stylish design, luxurious facilities, as well as the amazing views of Atlantic Ocean or Miami's skyline. You can relax on the beautiful swimming pool, get a wonderful massage in the award-winning Tierra Santa Healing House spa, have fun right on the beach and admire its white sand.\n\nWhen you visit this destination, do not forget to try some delicious food at its signature restaurants – from perfectly grilled South American dishes to creative dishes of other countries' cuisines. Besides, Faena Miami Beach offers a lot of fun places to spend leisure time: stylish bars and lounges for evening cocktails, live entertainment and performances.\n\nIf you dream about having a romantic trip, an exciting holiday or a great celebration, Faena Miami Beach is definitely the best option. Check out **[www.alexaratravel.com](http://www.alexaratravel.com)** and book exclusive hotel deals right now!",
+    "image": "https://images.trvl-media.com/lodging/11000000/10350000/10344600/10344566/8a030187.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "7/5/2026",
+    "tags": [
+      "Hotel Reviews",
+      "Travel Guides"
+    ]
+  },
+  {
     "id": "1782647809607",
     "slug": "san-clemente-palace-venice-a-private-island-escape-of-timeless-luxury",
     "title": "San Clemente Palace, Venice – A Private Island Escape of Timeless Luxury",
@@ -910,6 +924,27 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1783256737031",
+    "slug": "faena-miami-beach-where-luxury-art-and-oceanfront-elegance-meet",
+    "title": "Faena Miami Beach: Where Luxury, Art, and Oceanfront Elegance Meet",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Set right on the beach, this oceanfront resort pairs a bold, cinematic look shaped by Baz Luhrmann and Catherine Martin with a full day-to-night lineup. Book time at the oceanfront Tierra Santa Healing House, then plan a meal at Los Fuegos for South American live-fire cooking from Francis Mallmann. The outdoor geometric pool brings red-and-white candy-striped umbrellas and palm-fringed lounging into the mix.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n\n\n",
+    "categories": [
+      "Hotel",
+      "Restaurant",
+      "Package",
+      "Nightclub",
+      "Resort"
+    ],
+    "price": 929,
+    "originalPrice": 1000,
+    "image": "https://images.trvl-media.com/lodging/11000000/10350000/10344600/10344566/6f468db7.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-faena-miami-beach.Q6f3S9i"
+  },
   {
     "id": "1782649657770",
     "slug": "san-clemente-palace-venice-a-private-island-escape-of-timeless-luxury",
