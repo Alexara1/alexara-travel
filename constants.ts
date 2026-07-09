@@ -639,6 +639,19 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1783622569536",
+    "slug": "nobu-hotel-miami-beach-a-sophisticated-oceanfront-escape",
+    "title": "Nobu Hotel Miami Beach: A Sophisticated Oceanfront Escape",
+    "excerpt": "Discover the elegance of Nobu Hotel Miami Beach, where luxury accommodations, world-class dining, oceanfront relaxation, and exceptional service combine to create the perfect Miami getaway.",
+    "content": "You can experience a nice and modern luxury at **Nobu Hotel Miami Beach**. This hotel is where Japanese style meets the fun and lively feeling of Miami Beach in Florida. It is located on the beach in Miami Beach. This is a five-star hotel that has a design, great service and amazing views of the ocean. It is a place for people who want to relax and have a nice time.\n\nThe rooms and suites at **Nobu Hotel Miami Beach** are really nice. They have decorations, great amenities and private balconies with great views of the city or the Atlantic Ocean. The hotel also has a beach, many swimming pools, a nice spa and a great fitness center. All of these things make your stay really comfortable and refreshing.\n\nOne of the things about **Nobu Hotel Miami Beach** is the famous **Nobu Restaurant**. The chef, **Nobu Matsuhisa** makes great Japanese and Peruvian food that people from all over the world love. You can get sushi, black cod miso and handmade cocktails. Every meal is an experience.\n\n**Nobu Hotel Miami Beach** is great for a trip, a luxury vacation or just a relaxing beach trip. It has a mix of style and comfort. You can go to **www.alexaratravel.com** to find deals on hotels get ideas for trips and book your next fun adventure, in Miami.",
+    "image": "https://images.trvl-media.com/lodging/17000000/16260000/16256600/16256597/2db63bbd.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "7/9/2026",
+    "tags": [
+      "Hotel Reviews"
+    ]
+  },
+  {
     "id": "1783256124432",
     "slug": "faena-miami-beach-where-luxury-art-and-oceanfront-elegance-meet",
     "title": "Faena Miami Beach: Where Luxury, Art, and Oceanfront Elegance Meet",
@@ -924,6 +937,27 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1783623885133",
+    "slug": "nobu-hotel-miami-beach-a-sophisticated-oceanfront",
+    "title": "Nobu Hotel Miami Beach: A Sophisticated Oceanfront Escape",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Clean lines, blond wood, and organic materials set a contemporary Japanese beach-house look. Book time at the Esencia Wellness Spa with 18 treatment rooms and an on-site beauty salon for makeup, lash, hair, and nail services. Keep your schedule flexible with the 24-hour, oceanfront Esencia Fitness Center with Technogym equipment and a group class studio.\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel",
+      "Beach",
+      "Restaurant",
+      "Nightclub",
+      "Package"
+    ],
+    "price": 484,
+    "originalPrice": 500,
+    "image": "https://images.trvl-media.com/lodging/17000000/16260000/16256600/16256597/w2939h1661x0y0-d51c528e.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-nobu-hotel-miami-beach.RG0Q4jo"
+  },
   {
     "id": "1783256737031",
     "slug": "faena-miami-beach-where-luxury-art-and-oceanfront-elegance-meet",
