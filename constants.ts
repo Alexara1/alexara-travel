@@ -639,6 +639,17 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1784058001607",
+    "slug": "the-setai-miami-beach-where-luxury-meets-serenity",
+    "title": "The Setai Miami Beach – Where Luxury Meets Serenity",
+    "excerpt": "Experience the elegance of The Setai Miami Beach, where Art Deco charm, Asian-inspired luxury, and world-class hospitality create an unforgettable beachfront escape.",
+    "content": "The Setai Miami Beach Hotel is a five-star ocean-front resort that seamlessly combines classic art deco styling with luxurious Asian-inspired decor. Situated right in the center of South Beach, The Setai Hotel provides spacious suites, personal service, three climate-controlled infinity pools, a top-of-the-line spa and excellent dining. From a romantic break to a leisure beach holiday, The Setai has everything you need for an enjoyable stay complete with magnificent views of the ocean. For further luxury hotels, travel inspiration and great deals on accommodation visit us at www.alexaratravel.com.",
+    "image": "https://images.trvl-media.com/lodging/2000000/1130000/1126600/1126560/070445d5.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Admin",
+    "date": "7/15/2026",
+    "tags": []
+  },
+  {
     "id": "1783622569536",
     "slug": "nobu-hotel-miami-beach-a-sophisticated-oceanfront-escape",
     "title": "Nobu Hotel Miami Beach: A Sophisticated Oceanfront Escape",
@@ -937,6 +948,27 @@ export const MOCK_POSTS: BlogPost[] = [
 ];
 
 export const MOCK_DEALS: Deal[] = [
+  {
+    "id": "1784058373789",
+    "slug": "https-images-trvl-media-com-lodging-2000000-1130000-1126600-1126560-070445d5-jpg-impolicy-resizecrop-rw-1200-ra-fit",
+    "title": "https://images.trvl-media.com/lodging/2000000/1130000/1126600/1126560/070445d5.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Oceanfront in Miami Beach’s Art Deco area, the property puts you right on Collins Avenue. Dine at Jaya for modern Asian cooking with indoor seating or courtyard tables under a retractable roof. Valmont for The Spa at The Setai adds seven treatment rooms, including couples suites with ocean and city views.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
+    "categories": [
+      "Hotel",
+      "Beach",
+      "Resort",
+      "Package",
+      "Nightclub"
+    ],
+    "price": 744,
+    "originalPrice": 800,
+    "image": "https://images.trvl-media.com/lodging/2000000/1130000/1126600/1126560/62b3ede9.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-the-setai.9kmVoW0"
+  },
   {
     "id": "1783623885133",
     "slug": "nobu-hotel-miami-beach-a-sophisticated-oceanfront",
