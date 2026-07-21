@@ -639,6 +639,20 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
 
 export const MOCK_POSTS: BlogPost[] = [
   {
+    "id": "1784668653348",
+    "slug": "the-ritz-carlton-coconut-grove-miami-a-sophisticated-escape-in-florida",
+    "title": "The Ritz-Carlton Coconut Grove, Miami – A Sophisticated Escape in Florida",
+    "excerpt": "Experience timeless luxury at The Ritz-Carlton Coconut Grove, Miami, featuring elegant accommodations, exceptional dining, a relaxing spa, and a prime location near Miami's top attractions. Discover more luxury travel inspiration at www.alexaratravel.com.",
+    "content": "Situated in the quaint Coconut Grove area of Miami, **The Ritz-Carlton Coconut Grove, Miami** provides guests with an opportunity to indulge in luxury without being surrounded by hustle and bustle but still being close to the city’s top attractions. The chic boutique-style hotel suits couples, families, and business travelers who are looking for an oasis of relaxation. The hotel offers spacious rooms and suites, each equipped with private balconies, large windows, and marble bathrooms providing plenty of natural light and comfort.\n\nWith the perfect location in one of the most romantic and trendy areas of Miami, guests can easily visit Biscayne Bay, Brickell, Coral Gables, or simply enjoy some retail therapy in various shops. Explore the historic streets of Coconut Grove, engage in waterfront activities, or spend an unforgettable weekend in the world-class Ritz-Carlton hotel.\n\nAt **Alexara Travel**, we strive to help you discover the most outstanding hotels in different parts of the world and take advantage of exclusive travel offers. If you are considering your next luxurious holiday in Miami, **The Ritz-Carlton Coconut Grove, Miami** is surely among the best options. To find out more about the other luxury hotels around the world, visit **[www.alexaratravel.com](http://www.alexaratravel.com)**.",
+    "image": "https://images.trvl-media.com/lodging/1000000/580000/579400/579331/5a0238bd.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "author": "Alexara",
+    "date": "7/22/2026",
+    "tags": [
+      "Hotel Reviews",
+      "Travel Guides"
+    ]
+  },
+  {
     "id": "1784058001607",
     "slug": "the-setai-miami-beach-where-luxury-meets-serenity",
     "title": "The Setai Miami Beach – Where Luxury Meets Serenity",
@@ -949,9 +963,27 @@ export const MOCK_POSTS: BlogPost[] = [
 
 export const MOCK_DEALS: Deal[] = [
   {
+    "id": "1784668963653",
+    "slug": "the-ritz-carlton-coconut-grove-miami-a-sophisticated-escape-in-florida",
+    "title": "The Ritz-Carlton Coconut Grove, Miami – A Sophisticated Escape in Florida",
+    "location": "United State",
+    "city": "Miami",
+    "description": "Soft Mediterranean-inspired architecture sets the scene with Venetian stucco, mosaic columns, and grand fireplaces. Isabelle’s Coconut Grove anchors dining with an indoor grill room and a trellised garden terrace, while the Boutique Spa and Salon adds a sauna, steam room, and relaxation lounge for pre- or post-treatment time.\nSoft Mediterranean-inspired architecture sets the scene with Venetian stucco, mosaic columns, and grand fireplaces. Isabelle’s Coconut Grove anchors dining with an indoor grill room and a trellised garden terrace, while the Boutique Spa and Salon adds a sauna, steam room, and relaxation lounge for pre- or post-treatment time. Its package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)\n",
+    "categories": [
+      "Hotel",
+      "Package"
+    ],
+    "price": 632,
+    "originalPrice": 700,
+    "image": "https://images.trvl-media.com/lodging/1000000/580000/579400/579331/3727126e.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rating": 5,
+    "duration": "3 Days",
+    "affiliateLink": "https://expedia.com/affiliates/miami-hotels-the-ritz-carlton-coconut-grove.HWaoihV"
+  },
+  {
     "id": "1784058373789",
-    "slug": "https-images-trvl-media-com-lodging-2000000-1130000-1126600-1126560-070445d5-jpg-impolicy-resizecrop-rw-1200-ra-fit",
-    "title": "https://images.trvl-media.com/lodging/2000000/1130000/1126600/1126560/070445d5.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "slug": "the-setai-miami-beach-where-luxury-meets-serenity",
+    "title": "The Setai Miami Beach – Where Luxury Meets Serenity",
     "location": "United State",
     "city": "Miami",
     "description": "Oceanfront in Miami Beach’s Art Deco area, the property puts you right on Collins Avenue. Dine at Jaya for modern Asian cooking with indoor seating or courtyard tables under a retractable roof. Valmont for The Spa at The Setai adds seven treatment rooms, including couples suites with ocean and city views.\n\nIts package for 2 Travelers ,1 room (note: Prices can vary depend on date of availability)",
